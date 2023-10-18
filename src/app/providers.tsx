@@ -9,11 +9,10 @@ import { extendTheme } from '@chakra-ui/react'
 
 // 2. Extend the theme to include custom colors, fonts, etc
 const colors = {
-  brand: {
-    900: '#1a365d',
-    800: '#153e75',
-    700: '#2a69ac',
-  },
+  brand: PFCColors,
+  assets:{
+    "darkLiver": "#3A0A00"
+  }
 }
 
 const fonts = {
@@ -24,6 +23,7 @@ const fonts = {
 export const theme = extendTheme({ colors ,fonts})
 
 import { Rubik } from 'next/font/google';
+import { PFCColors } from './common/PFCColors'
 
 const rubik = Rubik({ subsets: ['latin'] });
 
