@@ -22,6 +22,8 @@ export const LoginCard = () => (
     maxW="lg"
     py={{ base: "12", md: "24" }}
     px={{ base: "0", sm: "8" }}
+    alignSelf={{ base: "center" }}
+    height={{ base: "100%" }}
   >
     <Stack spacing="8">
       <Stack spacing="6">
@@ -44,7 +46,7 @@ export const LoginCard = () => (
             <InputGroup>
               <InputLeftAddon borderStartRadius={6}>+91</InputLeftAddon>
               <Input
-                type="tel"
+                type="number"
                 placeholder="phone number"
                 borderRadius={0}
                 borderEndRadius={6}
