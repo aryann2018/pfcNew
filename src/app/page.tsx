@@ -5,13 +5,13 @@ import AuthCard from "./auth/AuthCard";
 
 export default function Home() {
   return (
-    <main className={styles.main}>
+    <main>
       <CSSReset />
       <Box
         display="flex"
         alignItems="center"
         justifyContent="center"
-        minHeight="100vh"
+        height={"calc(100vh - 24px)"}
       >
         <AuthCard />
       </Box>

@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import { LoginCard } from "./LoginCard";
 import OtpCard from "./OtpCard";
-import { Box, chakra } from "@chakra-ui/react";
+import { Box, Container, Divider, HStack, chakra } from "@chakra-ui/react";
 import { motion, isValidMotionProp } from "framer-motion";
 
 const ChakraBox = chakra(motion.div, {
@@ -21,30 +21,38 @@ const AuthCard = () => {
   };
 
   return (
-    <>
+    <Container height="100%">
       {phoneNumber ? (
-        <Box as="h2" textAlign="center" mb="6" maxW="md">
-          <ChakraBox
-            maxW="md"
-            borderWidth="1px"
-            borderRadius="lg"
-            overflow="hidden"
-            p="6"
-            m="auto"
-            mt="10"
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <OtpCard
-              phoneNumber={phoneNumber}
-              setPhoneNumber={setPhoneNumber}
-            />
-          </ChakraBox>
-        </Box>
+        <ChakraBox
+          maxW="md"
+          borderWidth="1px"
+          borderRadius="lg"
+          overflow="hidden"
+          p="6"
+          m="auto"
+          mt="10"
+          initial={{ opacity: 0, x: 20 }}
+          animate={{ opacity: 1, x: 0 }}
+        >
+          <OtpCard phoneNumber={phoneNumber} setPhoneNumber={setPhoneNumber} />
+        </ChakraBox>
       ) : (
-        <LoginCard onSubmit={handleLogin} />
+        <Box
+          maxW="md"
+          borderWidth="1px"
+          borderRadius="lg"
+          overflow="hidden"
+          p="6"
+          m="auto"
+          mt="10"
+        >
+          <LoginCard onSubmit={handleLogin} />
+          <HStack>
+            <Divider />
+          </HStack>
+        </Box>
       )}
-    </>
+    </Container>
   );
 };
 

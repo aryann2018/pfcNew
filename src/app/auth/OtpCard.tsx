@@ -7,15 +7,27 @@ import {
   Button,
   Text,
   Link,
+  HStack,
+  PinInput,
+  PinInputField,
+  Box,
 } from "@chakra-ui/react";
+import { Controller, useForm } from "react-hook-form";
 
 type OtpCardProps = {
   phoneNumber: string;
   setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
 };
 
-const OtpCard: React.FC<OtpCardProps> = ({ phoneNumber ,setPhoneNumber}) => {
+const OtpCard: React.FC<OtpCardProps> = ({ phoneNumber, setPhoneNumber }) => {
   const [otp, setOtp] = useState("");
+
+  const {
+    handleSubmit,
+    register,
+    formState: { isSubmitting },
+    control,
+  } = useForm();
 
   const handleVerify = (event: React.FormEvent) => {
     event.preventDefault();
@@ -25,29 +37,44 @@ const OtpCard: React.FC<OtpCardProps> = ({ phoneNumber ,setPhoneNumber}) => {
 
   return (
     <>
-    
       <Heading as="h2" textAlign="center" mb="6">
-        Verify OTP <Link onClick={() => setPhoneNumber("")}>Change</Link>
+        Verify OTP
       </Heading>
 
       <Text mb="4" textAlign="center">
-        Enter the OTP sent to {phoneNumber}
+        Enter the OTP sent to {phoneNumber}{" "}
+        <Link onClick={() => setPhoneNumber("")} textDecoration={"underline"}>
+          change
+        </Link>
       </Text>
 
-      <form onSubmit={handleVerify}>
-        <FormControl id="otp" mb="4">
-          <FormLabel>OTP</FormLabel>
-          <Input
-            type="text"
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
+      <Box mb="4">
+        <HStack justifyContent={"center"}>
+          <Controller
+            name="otp"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <PinInput {...field}>
+                <PinInputField />
+                <PinInputField />
+                <PinInputField />
+                <PinInputField />
+              </PinInput>
+            )}
           />
-        </FormControl>
+        </HStack>
+      </Box>
 
-        <Button colorScheme="teal" type="submit" width="full">
-          Verify
-        </Button>
-      </form>
+      <Button
+        colorScheme="teal"
+        type="submit"
+        width="full"
+        isLoading={isSubmitting}
+        disabled={isSubmitting}
+      >
+        Verify
+      </Button>
 
       <Text mt="4" textAlign="center">
         <Link href="#">Resend OTP</Link>
