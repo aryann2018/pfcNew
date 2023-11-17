@@ -11,29 +11,26 @@ import {
   PinInput,
   PinInputField,
   Box,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { Controller, useForm } from "react-hook-form";
 
 type OtpCardProps = {
   phoneNumber: string;
-  setPhoneNumber: React.Dispatch<React.SetStateAction<string>>;
+  resetPhoneNumber: () => void;
+  handleOtpSubmit: (otp: string) => void;
 };
 
-const OtpCard: React.FC<OtpCardProps> = ({ phoneNumber, setPhoneNumber }) => {
-  const [otp, setOtp] = useState("");
-
+const OtpCard: React.FC<OtpCardProps> = ({
+  phoneNumber,
+  resetPhoneNumber,
+  handleOtpSubmit,
+}) => {
   const {
     handleSubmit,
-    register,
-    formState: { isSubmitting },
+    formState: { isSubmitting, errors },
     control,
   } = useForm();
-
-  const handleVerify = (event: React.FormEvent) => {
-    event.preventDefault();
-    // You can add OTP verification logic here
-    console.log(`Verifying OTP: ${otp} for phone number: ${phoneNumber}`);
-  };
 
   return (
     <>
@@ -43,7 +40,7 @@ const OtpCard: React.FC<OtpCardProps> = ({ phoneNumber, setPhoneNumber }) => {
 
       <Text mb="4" textAlign="center">
         Enter the OTP sent to {phoneNumber}{" "}
-        <Link onClick={() => setPhoneNumber("")} textDecoration={"underline"}>
+        <Link onClick={resetPhoneNumber} textDecoration={"underline"}>
           change
         </Link>
       </Text>
@@ -54,8 +51,25 @@ const OtpCard: React.FC<OtpCardProps> = ({ phoneNumber, setPhoneNumber }) => {
             name="otp"
             control={control}
             defaultValue=""
+            rules={{
+              required: "OTP is required",
+              minLength: {
+                value: 4,
+                message: "OTP must be 4 digits long",
+              },
+              maxLength: {
+                value: 4,
+                message: "OTP must be 4 digits long",
+              },
+            }}
             render={({ field }) => (
-              <PinInput {...field}>
+              <PinInput
+                {...field}
+                onComplete={() =>
+                  handleSubmit((values) => handleOtpSubmit(values.otp))
+                }
+                isInvalid={!!errors.otp}
+              >
                 <PinInputField />
                 <PinInputField />
                 <PinInputField />
@@ -68,7 +82,7 @@ const OtpCard: React.FC<OtpCardProps> = ({ phoneNumber, setPhoneNumber }) => {
 
       <Button
         colorScheme="teal"
-        type="submit"
+        onClick={handleSubmit((values) => handleOtpSubmit(values.otp))}
         width="full"
         isLoading={isSubmitting}
         disabled={isSubmitting}

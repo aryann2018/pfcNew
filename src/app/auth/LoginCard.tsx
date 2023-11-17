@@ -1,5 +1,5 @@
 "use client";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import {
   Box,
   Button,
@@ -15,9 +15,12 @@ import {
   FormLabel,
   FormErrorMessage,
 } from "@chakra-ui/react";
+import { ContactDetailsType } from "./AuthCard";
+
+const COUNTRY_CODE = "+91";
 
 interface LoginCardProps {
-  onSubmit: (phoneNumber: string) => void;
+  onSubmit: (details: ContactDetailsType) => void;
 }
 
 export const LoginCard = (props: LoginCardProps) => {
@@ -25,12 +28,21 @@ export const LoginCard = (props: LoginCardProps) => {
 
   const {
     handleSubmit,
-    register,
     formState: { errors, isSubmitting },
-  } = useForm();
+    control,
+  } = useForm<ContactDetailsType>({
+    defaultValues: {
+      countryCode: COUNTRY_CODE,
+      phoneNumber: "",
+    },
+    mode: "onChange",
+  });
 
-  const onSubmit = (values: any) => {
-    onSubmitAuth(values.phone);
+  const onSubmit = (values: ContactDetailsType) => {
+    onSubmitAuth({
+      countryCode: values.countryCode,
+      phoneNumber: values.phoneNumber,
+    });
   };
 
   return (
@@ -43,44 +55,58 @@ export const LoginCard = (props: LoginCardProps) => {
         </Stack>
       </Stack>
 
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack spacing="6">
-          <Stack spacing="5">
-            <FormControl>
-              <FormLabel htmlFor="name">Phone Number</FormLabel>
-              <InputGroup>
-                <InputLeftAddon borderStartRadius={6}>+91</InputLeftAddon>
-                <Input
-                  isInvalid={!!errors.phone}
-                  type="number"
-                  placeholder="phone number"
-                  borderRadius={0}
-                  borderEndRadius={6}
-                  {...register("phone", {
-                    required: "This is required",
-                    maxLength: {
-                      value: 10,
-                      message: "Max length should be 10",
-                    },
-                    minLength: {
-                      value: 10,
-                      message: "Minimum length should be 10",
-                    },
-                  })}
+      <Stack spacing="6">
+        <Stack spacing="5">
+          <FormControl>
+            <FormLabel htmlFor="name">Phone Number</FormLabel>
+            <InputGroup>
+              <InputLeftAddon borderStartRadius={6}>
+                <Controller
+                  name="countryCode"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <Input
+                      autoComplete="on"
+                      maxWidth={"10"}
+                      padding={0}
+                      disabled={true}
+                      {...field}
+                    ></Input>
+                  )}
                 />
-              </InputGroup>
-              <FormErrorMessage>
-                {!!errors.phone && (errors.phone.message as string)}
-              </FormErrorMessage>
-            </FormControl>
-          </Stack>
-          <Stack spacing="6">
-            <Button colorScheme="teal" isLoading={isSubmitting} type="submit">
-              Sign in
-            </Button>
-          </Stack>
+              </InputLeftAddon>
+              <Controller
+                name="phoneNumber"
+                control={control}
+                defaultValue=""
+                render={({ field }) => (
+                  <Input
+                    isInvalid={!!errors.phoneNumber}
+                    type="number"
+                    placeholder="phone number"
+                    borderRadius={0}
+                    borderEndRadius={6}
+                    {...field}
+                  />
+                )}
+              />
+            </InputGroup>
+            <FormErrorMessage>
+              {!!errors.phoneNumber && (errors.phoneNumber as any).message}
+            </FormErrorMessage>
+          </FormControl>
         </Stack>
-      </form>
+        <Stack spacing="6">
+          <Button
+            onClick={handleSubmit(onSubmit)}
+            colorScheme="teal"
+            isLoading={isSubmitting}
+          >
+            Sign in
+          </Button>
+        </Stack>
+      </Stack>
     </Stack>
   );
 };
