@@ -1,10 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LoginCard } from "./LoginCard";
 import OtpCard from "./OtpCard";
 import { Box, Container, Divider, HStack, chakra } from "@chakra-ui/react";
 import { motion, isValidMotionProp } from "framer-motion";
+import { useGenerateOtp, useLogin } from "./api/hooks";
+import { useRouter } from "next/navigation";
+import { getToken, setToken } from "./utils";
 
 const ChakraBox = chakra(motion.div, {
   /**
@@ -19,12 +22,42 @@ export type ContactDetailsType = {
 };
 
 const AuthCard = () => {
+  const router = useRouter();
+
   const [contactDetails, setContactDetails] =
     useState<ContactDetailsType | null>(null);
 
   const [showPhoneInputCard, setShowPhoneInputCard] = useState<boolean>(false);
 
-  const handleContactDetailsSubmit = (contactDetails: ContactDetailsType) => {
+  const { mutate: mutateLogin, isPending: isLoggingIn } = useLogin({
+    onSuccess: async (data) => {
+      if (data?.token) {
+        await setToken(data.token);
+        router.push("/dashboard");
+      }
+    },
+    onError: (error) => {
+      console.log("error", error);
+    },
+  });
+
+  const { mutate: sendOtp, isPending: isSendingOtp } = useGenerateOtp({
+    onSuccess: (data) => {
+      if (data.is_success) {
+        setShowPhoneInputCard(false);
+      }
+    },
+    onError: (error) => {
+      console.log("error", error);
+    },
+  });
+
+  const handleContactDetailsSubmit = async (
+    contactDetails: ContactDetailsType
+  ) => {
+    await sendOtp({
+      phone_number: `${contactDetails.countryCode}${contactDetails.phoneNumber}`,
+    });
     setShowPhoneInputCard(false);
     setContactDetails({
       countryCode: contactDetails.countryCode,
@@ -32,11 +65,25 @@ const AuthCard = () => {
     });
   };
 
-  const handleOtpSubmit = (otp: string) => {
+  const handleOtpSubmit = async (otp: string) => {
+    await mutateLogin({
+      phone_number: `${contactDetails?.countryCode}${contactDetails?.phoneNumber}`,
+      otp,
+    });
     console.log(
       `Verifying OTP: ${otp} for phone number: ${contactDetails?.phoneNumber}`
     );
   };
+
+  useEffect(() => {
+    const checkToken = async () => {
+      const token = await getToken();
+      if (token) {
+        router.push("/dashboard");
+      }
+    };
+    checkToken();
+  }, []);
 
   return (
     <Container height="100%">
@@ -58,6 +105,7 @@ const AuthCard = () => {
               setShowPhoneInputCard(true);
             }}
             handleOtpSubmit={handleOtpSubmit}
+            isSendingOtp={isSendingOtp}
           />
         </ChakraBox>
       ) : (
@@ -70,7 +118,10 @@ const AuthCard = () => {
           m="auto"
           mt="10"
         >
-          <LoginCard onSubmit={handleContactDetailsSubmit} />
+          <LoginCard
+            onSubmit={handleContactDetailsSubmit}
+            isLoggingIn={isLoggingIn}
+          />
           <HStack>
             <Divider />
           </HStack>

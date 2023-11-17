@@ -14,17 +14,21 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
+  Text,
 } from "@chakra-ui/react";
 import { ContactDetailsType } from "./AuthCard";
+import { getToken, isTokenAvailable } from "./utils";
+import { useEffect } from "react";
 
-const COUNTRY_CODE = "+91";
+const COUNTRY_CODE = "91";
 
 interface LoginCardProps {
   onSubmit: (details: ContactDetailsType) => void;
+  isLoggingIn: boolean;
 }
 
 export const LoginCard = (props: LoginCardProps) => {
-  const { onSubmit: onSubmitAuth } = props;
+  const { onSubmit: onSubmitAuth, isLoggingIn } = props;
 
   const {
     handleSubmit,
@@ -35,7 +39,6 @@ export const LoginCard = (props: LoginCardProps) => {
       countryCode: COUNTRY_CODE,
       phoneNumber: "",
     },
-    mode: "onChange",
   });
 
   const onSubmit = (values: ContactDetailsType) => {
@@ -64,15 +67,21 @@ export const LoginCard = (props: LoginCardProps) => {
                 <Controller
                   name="countryCode"
                   control={control}
-                  defaultValue=""
+                  rules={{ required: "Country code is required" }}
                   render={({ field }) => (
-                    <Input
-                      autoComplete="on"
-                      maxWidth={"10"}
-                      padding={0}
-                      disabled={true}
-                      {...field}
-                    ></Input>
+                    <>
+                      <Text color="gray">+</Text>
+                      <Input
+                        {...field}
+                        type="text"
+                        autoComplete="on"
+                        maxWidth={"10"}
+                        padding={0}
+                        disabled={true}
+                        value={COUNTRY_CODE}
+                        onChange={() => {}}
+                      ></Input>
+                    </>
                   )}
                 />
               </InputLeftAddon>
@@ -80,28 +89,48 @@ export const LoginCard = (props: LoginCardProps) => {
                 name="phoneNumber"
                 control={control}
                 defaultValue=""
+                rules={{
+                  required: "Phone number is required",
+                  minLength: {
+                    value: 10,
+                    message: "Phone number should be of 10 digits",
+                  },
+                  maxLength: {
+                    value: 10,
+                    message: "Phone number should be of 10 digits",
+                  },
+                }}
                 render={({ field }) => (
                   <Input
+                    {...field}
                     isInvalid={!!errors.phoneNumber}
                     type="number"
                     placeholder="phone number"
                     borderRadius={0}
                     borderEndRadius={6}
-                    {...field}
                   />
                 )}
               />
             </InputGroup>
-            <FormErrorMessage>
-              {!!errors.phoneNumber && (errors.phoneNumber as any).message}
-            </FormErrorMessage>
+
+            {!!errors.countryCode && (
+              <Text fontSize={"small"} color="red">
+                {(errors.countryCode as any).message}
+              </Text>
+            )}
+            {!!errors.phoneNumber && (
+              <Text fontSize={"small"} color="red">
+                {(errors.phoneNumber as any).message}
+              </Text>
+            )}
           </FormControl>
         </Stack>
         <Stack spacing="6">
           <Button
             onClick={handleSubmit(onSubmit)}
             colorScheme="teal"
-            isLoading={isSubmitting}
+            isLoading={isSubmitting || isLoggingIn}
+            disabled={isSubmitting || isLoggingIn}
           >
             Sign in
           </Button>

@@ -19,12 +19,14 @@ type OtpCardProps = {
   phoneNumber: string;
   resetPhoneNumber: () => void;
   handleOtpSubmit: (otp: string) => void;
+  isSendingOtp: boolean;
 };
 
 const OtpCard: React.FC<OtpCardProps> = ({
   phoneNumber,
   resetPhoneNumber,
   handleOtpSubmit,
+  isSendingOtp,
 }) => {
   const {
     handleSubmit,
@@ -84,8 +86,8 @@ const OtpCard: React.FC<OtpCardProps> = ({
         colorScheme="teal"
         onClick={handleSubmit((values) => handleOtpSubmit(values.otp))}
         width="full"
-        isLoading={isSubmitting}
-        disabled={isSubmitting}
+        isLoading={isSubmitting || isSendingOtp}
+        disabled={isSubmitting || isSendingOtp}
       >
         Verify
       </Button>
