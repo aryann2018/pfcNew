@@ -33,7 +33,7 @@ const AuthCard = () => {
     onSuccess: async (data) => {
       if (data?.token) {
         await setToken(data.token);
-        router.push("/dashboard");
+        router.push("/dashboard/clients");
       }
     },
     onError: (error) => {
@@ -56,7 +56,7 @@ const AuthCard = () => {
     contactDetails: ContactDetailsType
   ) => {
     await sendOtp({
-      phone_number: `${contactDetails.countryCode}${contactDetails.phoneNumber}`,
+      phone_number: `+${contactDetails.countryCode}${contactDetails.phoneNumber}`,
     });
     setShowPhoneInputCard(false);
     setContactDetails({
@@ -67,7 +67,7 @@ const AuthCard = () => {
 
   const handleOtpSubmit = async (otp: string) => {
     await mutateLogin({
-      phone_number: `${contactDetails?.countryCode}${contactDetails?.phoneNumber}`,
+      phone_number: `+${contactDetails?.countryCode}${contactDetails?.phoneNumber}`,
       otp,
     });
     console.log(
@@ -79,7 +79,7 @@ const AuthCard = () => {
     const checkToken = async () => {
       const token = await getToken();
       if (token) {
-        router.push("/dashboard");
+        router.push("/dashboard/clients");
       }
     };
     checkToken();

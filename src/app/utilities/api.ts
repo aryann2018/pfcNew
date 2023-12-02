@@ -1,48 +1,56 @@
 import axios from "axios";
-// import { secureStore } from './secureStore';
+import { getToken } from "../auth/utils";
 
 const getUrl = () => {
   if (process.env.NODE_ENV === "production") {
     return "https://api.pfc.icu/api/v1";
-  } else if (process.env.NODE_ENV === "development") {
+  } else if (process.env.NODE_ENV === "test") {
     return "https://api.staging.pfc.icu/api/v1";
+  } else {
+    return "http://localhost:8000/api/v1";
   }
 };
+export const getInstance = async () => {
+  const token = await getToken();
 
-export const instance = axios.create({
-  baseURL: getUrl(),
-  headers: {
-    "Content-Type": "application/json",
-    // Authorization: `Bearer ${secureStore.getItem('token')}`
-  },
-});
+  return axios.create({
+    baseURL: getUrl(),
+    headers: {
+      "Content-Type": "*/*",
+      Authorization: token ? `Bearer ${token}` : undefined,
+    },
+  });
+};
 
 export const post = async <RequestType, ResponseType>(
   url: string,
   data: RequestType
 ) => {
+  const instance = await getInstance();
+  const response = await instance.post<ResponseType>(url, data);
+
+  return response;
+};
+
+export const get = async <ResponseType>(url: string) => {
   try {
-    const response = await instance.post<ResponseType>(url, data);
+    const instance = await getInstance();
+
+    const response = await instance.get<ResponseType>(url);
 
     return response;
   } catch (error) {
     console.log(error);
   }
-
-  // const response = await instance.post<ResponseType>(url, data);Z
-};
-
-export const get = async <ResponseType>(url: string) => {
-  const response = await instance.get<ResponseType>(url);
-
-  return response;
 };
 
 export const put = async <RequestType, ResponseType>(
   url: string,
   data: RequestType
 ) => {
+  const instance = await getInstance();
   const response = await instance.put<ResponseType>(url, data);
+
   return response;
 };
 
@@ -50,11 +58,15 @@ export const patch = async <RequestType, ResponseType>(
   url: string,
   data: RequestType
 ) => {
+  const instance = await getInstance();
   const response = await instance.patch<ResponseType>(url, data);
+
   return response;
 };
 
 export const remove = async <ResponseType>(url: string) => {
+  const instance = await getInstance();
   const response = await instance.delete<ResponseType>(url);
+
   return response;
 };
