@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { Axios, AxiosRequestConfig } from "axios";
 import { getToken } from "../auth/utils";
 
 const getUrl = () => {
@@ -24,19 +24,23 @@ export const getInstance = async () => {
 
 export const post = async <RequestType, ResponseType>(
   url: string,
-  data: RequestType
+  data: RequestType,
+  options?: AxiosRequestConfig
 ) => {
   const instance = await getInstance();
-  const response = await instance.post<ResponseType>(url, data);
+  const response = await instance.post<ResponseType>(url, data, { ...options });
 
   return response;
 };
 
-export const get = async <ResponseType>(url: string) => {
+export const get = async <ResponseType>(
+  url: string,
+  options?: AxiosRequestConfig
+) => {
   try {
     const instance = await getInstance();
 
-    const response = await instance.get<ResponseType>(url);
+    const response = await instance.get<ResponseType>(url, { ...options });
 
     return response;
   } catch (error) {
@@ -46,27 +50,36 @@ export const get = async <ResponseType>(url: string) => {
 
 export const put = async <RequestType, ResponseType>(
   url: string,
-  data: RequestType
+  data: RequestType,
+  options: AxiosRequestConfig
 ) => {
   const instance = await getInstance();
-  const response = await instance.put<ResponseType>(url, data);
+  const response = await instance.put<ResponseType>(url, data, { ...options });
 
   return response;
 };
 
 export const patch = async <RequestType, ResponseType>(
   url: string,
-  data: RequestType
+  data: RequestType,
+  options: AxiosRequestConfig
 ) => {
   const instance = await getInstance();
-  const response = await instance.patch<ResponseType>(url, data);
+  const response = await instance.patch<ResponseType>(url, data, {
+    ...options,
+  });
 
   return response;
 };
 
-export const remove = async <ResponseType>(url: string) => {
+export const remove = async <ResponseType>(
+  url: string,
+  options: AxiosRequestConfig
+) => {
   const instance = await getInstance();
-  const response = await instance.delete<ResponseType>(url);
+  const response = await instance.delete<ResponseType>(url, {
+    ...options,
+  });
 
   return response;
 };

@@ -1,29 +1,29 @@
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-import './globals.css'
-import { Providers } from './providers';
-import { TopNav } from './common/TopNav';
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import { Providers } from "./providers";
+import { TopNav } from "./common/TopNav";
 
-const inter = Inter({ subsets: ['latin'] })
+export const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: 'PFC Coach App',
-  description: 'Web app for PFC Coaches',
-}
+  title: "PFC Coach App",
+  description: "Web app for PFC Coaches",
+};
 
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode
+  children: React.ReactNode;
 }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-      <Providers>
-        <TopNav />
-        {children}
-      </Providers>
+        <Providers>
+          <TopNav />
+          {children}
+        </Providers>
       </body>
     </html>
-  )
+  );
 }

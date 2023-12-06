@@ -17,6 +17,7 @@ import {
   Skeleton,
   SkeletonText,
   CircularProgress,
+  Box,
 } from "@chakra-ui/react";
 import { subscriptionsList } from "./api/mocks";
 import { getDaysUntilEndDate } from "@/app/utilities/utils";
@@ -103,54 +104,57 @@ const SubscriptionList = () => {
   }
 
   return (
-    <TableContainer
-      borderRadius={10}
-      borderWidth={1}
-      borderColor={PFCColors.GRAY_400}
-      width={"100%"}
-      maxHeight={"100%"}
-      overflowY={"auto"}
-      _loading={{ opacity: 0.5 }}
-    >
-      <Table variant="striped" colorScheme={"Red"} position={"relative"}>
-        <TableCaption
-          position={"sticky"}
-          bottom={0}
-          background={PFCColors.WHITE}
-          fontSize={"smaller"}
-        >
-          {subscriptions.length} clients
-        </TableCaption>
-        <Thead position={"sticky"} top={0} background={PFCColors.WHITE}>
-          <Tr>
-            <Th>Client details</Th>
-            <Th>Plan details</Th>
-            <Th isNumeric>
-              <Text align={"center"}>BMI details</Text>
-            </Th>
-          </Tr>
-        </Thead>
+    <Box width={"100%"}>
+      <Text fontSize={"30px"}>Welcome back!</Text>
+      <TableContainer
+        borderRadius={10}
+        borderWidth={1}
+        borderColor={PFCColors.GRAY_400}
+        width={"100%"}
+        maxHeight={"100%"}
+        overflowY={"auto"}
+        _loading={{ opacity: 0.5 }}
+      >
+        <Table variant="striped" colorScheme={"Red"} position={"relative"}>
+          <TableCaption
+            position={"sticky"}
+            bottom={0}
+            background={PFCColors.WHITE}
+            fontSize={"smaller"}
+          >
+            {subscriptions!.length} clients
+          </TableCaption>
+          <Thead position={"sticky"} top={0} background={PFCColors.WHITE}>
+            <Tr>
+              <Th>Client details</Th>
+              <Th>Plan details</Th>
+              <Th isNumeric>
+                <Text align={"center"}>BMI details</Text>
+              </Th>
+            </Tr>
+          </Thead>
 
-        <Tbody>
-          {subscriptions.map((subscription) => {
-            return (
-              <ClientSubscription
-                key={subscription.id}
-                subscription={subscription}
-              />
-            );
-          })}
-        </Tbody>
+          <Tbody>
+            {subscriptions!.map((subscription) => {
+              return (
+                <ClientSubscription
+                  key={subscription.id}
+                  subscription={subscription}
+                />
+              );
+            })}
+          </Tbody>
 
-        <Tfoot>
-          <Tr>
-            <Th>Client details</Th>
-            <Th>Plan details</Th>
-            <Th isNumeric>BMI details</Th>
-          </Tr>
-        </Tfoot>
-      </Table>
-    </TableContainer>
+          <Tfoot>
+            <Tr>
+              <Th>Client details</Th>
+              <Th>Plan details</Th>
+              <Th isNumeric>BMI details</Th>
+            </Tr>
+          </Tfoot>
+        </Table>
+      </TableContainer>
+    </Box>
   );
 };
 
