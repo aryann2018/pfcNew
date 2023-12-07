@@ -5,3 +5,5 @@ export function getDaysUntilEndDate(endDate: string) {
   const differenceInDays = differenceInTime / (1000 * 3600 * 24);
   return Math.ceil(differenceInDays);
 }
+
+export const isOdd = (num: number) => num % 2 === 1;

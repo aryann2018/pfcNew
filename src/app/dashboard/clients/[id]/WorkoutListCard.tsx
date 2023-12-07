@@ -9,10 +9,10 @@ import {
   Spacer,
   Text,
 } from "@chakra-ui/react";
-import { useGetDietPlans, useGetWorkoutPlans } from "../api/hooks";
 import { CiCirclePlus } from "react-icons/ci";
-import { WorkoutPlanType } from "../api/types";
 import { useRouter } from "next/navigation";
+import { useGetWorkoutPlans } from "../../workoutplans/api/hooks";
+import { WorkoutPlanType } from "../../workoutplans/api/types";
 
 const WorkoutPlanListCard = ({ id, name, onClick }: any) => {
   return (

@@ -1,30 +1,19 @@
 "use client";
 
-import { PFCColors } from "@/app/common/PFCColors";
-import { useGetDietPlans } from "../api/hooks";
-
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
   Text,
   Box,
   Spacer,
   Flex,
   HStack,
   IconButton,
-  Stack,
   Divider,
 } from "@chakra-ui/react";
 import { CiCirclePlus } from "react-icons/ci";
 import { useRouter } from "next/navigation";
-import { DietPlan } from "../api/types";
+
+import { useGetDietPlans } from "../../dietplans/api/hooks";
+import { DietPlan } from "../../dietplans/api/types";
 
 const DietListCard = ({ id, name, onClick }: any) => {
   return (
