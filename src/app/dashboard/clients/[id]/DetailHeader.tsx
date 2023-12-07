@@ -33,7 +33,7 @@ export const DetailsHeader = ({ id }: { id: string }) => {
           onClick={() => router.back()}
         />
         <Text color={PFCColors.GRAY_900} fontWeight={600} fontSize={30}>
-          {client?.first_name + " " + client?.middle_name}
+          {client?.first_name + " " + client?.middle_name + " " + client?.last_name}
         </Text>
       </HStack>
     </Box>
