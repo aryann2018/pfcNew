@@ -13,7 +13,7 @@ interface TemplateScreenProps {
 
 export const TemplateScreen = (props: TemplateScreenProps) => {
   const { data, error, isLoading } = useGetWorkoutPlanTemplates();
-  console.log(data, error, isLoading);
+
   if (isLoading) {
     return <div>Loading...</div>;
   }

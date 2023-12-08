@@ -79,7 +79,7 @@ export const DetailsCard = ({ id }: { id: string }) => {
   }
 
   return (
-    <Flex>
+    <Flex direction={"row"} alignItems={"flex-start"}>
       {Object.entries(getAllDetails(client)).map(([key, value]) => (
         <SingleDetail key={key} label={key} value={value} isCopyable={true} />
       ))}

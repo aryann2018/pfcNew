@@ -16,8 +16,8 @@ const colors = {
 };
 
 const fonts = {
-  heading: "var(--font-rubik)",
-  body: "var(--font-rubik)",
+  heading: "var(--font-inter)",
+  body: "var(--font-inter)",
 };
 
 export const theme = extendTheme({ colors, fonts });

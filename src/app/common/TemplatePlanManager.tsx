@@ -1,4 +1,16 @@
-import { Box, Button, Select, SelectField, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Button,
+  Divider,
+  Flex,
+  Grid,
+  GridItem,
+  HStack,
+  Select,
+  SelectField,
+  Spacer,
+  Text,
+} from "@chakra-ui/react";
 import { useEffect, useState } from "react";
 
 interface TemplateSubSection {
@@ -56,7 +68,7 @@ interface TemplateSelectProps {
 
 const TemplateSelect = (props: TemplateSelectProps) => {
   return (
-    <Select size={"lg"} variant={"filled"}>
+    <Select variant={"filled"} maxWidth={"50%"}>
       {props.items.map((item) => (
         <TemplateSelectItem
           key={item.value}
@@ -72,7 +84,7 @@ const TemplateSelect = (props: TemplateSelectProps) => {
 /* templatePlanSubSection */
 const TemplatePlanSubSection = (props: TemplateSubSection) => {
   return (
-    <Box>
+    <Box {...styles.subSection}>
       <Text>{props.name}</Text>
       <Text>{props.description}</Text>
     </Box>
@@ -82,8 +94,10 @@ const TemplatePlanSubSection = (props: TemplateSubSection) => {
 const TemplatePlanSection = (props: TemplateSection) => {
   return (
     <Box>
-      <Text>{props.name}</Text>
-      <Text>{props.description}</Text>
+      <HStack justifyContent="space-between" p={2}>
+        <Text {...styles.sectionTitle}>{props.name}</Text>
+        <Text>{props.description}</Text>
+      </HStack>
       {props.subSections.map((subSection) => (
         <TemplatePlanSubSection key={subSection.id} {...subSection} />
       ))}
@@ -123,31 +137,105 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
   if (props.isNew) {
     return (
       <Box>
-        <TemplateSelect
-          items={templateSelectItems.map((item) => ({
-            ...item,
-            onClick: (value) => {
-              const template = props.templateItems.find(
-                (template) => template.id === value
-              );
-              if (template) {
-                setTemplateId(value);
-              }
-            },
-          }))}
-          onClick={(value) => {
-            setTemplateId(value);
-          }}
-        />
-
-        {template?.sections.map((section) => (
-          <TemplatePlanSection key={section.id} {...section} />
-        ))}
-
-        <Button onClick={() => {}}>Assign</Button>
+        <HStack>
+          <TemplateSelect
+            items={templateSelectItems.map((item) => ({
+              ...item,
+              onClick: (value) => {
+                const template = props.templateItems.find(
+                  (template) => template.id === value
+                );
+                if (template) {
+                  setTemplateId(value);
+                }
+              },
+            }))}
+            onClick={(value) => {
+              setTemplateId(value);
+            }}
+            {...styles.select}
+          />
+          <Spacer />
+          <Box {...styles.rightTopInfo}>
+            <Text>{template?.rightTopInfo}</Text>
+          </Box>
+        </HStack>
+        <Box p={2} />
+        <Grid templateColumns="repeat(2, 1fr)" gap={6}>
+          {template?.sections.map((section) => (
+            <GridItem key={section.id} {...styles.section}>
+              <TemplatePlanSection key={section.id} {...section} />
+            </GridItem>
+          ))}
+        </Grid>
+        <Box p={2} />
+        <Divider />
+        <Box p="4" display="flex" alignItems={"flex-end"}>
+          <Button onClick={() => {}} {...styles.AssignButton}>
+            Assign
+          </Button>
+        </Box>
       </Box>
     );
   }
   return <div>TemplatePlanManager</div>;
 };
+
+const styles = {
+  select: {
+    paddingX: 4,
+    paddingY: 2,
+    background: "#EAECF0",
+    borderRadius: 8,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 16,
+    display: "inline-flex",
+    color: "#101828",
+    fontSize: 48,
+    fontFamily: "Inter",
+    fontWeight: "600",
+    lineHeight: 30,
+  },
+  rightTopInfo: {
+    paddingY: 2,
+    paddingX: 2,
+    background:
+      "linear-gradient(0deg, white 0%, white 100%), linear-gradient(180deg, rgba(238, 241, 244, 0.50) 0%, rgba(255, 255, 255, 0.50) 45%, rgba(255, 255, 255, 0.50) 59%, rgba(237.83, 240.67, 243.51, 0.50) 100%)",
+    boxShadow:
+      "0px 1.7733333110809326px 1.7733333110809326px rgba(24, 34, 48, 0.10)",
+    borderRadius: 8,
+    border: "1px #D0D5DD solid",
+    justifyContent: "center",
+    alignItems: "center",
+
+    display: "inline-flex",
+    color: "#353849",
+    fontSize: 24,
+    fontWeight: "600",
+  },
+  section: {
+    flex: "0 0 48%",
+    margin: "5px" /* Optional: Add margin for spacing between items */,
+    width: "100%",
+    height: "100%",
+    padding: "18px",
+
+    background: "#F2F4F7",
+    boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.06)",
+    borderRadius: 8,
+    overflow: "hidden",
+    border: "1px #D0D5DD solid",
+  },
+  sectionTitle: {
+    color: "#344054",
+    fontSize: 20,
+    fontFamily: "Inter",
+    fontWeight: 600,
+    wordWrap: "break-word",
+  },
+  subSection: {},
+  AssignButton: {},
+};
+
 export default TemplatePlanManager;

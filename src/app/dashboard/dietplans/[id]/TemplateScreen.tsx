@@ -3,6 +3,11 @@ import TemplatePlanManager, {
   Template,
 } from "@/app/common/TemplatePlanManager";
 import { useGetDietPlanTemplates } from "../api/hooks";
+import {
+  getTotalDietPlanCalories,
+  getTotalFoodItemCalories,
+  getTotalMealPlanCalories,
+} from "../utils";
 
 interface TemplateScreenProps {
   isNew: boolean;
@@ -29,8 +34,8 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
       name: template.name,
       sections: template.meal_plan_templates.map((section) => {
         return {
-          description: "",
-          rightTopInfo: "",
+          description: "hey this is the section",
+          rightTopInfo: `${getTotalMealPlanCalories(section)} kcal`,
           id: section.id,
           name: section.name,
           subSections: section.template_foods.map((subSection) => {
@@ -46,26 +51,24 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
                   return `${key}: 1}`;
                 }),
               onDeleteClick: () => ({}),
-              LeftInfo: "hey",
-              rightTopInfo: "hey",
+              LeftInfo: "250 gm",
+              rightTopInfo: `${getTotalFoodItemCalories(subSection)} kcal`,
             };
           }),
         };
       }),
-      description: "",
-      rightTopInfo: "",
+      description: "hey this is the template",
+      rightTopInfo: `${getTotalDietPlanCalories(template)} kcal`,
     };
   });
 
   return (
-    <>
-      <TemplatePlanManager
-        isNew={props.isNew}
-        onAssignPress={(id, value) => {
-          console.log(id, value);
-        }}
-        templateItems={templateItems}
-      />
-    </>
+    <TemplatePlanManager
+      isNew={props.isNew}
+      onAssignPress={(id, value) => {
+        console.log(id, value);
+      }}
+      templateItems={templateItems}
+    />
   );
 };

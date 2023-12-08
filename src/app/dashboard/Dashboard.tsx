@@ -112,7 +112,7 @@ const Dashboard = ({ children }: DashboardProps) => {
         </DrawerContent>
       </Drawer>
       <Box ml={{ base: 0, md: 60 }} transition=".3s ease">
-        <Box p={"4"} />
+        <Box p={"8"} />
         <Box as="main" p="4">
           {children}
         </Box>

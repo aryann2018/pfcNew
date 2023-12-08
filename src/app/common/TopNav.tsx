@@ -2,7 +2,13 @@ import { Box, Flex, Spacer, Text, Button, Image } from "@chakra-ui/react";
 
 export const TopNav = () => {
   return (
-    <Flex bg="assets.darkLiver" alignItems="center">
+    <Flex
+      bg="assets.darkLiver"
+      alignItems="center"
+      position={"fixed"}
+      top={0}
+      width={"100%"}
+    >
       <Flex
         id="animate-area"
         backgroundImage="/images/bg.svg"
