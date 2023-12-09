@@ -6,9 +6,9 @@ const getUrl = () => {
     return "https://api.pfc.icu/api/v1";
   }
   // } else if (process.env.NODE_ENV === "test") {
-  return "https://api.staging.pfc.icu/api/v1";
+  // return "https://api.staging.pfc.icu/api/v1";
   // } else {
-  //   return "http://localhost:8000/api/v1";
+  return "http://localhost:8000/api/v1";
   // }
 };
 export const getInstance = async () => {

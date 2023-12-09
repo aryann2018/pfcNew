@@ -1,3 +1,4 @@
+"use client";
 import { PFCColors } from "@/app/common/PFCColors";
 import {
   Table,
