@@ -4,13 +4,13 @@ import { getToken } from "../auth/utils";
 const getUrl = () => {
   if (process.env.NODE_ENV === "production") {
     return "https://api.pfc.icu/api/v1";
+  } else if (process.env.NODE_ENV === "test") {
+    return "https://api.staging.pfc.icu/api/v1";
+  } else {
+    return "http://localhost:8000/api/v1";
   }
-  // } else if (process.env.NODE_ENV === "test") {
-  // return "https://api.staging.pfc.icu/api/v1";
-  // } else {
-  return "http://localhost:8000/api/v1";
-  // }
 };
+
 export const getInstance = async () => {
   const token = await getToken();
 

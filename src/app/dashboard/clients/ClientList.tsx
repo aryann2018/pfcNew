@@ -90,13 +90,18 @@ const ClientSubscription = (props: ClientSubscriptionProps) => {
 };
 
 const SubscriptionList = () => {
-  const { isLoading, data } = useGetSubscriptions();
+  const { isLoading, data, isError } = useGetSubscriptions();
   const subscriptions = data?.data;
 
   if (isLoading) {
     return <CircularProgress color={PFCColors.PRIMARY_400} isIndeterminate />;
   }
-  if (!subscriptions || (subscriptions && subscriptions.length === 0)) {
+
+  if (isError) {
+    return <Text>Something went wrong</Text>;
+  }
+
+  if (!subscriptions || subscriptions.length === 0) {
     <Flex>
       <HStack>
         <Text>No Subscriptions to view</Text>
