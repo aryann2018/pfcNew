@@ -1,8 +1,8 @@
 "use client";
-import TemplatePlanManager, {
-  Template,
-} from "@/app/common/TemplatePlanManager";
+import TemplatePlanManager, { Template } from "./TemplatePlanManager";
+
 import { useGetDietPlanTemplates, useGetFoodIngredients } from "../api/hooks";
+
 import {
   getTotalDietPlanCalories,
   getTotalFoodItemCalories,

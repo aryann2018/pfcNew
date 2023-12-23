@@ -15,8 +15,9 @@ import {
 import { useEffect, useState } from "react";
 import { BiFontSize } from "react-icons/bi";
 import { CiCirclePlus } from "react-icons/ci";
-import { inter } from "../layout";
-import { PFCColors } from "./PFCColors";
+import { inter } from "../../../layout";
+import { PFCColors } from "../../../common/PFCColors";
+import { MacrosTicker } from "./MacrosTIcker";
 
 interface TemplateSubSection {
   id: string;
@@ -234,9 +235,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
             {...styles.select}
           />
           <Spacer />
-          <Box {...styles.rightTopInfo}>
-            <Text>{template?.rightTopInfo}</Text>
-          </Box>
+          <MacrosTicker protien={40} fat={70} carbs={20} calories={2990} />
         </HStack>
         <Box p={2} />
         <Grid templateColumns="repeat(2, 1fr)" gap={6}>

@@ -3,11 +3,11 @@ import { getToken } from "../auth/utils";
 
 const getUrl = () => {
   if (process.env.NODE_ENV === "production") {
-    return "https://api.pfc.quest/api/v1";
+    return "http://api.pfc.quest/api/v1";
   } else if (process.env.NODE_ENV === "development") {
-    return "https://localhost:8000/api/v1";
+    return "http://localhost:8000/api/v1";
   } else if (process.env.NODE_ENV === "test") {
-    return "https://localhost:8000/api/v1";
+    return "http://localhost:8000/api/v1";
   } else {
     return "https://api.staging.pfc.quest/api/v1";
   }
