@@ -24,7 +24,7 @@ export const useGetWorkoutPlans = ({ client_id }: { client_id: string }) => {
         );
         return res?.data;
       } catch (error) {
-        console.log(error);
+        error;
       }
     },
   });
@@ -42,7 +42,7 @@ export const useGetWorkoutPlanTemplates = () => {
         );
         return res?.data;
       } catch (error) {
-        console.log(error);
+        error;
       }
     },
   });

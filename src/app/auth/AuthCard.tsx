@@ -37,7 +37,7 @@ const AuthCard = () => {
       }
     },
     onError: (error) => {
-      console.log("error", error);
+      "error", error;
     },
   });
 
@@ -48,7 +48,7 @@ const AuthCard = () => {
       }
     },
     onError: (error) => {
-      console.log("error", error);
+      "error", error;
     },
   });
 
@@ -56,7 +56,7 @@ const AuthCard = () => {
     contactDetails: ContactDetailsType
   ) => {
     await sendOtp({
-      phone_number: `+${contactDetails.countryCode}${contactDetails.phoneNumber}`,
+      phone_number: `${contactDetails.countryCode}${contactDetails.phoneNumber}`,
     });
     setShowPhoneInputCard(false);
     setContactDetails({
@@ -67,12 +67,10 @@ const AuthCard = () => {
 
   const handleOtpSubmit = async (otp: string) => {
     await mutateLogin({
-      phone_number: `+${contactDetails?.countryCode}${contactDetails?.phoneNumber}`,
+      phone_number: `${contactDetails?.countryCode}${contactDetails?.phoneNumber}`,
       otp,
     });
-    console.log(
-      `Verifying OTP: ${otp} for phone number: ${contactDetails?.phoneNumber}`
-    );
+    `Verifying OTP: ${otp} for phone number: ${contactDetails?.phoneNumber}`;
   };
 
   useEffect(() => {

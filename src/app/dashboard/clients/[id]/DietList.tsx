@@ -15,18 +15,20 @@ import { useRouter } from "next/navigation";
 import { useGetDietPlans } from "../../dietplans/api/hooks";
 import { DietPlan } from "../../dietplans/api/types";
 
-const DietListCard = ({ id, name, onClick }: any) => {
+const DietListCard = ({ kcal, name, onClick }: any) => {
   return (
     <Flex
       direction={"column"}
-      padding={"4"}
+      padding={"10px"}
       onClick={onClick}
       cursor={"pointer"}
     >
-      <Text color="#101828" fontWeight="500">
-        {name}
-      </Text>
-      <Box p={2} />
+      <Flex direction={"column"}>
+        <Text color="#101828" fontWeight="500" fontSize={"14px"}>
+          {name}
+        </Text>
+        <Box p="0.5" />
+      </Flex>
       <Divider />
     </Flex>
   );
@@ -57,7 +59,7 @@ export const DietList = (props: DietListrops) => {
 
   return (
     <Box
-      width={"100%"}
+      width={"48%"}
       borderRadius="8px"
       border="1px solid #EAECF0"
       minHeight={"300px"}
@@ -80,6 +82,7 @@ export const DietList = (props: DietListrops) => {
                 `/dashboard/dietplans/new?client_id=${props.clientId}`
               )
             }
+            bg="transparent"
             aria-label="add workout plan"
             icon={<CiCirclePlus />}
           />
@@ -88,7 +91,7 @@ export const DietList = (props: DietListrops) => {
       {data.data.map((dietPlan: DietPlan) => (
         <DietListCard
           key={dietPlan.id}
-          id={dietPlan.id}
+          kcal={"1800"}
           name={dietPlan.name}
           onClick={() => {
             router.push(

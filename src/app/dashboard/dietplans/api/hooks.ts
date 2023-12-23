@@ -3,11 +3,13 @@ import { useQuery } from "@tanstack/react-query";
 import {
   DietPlanTemplatesQueryResponse,
   DietPlansQueryResponse,
+  FoodIngredientsQueryResponse,
 } from "./types";
 import { get } from "../../../utilities/api";
 import {
   DIET_PLANS_API,
   DIET_PLANS_TEMPLATES_API,
+  FOOD_INGRIDENTS_API,
 } from "../../dietplans/api/constants";
 
 export const useGetDietPlans = ({ client_id }: { client_id: string }) => {
@@ -20,7 +22,7 @@ export const useGetDietPlans = ({ client_id }: { client_id: string }) => {
         });
         return res?.data;
       } catch (error) {
-        console.log(error);
+        error;
       }
     },
   });
@@ -38,7 +40,25 @@ export const useGetDietPlanTemplates = () => {
         );
         return res?.data;
       } catch (error) {
-        console.log(error);
+        error;
+      }
+    },
+  });
+
+  return query;
+};
+
+export const useGetFoodIngredients = () => {
+  const query = useQuery({
+    queryKey: [FOOD_INGRIDENTS_API],
+    queryFn: async () => {
+      try {
+        const res = await get<FoodIngredientsQueryResponse>(
+          FOOD_INGRIDENTS_API
+        );
+        return res?.data;
+      } catch (error) {
+        error;
       }
     },
   });

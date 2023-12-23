@@ -65,3 +65,9 @@ export type DietPlanTemplate = DietPlan & {
 export type DietPlanTemplatesQueryResponse = DietPlansQueryResponse & {
   data: DietPlanTemplate[];
 };
+
+export type FoodIngredientsQueryResponse = {
+  data: FoodIngredient[];
+  is_success: boolean;
+  message: null | string;
+};

@@ -59,9 +59,10 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
       <TemplatePlanManager
         isNew={props.isNew}
         onAssignPress={(id, value) => {
-          console.log(id, value);
+          id, value;
         }}
         templateItems={templateItems}
+        templateType="workout"
       />
     </>
   );

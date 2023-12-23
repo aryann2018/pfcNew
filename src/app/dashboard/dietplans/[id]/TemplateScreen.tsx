@@ -2,12 +2,13 @@
 import TemplatePlanManager, {
   Template,
 } from "@/app/common/TemplatePlanManager";
-import { useGetDietPlanTemplates } from "../api/hooks";
+import { useGetDietPlanTemplates, useGetFoodIngredients } from "../api/hooks";
 import {
   getTotalDietPlanCalories,
   getTotalFoodItemCalories,
   getTotalMealPlanCalories,
 } from "../utils";
+import { useRouter } from "next/navigation";
 
 interface TemplateScreenProps {
   isNew: boolean;
@@ -17,7 +18,12 @@ interface TemplateScreenProps {
 
 export const TemplateScreen = (props: TemplateScreenProps) => {
   const { data, error, isLoading } = useGetDietPlanTemplates();
-  console.log(data, error, isLoading);
+
+  const { data: foodIngredientsData } = useGetFoodIngredients();
+  foodIngredientsData;
+
+  const router = useRouter();
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -48,10 +54,12 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
                   ["fat", "protein", "carbohydrates"].includes(key)
                 )
                 .map((key) => {
-                  return `${key}: 1}`;
+                  return `${key}: 100`;
                 }),
               onDeleteClick: () => ({}),
-              LeftInfo: "250 gm",
+              LeftInfo:
+                (subSection.food_ingredient.portion_size as unknown as number) *
+                subSection.quantity,
               rightTopInfo: `${getTotalFoodItemCalories(subSection)} kcal`,
             };
           }),
@@ -66,9 +74,11 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
     <TemplatePlanManager
       isNew={props.isNew}
       onAssignPress={(id, value) => {
-        console.log(id, value);
+        router.push(`/dashboard/clients/${props.clientId}/`);
       }}
+      templateType="diet"
       templateItems={templateItems}
+      onAddNewFoodItem={() => {}}
     />
   );
 };

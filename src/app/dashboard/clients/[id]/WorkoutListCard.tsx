@@ -14,18 +14,20 @@ import { useRouter } from "next/navigation";
 import { useGetWorkoutPlans } from "../../workoutplans/api/hooks";
 import { WorkoutPlanType } from "../../workoutplans/api/types";
 
-const WorkoutPlanListCard = ({ id, name, onClick }: any) => {
+const WorkoutPlanListCard = ({ desc, name, onClick }: any) => {
   return (
     <Flex
       direction={"column"}
-      padding={"4"}
-      cursor={"pointer"}
+      padding={"10px"}
       onClick={onClick}
+      cursor={"pointer"}
     >
-      <Text color="#101828" fontWeight="500">
-        {name}
-      </Text>
-      <Box p={2} />
+      <Flex direction={"column"}>
+        <Text color="#101828" fontWeight="500" fontSize={"14px"}>
+          {name}
+        </Text>
+        <Box p="0.5" />
+      </Flex>
       <Divider />
     </Flex>
   );
@@ -40,6 +42,7 @@ export const WorkoutPlanList = (props: WorkoutPlanListProps) => {
     client_id: props.clientId,
   });
 
+  data;
   const router = useRouter();
 
   if (isLoading) {
@@ -56,7 +59,7 @@ export const WorkoutPlanList = (props: WorkoutPlanListProps) => {
 
   return (
     <Box
-      width={"100%"}
+      width={"48%"}
       borderRadius="8px"
       border="1px solid #EAECF0"
       height={"100%"}
@@ -80,6 +83,7 @@ export const WorkoutPlanList = (props: WorkoutPlanListProps) => {
                 `/dashboard/workoutplans/new?client_id=${props.clientId}`
               )
             }
+            bg="transparent"
             aria-label="add workout plan"
             icon={<CiCirclePlus />}
           />
@@ -88,8 +92,8 @@ export const WorkoutPlanList = (props: WorkoutPlanListProps) => {
       {data.data.map((plan: WorkoutPlanType) => (
         <WorkoutPlanListCard
           key={plan.id}
-          id={plan.id}
           name={plan.name}
+          desc={`8 Workouts`}
           onClick={() => {
             router.push(
               `/dashboard/workoutplans/${plan.id}?client_id=${props.clientId}`

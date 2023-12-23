@@ -12,7 +12,7 @@ export const useGetSubscriptions = () => {
         const res = await get<QuerySubscriptionsResponse>(GET_SUBSCRIPTIONS);
         return res?.data;
       } catch (error) {
-        console.log(error);
+        error;
       }
     },
   });

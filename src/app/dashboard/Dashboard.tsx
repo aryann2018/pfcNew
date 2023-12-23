@@ -1,4 +1,5 @@
 "use client";
+
 import {
   Avatar,
   Box,
@@ -21,6 +22,16 @@ import { PiUserList } from "react-icons/pi";
 
 import React from "react";
 import { PFCColors } from "../common/PFCColors";
+import { useRouter } from "next/navigation";
+import { Image } from "@chakra-ui/react";
+
+const navItems = [
+  {
+    label: "Dashboard",
+    icon: PiUserList,
+    route: "/dashboard/clients",
+  },
+];
 
 interface DashboardProps {
   children: any;
@@ -28,27 +39,30 @@ interface DashboardProps {
 
 const Dashboard = ({ children }: DashboardProps) => {
   const sidebar = useDisclosure();
+  const router = useRouter();
 
   const NavItem = (props: any) => {
     const { icon, children, ...rest } = props;
     return (
       <Flex
         align="center"
-        px="4"
-        mx="2"
+        paddingX={"16px"}
         rounded="md"
         py="3"
         cursor="pointer"
         color={PFCColors.GRAY_100}
-        fontSize={18}
+        fontSize={16}
         _hover={{
           bg: "blackAlpha.300",
           color: "whiteAlpha.900",
         }}
         role="group"
-        fontWeight="800"
+        fontWeight="500"
         transition=".15s ease"
         {...rest}
+        onClick={() => {
+          props.onClick();
+        }}
       >
         {icon && (
           <Icon
@@ -67,9 +81,8 @@ const Dashboard = ({ children }: DashboardProps) => {
 
   const SidebarContent = (props: any) => (
     <Box
-      as="nav"
+      as="div"
       pos="fixed"
-      top="16"
       left="0"
       zIndex="sticky"
       h="full"
@@ -79,24 +92,33 @@ const Dashboard = ({ children }: DashboardProps) => {
       bg="brand.GRAY_900"
       borderColor="blackAlpha.300"
       borderRightWidth="1px"
-      w="60"
+      w="72"
       {...props}
     >
-      <Stack
-        as="nav"
-        fontSize="sm"
-        color="gray.600"
-        aria-label="Main Navigation"
-      >
-        <Flex h="8" />
-        <NavItem icon={PiUserList}>Clients</NavItem>
+      <Stack as="nav" aria-label="Main Navigation">
+        <Box paddingY={"12px"} />
+        <Flex direction={"row"} alignItems={"center"} paddingX={"16px"}>
+          <Image src="/images/logo.svg" alt="Logo" height="40px" />
+        </Flex>
+        <Box paddingY={"12px"} />
+        {navItems.map((navItem) => (
+          <NavItem
+            key={navItem.label}
+            icon={navItem.icon}
+            onClick={() => {
+              router.push(navItem.route);
+            }}
+          >
+            {navItem.label}
+          </NavItem>
+        ))}
       </Stack>
     </Box>
   );
   return (
     <Box
       as="section"
-      bg="gray.50"
+      bg="white"
       _dark={{ bg: "gray.700" }}
       height={"calc(100vh - 64px)"}
     >
@@ -111,9 +133,13 @@ const Dashboard = ({ children }: DashboardProps) => {
           <SidebarContent w="full" borderRight="none" />
         </DrawerContent>
       </Drawer>
-      <Box ml={{ base: 0, md: 60 }} transition=".3s ease">
-        <Box p={"8"} />
-        <Box as="main" p="4">
+      <Box
+        ml={{ base: 0, md: 72 }}
+        transition=".3s ease"
+        background={"#101828"}
+      >
+        <Box p={"2"} background={"#101828"} />
+        <Box as="main" p="8" borderTopLeftRadius={"40px"} background={"white"}>
           {children}
         </Box>
       </Box>

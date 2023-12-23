@@ -3,11 +3,13 @@ import { getToken } from "../auth/utils";
 
 const getUrl = () => {
   if (process.env.NODE_ENV === "production") {
-    return "https://api.pfc.icu/api/v1";
+    return "https://api.pfc.quest/api/v1";
+  } else if (process.env.NODE_ENV === "development") {
+    return "https://localhost:8000/api/v1";
   } else if (process.env.NODE_ENV === "test") {
-    return "https://api.staging.pfc.icu/api/v1";
+    return "https://localhost:8000/api/v1";
   } else {
-    return "http://localhost:8000/api/v1";
+    return "https://api.staging.pfc.quest/api/v1";
   }
 };
 
@@ -44,9 +46,7 @@ export const get = async <ResponseType>(
     const response = await instance.get<ResponseType>(url, { ...options });
 
     return response;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 export const put = async <RequestType, ResponseType>(

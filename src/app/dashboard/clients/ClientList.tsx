@@ -25,6 +25,7 @@ import { getDaysUntilEndDate } from "@/app/utilities/utils";
 import { SubscriptionType } from "./api/types";
 import { useRouter } from "next/navigation";
 import { useGetSubscriptions } from "./api/hooks";
+import PFCSpace from "@/app/common/PFCSpace";
 
 interface ClientSubscriptionProps {
   subscription: SubscriptionType;
@@ -112,6 +113,7 @@ const SubscriptionList = () => {
   return (
     <Box width={"100%"}>
       <Text fontSize={"30px"}>Welcome back!</Text>
+      <PFCSpace />
       <TableContainer
         borderRadius={10}
         borderWidth={1}
