@@ -19,8 +19,8 @@ export type FoodIngredient = {
 
 export type FoodItem = {
   id: string;
-  created_at: string;
-  modified_at: string;
+  created_at?: string;
+  modified_at?: string;
   food_ingredient: FoodIngredient;
   quantity: number;
 };

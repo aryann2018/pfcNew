@@ -3,7 +3,7 @@ import { Badge, Box, Flex, Text } from "@chakra-ui/react";
 import { NumberTicker } from "./MacrosTIcker";
 
 interface CustomBadgesProps {
-  macros: {
+  macros?: {
     protein: number;
     fat: number;
     carbs: number;
@@ -20,9 +20,10 @@ function CustomBadges(props: CustomBadgesProps) {
     fontFamily: "JetBrains Mono", // font family
   };
 
-  const { macros } = props;
+  const { macros = { protein: 0, fat: 0, carbs: 0, calories: 0 } } = props;
 
   const { protein, fat, carbs, calories } = macros;
+
   return (
     <Flex gap={"10px"} marginY={"10px"} height={"40px"} width={"100%"}>
       <Badge

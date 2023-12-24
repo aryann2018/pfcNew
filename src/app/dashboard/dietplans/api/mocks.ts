@@ -11,28 +11,39 @@ const UNIT_PLATE = "plate";
 const UNIT_CUP = "cup";
 
 // Functions to create food items, subsections, sections, and templates
-function createFoodItem(foodData: any): FoodIngredient {
+export function createFoodItem(foodData: any): FoodIngredient {
   return { ...foodData };
 }
 
-function createTemplateSubSection(subSectionData: any): TemplateSubSection {
+export function createTemplateSubSection(
+  subSectionData: any
+): TemplateSubSection {
   return {
     ...subSectionData,
     foodItem: createFoodItem(subSectionData.foodItem),
+    macros: subSectionData.macros,
   };
 }
 
-function createTemplateSection(sectionData: any): TemplateSection {
+export function createTemplateSection(sectionData: any): TemplateSection {
   return {
     ...sectionData,
     subSections: sectionData.subSections.map(createTemplateSubSection),
+    macros: sectionData.macros,
+    name: sectionData.name,
+    description: sectionData.description,
+    id: sectionData.id,
   };
 }
 
-function createTemplate(templateData: any): Template {
+export function createTemplate(templateData: any): Template {
   return {
     ...templateData,
     sections: templateData.sections.map(createTemplateSection),
+    macros: templateData.macros,
+    name: templateData.name,
+    description: templateData.description,
+    id: templateData.id,
   };
 }
 
@@ -43,11 +54,13 @@ export const templates: Template[] = [
     name: "Ultimate Keto Diet",
     description:
       "A low-carb, high-fat diet designed to achieve ketosis and burn fat efficiently.",
+    macros: { protein: 30, fat: 60, carbs: 10, calories: 700 },
     sections: [
       createTemplateSection({
         id: "keto-breakfast",
         name: "Breakfast",
         description: "Start your day with a ketogenic boost.",
+        macros: { protein: 8, fat: 20, carbs: 5, calories: 300 },
         subSections: [
           createTemplateSubSection({
             name: "Keto Pancakes",
@@ -63,6 +76,7 @@ export const templates: Template[] = [
           createTemplateSubSection({
             name: "Avocado Smoothie",
             description: "A creamy smoothie with avocado and coconut milk.",
+
             macros: { protein: 4, fat: 15, carbs: 8, calories: 180 },
             quantity: 1,
             unit: UNIT_CUP,
@@ -86,6 +100,7 @@ export const templates: Template[] = [
         id: "vegan-lunch",
         name: "Lunch",
         description: "Nutritious and delicious vegan midday meals.",
+        macros: { protein: 8, fat: 20, carbs: 5, calories: 320 },
         subSections: [
           createTemplateSubSection({
             name: "Chickpea Salad",
@@ -115,6 +130,7 @@ export const templates: Template[] = [
         id: "balanced-dinner",
         name: "Dinner",
         description: "Enjoy a balanced and fulfilling end to your day.",
+        macros: { protein: 8, fat: 20, carbs: 5, calories: 300 },
         subSections: [
           createTemplateSubSection({
             name: "Grilled Salmon with Quinoa",

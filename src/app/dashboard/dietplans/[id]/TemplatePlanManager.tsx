@@ -13,6 +13,12 @@ import {
 import { useEffect, useState } from "react";
 import { MacrosTicker } from "./MacrosTIcker";
 import { MealPlanSection, TemplateSection } from "./MealPlanSection";
+import useDietPlanStore from "./dietplansStore";
+import {
+  getTotalMealPlanMacros,
+  getTotalSectionMacros,
+  getTotalTemplateMacros,
+} from "../utils";
 
 /* selectItem */
 interface TemplateSelectItemProps {
@@ -75,7 +81,7 @@ export interface Template {
 }
 
 const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
-  const [templateId, setTemplateId] = useState<string | null>(null);
+  const { activeTemplate, setActiveTemplate } = useDietPlanStore();
 
   const templateSelectItems = props.templates.map((template) => {
     return {
@@ -84,17 +90,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
     };
   });
 
-  const template: Template | undefined = props.templates.find(
-    (template) => template.id === templateId
-  );
-
-  useEffect(() => {
-    if (props.isNew) {
-      if (!templateId) {
-        setTemplateId(templateSelectItems[0].value);
-      }
-    }
-  }, [props.isNew, props.templates, templateId, templateSelectItems]);
+  const activeTemplateMacros = getTotalTemplateMacros(activeTemplate!);
 
   if (props.isNew) {
     return (
@@ -108,22 +104,36 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
                   (template) => template.id === value
                 );
                 if (template) {
-                  setTemplateId(value);
+                  setActiveTemplate(value);
                 }
               },
             }))}
             onClick={(value) => {
-              setTemplateId(value);
+              const template = props.templates.find(
+                (template) => template.id === value
+              );
+              if (template) {
+                setActiveTemplate(value);
+              }
             }}
           />
           <Spacer />
-          <MacrosTicker protien={40} fat={70} carbs={20} calories={2990} />
+          <MacrosTicker
+            protien={activeTemplateMacros.protein!}
+            fat={activeTemplateMacros.fat!}
+            carbs={activeTemplateMacros.carbs!}
+            calories={activeTemplateMacros.calories!}
+          />
         </HStack>
         <Box p={2} />
         <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-          {template?.sections.map((section) => (
+          {activeTemplate?.sections.map((section) => (
             <GridItem key={section.id} {...styles.section}>
-              <MealPlanSection key={section.id} {...section} />
+              <MealPlanSection
+                key={section.id}
+                {...section}
+                macros={getTotalSectionMacros(section)}
+              />
             </GridItem>
           ))}
         </Grid>
@@ -132,7 +142,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
         <Flex p="4" direction="row" justifyContent={"flex-end"}>
           <Button
             onClick={() => {
-              props.onAssignPress(template?.id!, {});
+              props.onAssignPress(activeTemplate?.id!, activeTemplate);
             }}
             {...styles.assignButton}
           >
