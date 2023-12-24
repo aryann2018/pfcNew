@@ -1,7 +1,11 @@
 import { PFCColors } from "@/app/common/PFCColors";
-import { Badge, Flex, HStack, Text } from "@chakra-ui/react";
+import { Badge, Box, Flex, HStack, Text } from "@chakra-ui/react";
 import { CiCirclePlus } from "react-icons/ci";
 import { styles } from "./TemplatePlanManager";
+import { FoodIngredient } from "../api/types";
+import SearchableFoodSelect from "@/app/common/inputs/SearchableFoodSelect";
+import { useState } from "react";
+import CustomBadges from "./CustomBadges";
 
 interface AddTemplateSubSectionProps {
   label: string;
@@ -29,53 +33,52 @@ export const AddTemplateSubSection = ({
 };
 
 export interface TemplateSubSection {
-  id: string;
+  id?: string;
   name: string;
   description: string;
-  labels: string[];
-  onDeleteClick: (id: string) => void;
-  LeftInfo: any;
-  rightTopInfo: any;
+  onDelete?: (id: string) => void;
+  isNew?: boolean;
+  macros: {
+    protein: number;
+    fat: number;
+    carbs: number;
+    calories: number;
+  };
+  quantity: number;
+  unit: string;
+  foodItem?: FoodIngredient;
+  style?: any;
 }
 
-export const FoodItemSubSection = (props: any) => {
+export const FoodItemSubSection = (props: TemplateSubSection) => {
+  const [selected, setSelected] = useState<FoodIngredient>(props.foodItem!);
   return (
     <Flex
-      direction={"column"}
+      direction={"row"}
       justifyContent={"space-between"}
       bg={PFCColors.WHITE}
       p="12px"
       borderRadius={"4px"}
+      boxShadow="0px 1.69px 1.69px 0px rgba(24, 34, 48, 0.10)"
+      zIndex={props.style?.zIndex}
     >
-      <Flex direction={"row"} justifyContent={"space-between"} flexGrow={"1"}>
-        <Text {...styles.subSection.title}>{props.name}</Text>
-
-        <Text
-          {...styles.rightTopInfo}
-          fontSize={"12px"}
-          bg={"#EAECF0"}
-          paddingY="8px"
-          paddingX="12px"
-        >
-          {props.rightTopInfo}
-        </Text>
+      <Flex
+        direction={"column"}
+        justifyContent={"space-between"}
+        width={"100%"}
+      >
+        <Box width={"100%"}>
+          <SearchableFoodSelect
+            onSelect={(foodItem) => {
+              setSelected(foodItem);
+            }}
+            selected={selected}
+          />
+        </Box>
+        <Flex direction={"row"} justifyContent={"space-between"} width={"100%"}>
+          <CustomBadges macros={props.macros} />
+        </Flex>
       </Flex>
-
-      <HStack>
-        {props.labels.map((label: any) => (
-          <Badge
-            key={label}
-            borderRadius={4}
-            colorScheme="green"
-            fontSize={"12px"}
-            padding={1}
-            paddingX={4}
-            size={"sm"}
-          >
-            {label}
-          </Badge>
-        ))}
-      </HStack>
     </Flex>
   );
 };

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import { Box, Flex, Text } from "@chakra-ui/react";
 
-const NumberTicker = ({ toValue, duration = 1000 }: any) => {
+export const NumberTicker = ({ toValue, duration = 1000, unit }: any) => {
   const [value, setValue] = useState(0);
 
   useEffect(() => {
@@ -23,7 +23,12 @@ const NumberTicker = ({ toValue, duration = 1000 }: any) => {
     return () => clearInterval(timer); // Cleanup the interval on component unmount
   }, [toValue, duration]);
 
-  return <Text fontWeight="bold">{Math.round(value)}</Text>;
+  return (
+    <Text fontWeight="bold">
+      {Math.round(value)}
+      {unit ?? ""}
+    </Text>
+  );
 };
 
 interface MacrosTickerProps {
@@ -45,8 +50,11 @@ export const MacrosTicker = (props: MacrosTickerProps) => {
         fontSize: size === "sm" ? "14px" : size === "md" ? "16px" : "22px",
         borderColor: "#D0D5DD",
         borderWidth: "1px",
-        borderRadius: "8px",
+        borderRadius: "6.761px",
         marginRight: "8px",
+        boxShadow: "0px 1.69px 1.69px 0px rgba(24, 34, 48, 0.10)",
+        background:
+          "linear-gradient(180deg, rgba(238, 241, 244, 0.50) 0%, rgba(255, 255, 255, 0.50) 45%, rgba(255, 255, 255, 0.50) 58.89%, rgba(238, 241, 244, 0.50) 100%), #FFF;",
       }}
     >
       <Flex

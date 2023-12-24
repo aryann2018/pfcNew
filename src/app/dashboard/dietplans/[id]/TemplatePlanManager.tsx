@@ -37,7 +37,16 @@ interface TemplateSelectProps {
 
 const TemplateSelect = (props: TemplateSelectProps) => {
   return (
-    <Select variant={"filled"} maxWidth={"50%"}>
+    <Select
+      variant={"filled"}
+      maxWidth={"50%"}
+      style={{
+        borderRadius: "8px",
+        background: "#EAECF0",
+        fontSize: "24px",
+        fontWeight: "600",
+      }}
+    >
       {props.items.map((item) => (
         <TemplateSelectItem
           key={item.value}
@@ -63,7 +72,6 @@ export interface Template {
   name: string;
   description: string;
   sections: TemplateSection[];
-  rightTopInfo: any;
 }
 
 const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
@@ -107,7 +115,6 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
             onClick={(value) => {
               setTemplateId(value);
             }}
-            {...styles.select}
           />
           <Spacer />
           <MacrosTicker protien={40} fat={70} carbs={20} calories={2990} />
@@ -152,24 +159,7 @@ export const styles = {
     fontSize: 48,
     fontWeight: "600",
   },
-  rightTopInfo: {
-    paddingY: 2,
-    paddingX: 2,
-    background:
-      "linear-gradient(0deg, white 0%, white 100%), linear-gradient(180deg, rgba(238, 241, 244, 0.50) 0%, rgba(255, 255, 255, 0.50) 45%, rgba(255, 255, 255, 0.50) 59%, rgba(237.83, 240.67, 243.51, 0.50) 100%)",
-    boxShadow:
-      "0px 1.7733333110809326px 1.7733333110809326px rgba(24, 34, 48, 0.10)",
-    borderRadius: 8,
-    border: "1px #D0D5DD solid",
-    justifyContent: "center",
-    alignItems: "center",
 
-    display: "inline-flex",
-    color: "#353849",
-    fontSize: 24,
-    fontWeight: "600",
-    maxHeight: "40px",
-  },
   section: {
     flex: "0 0 48%",
     margin: "5px" /* Optional: Add margin for spacing between items */,
