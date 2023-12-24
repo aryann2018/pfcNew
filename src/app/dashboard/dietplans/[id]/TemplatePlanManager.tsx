@@ -1,5 +1,4 @@
 import {
-  Badge,
   Box,
   Button,
   Divider,
@@ -8,42 +7,12 @@ import {
   GridItem,
   HStack,
   Select,
-  SelectField,
   Spacer,
   Text,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-import { BiFontSize } from "react-icons/bi";
-import { CiCirclePlus } from "react-icons/ci";
-import { inter } from "../../../layout";
-import { PFCColors } from "../../../common/PFCColors";
 import { MacrosTicker } from "./MacrosTIcker";
-
-interface TemplateSubSection {
-  id: string;
-  name: string;
-  description: string;
-  labels: string[];
-  onDeleteClick: (id: string) => void;
-  LeftInfo: any;
-  rightTopInfo: any;
-}
-
-interface TemplateSection {
-  id: string;
-  name: string;
-  description: string;
-  subSections: TemplateSubSection[];
-  rightTopInfo: any;
-}
-
-export interface Template {
-  id: string;
-  name: string;
-  description: string;
-  sections: TemplateSection[];
-  rightTopInfo: any;
-}
+import { MealPlanSection, TemplateSection } from "./MealPlanSection";
 
 /* selectItem */
 interface TemplateSelectItemProps {
@@ -54,14 +23,7 @@ interface TemplateSelectItemProps {
 
 const TemplateSelectItem = (props: TemplateSelectItemProps) => {
   return (
-    <option
-      //   border="1px solid #EAECF0"
-      //   borderRadius="8px"
-      //   width="100%"
-      //   _hover={{ cursor: "pointer" }}
-      onClick={() => props.onClick(props.value)}
-      value={props.value}
-    >
+    <option onClick={() => props.onClick(props.value)} value={props.value}>
       <Text>{props.label}</Text>
     </option>
   );
@@ -88,120 +50,33 @@ const TemplateSelect = (props: TemplateSelectProps) => {
   );
 };
 
-/* templatePlanSubSection */
-const TemplatePlanSubSection = (props: TemplateSubSection) => {
-  return (
-    <Flex
-      direction={"column"}
-      justifyContent={"space-between"}
-      bg={PFCColors.WHITE}
-      p="12px"
-      borderRadius={"4px"}
-    >
-      <Flex direction={"row"} justifyContent={"space-between"} flexGrow={"1"}>
-        <Text {...styles.subSection.title}>{props.name}</Text>
-
-        <Text
-          {...styles.rightTopInfo}
-          fontSize={"12px"}
-          bg={"#EAECF0"}
-          paddingY="8px"
-          paddingX="12px"
-        >
-          {props.rightTopInfo}
-        </Text>
-      </Flex>
-
-      <HStack>
-        {props.labels.map((label) => (
-          <Badge
-            key={label}
-            borderRadius={4}
-            colorScheme="green"
-            fontSize={"12px"}
-            padding={1}
-            paddingX={4}
-            size={"sm"}
-          >
-            {label}
-          </Badge>
-        ))}
-      </HStack>
-    </Flex>
-  );
-};
-
-interface AddTemplateSubSectionProps {
-  label: string;
-  onClick: () => void;
-}
-
-const AddTemplateSubSection = ({
-  label,
-  onClick,
-}: AddTemplateSubSectionProps) => {
-  return (
-    <Flex
-      direction={"column"}
-      onClick={onClick}
-      cursor={"pointer"}
-      alignItems={"center"}
-      justifyContent={"center"}
-      bg="white"
-      p="10px"
-    >
-      <CiCirclePlus size={24} />
-      <Text fontSize={"15px"}>{label}</Text>
-    </Flex>
-  );
-};
-
-interface TemplateSectionProps extends TemplateSection {
-  templateType: "diet" | "workout";
-}
-
-const TemplatePlanSection = (props: TemplateSectionProps) => {
-  return (
-    <Flex direction={"column"}>
-      <HStack justifyContent="space-between" p={2}>
-        <Text {...styles.sectionTitle}>{props.name}</Text>
-        <Text {...styles.rightTopInfo} fontSize={"15px"}>
-          {props.rightTopInfo}
-        </Text>
-      </HStack>
-      <Flex direction={"column"} p={2} gap={"4"}>
-        {props.subSections.map((subSection) => (
-          <TemplatePlanSubSection key={subSection.id} {...subSection} />
-        ))}
-        <AddTemplateSubSection
-          label={props.templateType === "diet" ? "Add dish" : "Add Exercise"}
-          onClick={() => {}}
-        />
-      </Flex>
-    </Flex>
-  );
-};
-
 /* templatePlanManager */
 interface TemplatePlanManagerProps {
   isNew: boolean;
   onAssignPress: (template_id: string, template: any) => void;
-  templateItems: Template[];
-  templateType: "diet" | "workout";
+  templates: Template[];
   onAddNewFoodItem: () => void;
+}
+
+export interface Template {
+  id: string;
+  name: string;
+  description: string;
+  sections: TemplateSection[];
+  rightTopInfo: any;
 }
 
 const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
   const [templateId, setTemplateId] = useState<string | null>(null);
 
-  const templateSelectItems = props.templateItems.map((template) => {
+  const templateSelectItems = props.templates.map((template) => {
     return {
       label: template.name,
       value: template.id,
     };
   });
 
-  const template: Template | undefined = props.templateItems.find(
+  const template: Template | undefined = props.templates.find(
     (template) => template.id === templateId
   );
 
@@ -211,7 +86,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
         setTemplateId(templateSelectItems[0].value);
       }
     }
-  }, [props.isNew, props.templateItems, templateId, templateSelectItems]);
+  }, [props.isNew, props.templates, templateId, templateSelectItems]);
 
   if (props.isNew) {
     return (
@@ -221,7 +96,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
             items={templateSelectItems.map((item) => ({
               ...item,
               onClick: (value) => {
-                const template = props.templateItems.find(
+                const template = props.templates.find(
                   (template) => template.id === value
                 );
                 if (template) {
@@ -241,11 +116,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
         <Grid templateColumns="repeat(2, 1fr)" gap={6}>
           {template?.sections.map((section) => (
             <GridItem key={section.id} {...styles.section}>
-              <TemplatePlanSection
-                key={section.id}
-                {...section}
-                templateType={props.templateType}
-              />
+              <MealPlanSection key={section.id} {...section} />
             </GridItem>
           ))}
         </Grid>
@@ -267,7 +138,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
   return <div>TemplatePlanManager</div>;
 };
 
-const styles = {
+export const styles = {
   select: {
     paddingX: 4,
     paddingY: 2,

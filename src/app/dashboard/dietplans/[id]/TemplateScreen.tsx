@@ -34,7 +34,7 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
     return <div>No data</div>;
   }
 
-  const templateItems: Template[] = data!.data.map((template) => {
+  const templates: Template[] = data!.data.map((template) => {
     return {
       id: template.id,
       name: template.name,
@@ -76,8 +76,7 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
       onAssignPress={(id, value) => {
         router.push(`/dashboard/clients/${props.clientId}/`);
       }}
-      templateType="diet"
-      templateItems={templateItems}
+      templates={templates}
       onAddNewFoodItem={() => {}}
     />
   );

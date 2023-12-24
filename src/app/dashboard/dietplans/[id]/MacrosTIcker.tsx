@@ -23,11 +23,7 @@ const NumberTicker = ({ toValue, duration = 1000 }: any) => {
     return () => clearInterval(timer); // Cleanup the interval on component unmount
   }, [toValue, duration]);
 
-  return (
-    <Text fontSize="2xl" fontWeight="bold">
-      {Math.round(value)}
-    </Text>
-  );
+  return <Text fontWeight="bold">{Math.round(value)}</Text>;
 };
 
 interface MacrosTickerProps {
