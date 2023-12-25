@@ -14,6 +14,7 @@ import {
   FiX as CloseIcon,
   FiEdit3 as EditIcon,
 } from "react-icons/fi";
+import { on } from "events";
 
 function EditableControls() {
   const {
@@ -52,7 +53,10 @@ function EditableControls() {
   );
 }
 
-function EditableText(props: { defaultValue: string }) {
+function EditableText(props: {
+  defaultValue: string;
+  onChange: (text: string) => void;
+}) {
   // Define common styles for both EditablePreview and EditableInput
   const commonStyles = {
     px: 2, // padding left and right
@@ -62,7 +66,7 @@ function EditableText(props: { defaultValue: string }) {
     fontWeight: "bold", // font weight
   };
 
-  const { defaultValue, ...rest } = props;
+  const { defaultValue, onChange, ...rest } = props;
 
   return (
     <Editable
@@ -71,6 +75,9 @@ function EditableText(props: { defaultValue: string }) {
       as={Flex}
       direction={"row"}
       alignItems={"center"}
+      onChange={(value) => {
+        onChange(value);
+      }}
     >
       <EditablePreview
         {...commonStyles}

@@ -28,7 +28,8 @@ export interface TemplateSection {
 interface TemplateSectionProps extends TemplateSection {}
 
 export const MealPlanSection = (props: TemplateSectionProps) => {
-  const { addNewSubSectionToActiveTemplate } = useDietPlanStore();
+  const { addNewSubSectionToActiveTemplate, updateSectionName } =
+    useDietPlanStore();
 
   const macros = getTotalSectionMacros(props);
 
@@ -36,7 +37,10 @@ export const MealPlanSection = (props: TemplateSectionProps) => {
     <div>
       <Flex direction={"column"}>
         <HStack justifyContent="space-between" p={2}>
-          <EditableText defaultValue={props.name} />
+          <EditableText
+            defaultValue={props.name}
+            onChange={(text) => updateSectionName(props.id, text)}
+          />
           <MacrosTicker
             size="sm"
             protien={macros.protein}
