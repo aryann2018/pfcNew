@@ -31,7 +31,6 @@ const SelectOption = ({ children, ...props }: any) => (
 );
 
 interface SearchableFoodSelectProps {
-  options: FoodIngredient[];
   isLoadingOptions: boolean;
   selected?: FoodIngredient;
   onSelect: (value: any) => void;
@@ -41,6 +40,7 @@ function SearchableFoodSelect({
   selected,
   onSelect,
 }: SearchableFoodSelectProps) {
+  console.log("selected", selected);
   const { foodIngridients, setSearchTerm, isLoading } =
     useFoodIngridientsStore();
 

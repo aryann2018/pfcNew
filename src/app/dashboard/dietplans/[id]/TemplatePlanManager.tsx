@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  CloseButton,
   Divider,
   Flex,
   Grid,
@@ -19,6 +20,7 @@ import {
   getTotalSectionMacros,
   getTotalTemplateMacros,
 } from "../utils";
+import { AddNewMealButton } from "./AddNewMealButton";
 
 /* selectItem */
 interface TemplateSelectItemProps {
@@ -81,8 +83,14 @@ export interface Template {
 }
 
 const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
-  const { activeTemplate, setActiveTemplate } = useDietPlanStore();
+  const {
+    activeTemplate,
+    setActiveTemplate,
+    removeSectionFromActiveTemplate,
+    addNewSectionToActiveTemplate,
+  } = useDietPlanStore();
 
+  console.log("activeTemplate", activeTemplate);
   const templateSelectItems = props.templates.map((template) => {
     return {
       label: template.name,
@@ -128,16 +136,49 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
         <Box p={2} />
         <Grid templateColumns="repeat(2, 1fr)" gap={6}>
           {activeTemplate?.sections.map((section) => (
-            <GridItem key={section.id} {...styles.section}>
-              <MealPlanSection
+            <div style={{ position: "relative" }} key={section.id}>
+              <GridItem
                 key={section.id}
-                {...section}
-                macros={getTotalSectionMacros(section)}
-              />
-            </GridItem>
+                {...styles.section}
+                _hover={{
+                  ".close-button": {
+                    display: "block",
+                  },
+                }}
+              >
+                <MealPlanSection
+                  key={section.id}
+                  {...section}
+                  macros={getTotalSectionMacros(section)}
+                />
+                <CloseButton
+                  className="close-button"
+                  size="md"
+                  position="absolute"
+                  display={"none"}
+                  top={"-10px"}
+                  right={"-20px"}
+                  background={"black"}
+                  color={"white"}
+                  borderRadius={"50%"}
+                  zIndex={100}
+                  onClick={() => {
+                    removeSectionFromActiveTemplate(section.id);
+                  }}
+                  cursor={"pointer"}
+                />
+              </GridItem>
+            </div>
           ))}
         </Grid>
         <Box p={2} />
+        <Flex direction={"row"} justifyContent={"center"}>
+          <AddNewMealButton
+            onClick={() => {
+              addNewSectionToActiveTemplate();
+            }}
+          />
+        </Flex>
         <Divider />
         <Flex p="4" direction="row" justifyContent={"flex-end"}>
           <Button

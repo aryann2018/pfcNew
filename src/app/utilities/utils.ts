@@ -1,3 +1,5 @@
+import { RefObject, useEffect, useRef, useState } from "react";
+
 export function getDaysUntilEndDate(endDate: string) {
   const now = new Date();
   const end = new Date(endDate);
@@ -23,3 +25,27 @@ export function mergeUniqueObjects(objectsArray: any[]): any[] {
   // Return the values of the unique object, which are the unique items
   return Object.values(unique);
 }
+
+export const useHover = (): [boolean, RefObject<HTMLDivElement>] => {
+  const [hovered, setHovered] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const enter = () => setHovered(true);
+  const leave = () => setHovered(false);
+
+  useEffect(() => {
+    const refCopy = ref;
+
+    if (!refCopy.current) return;
+
+    (refCopy.current as HTMLElement).addEventListener("mouseenter", enter);
+    (refCopy.current as HTMLElement).addEventListener("mouseleave", leave);
+    return () => {
+      if (!refCopy.current) return;
+
+      (refCopy.current as HTMLElement).removeEventListener("mouseenter", enter);
+      (refCopy.current as HTMLElement).removeEventListener("mouseleave", leave);
+    };
+  }, [ref]);
+
+  return [hovered, ref];
+};

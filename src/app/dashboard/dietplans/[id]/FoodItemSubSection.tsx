@@ -2,6 +2,7 @@ import { PFCColors } from "@/app/common/PFCColors";
 import {
   Badge,
   Box,
+  Button,
   Flex,
   HStack,
   Input,
@@ -13,10 +14,11 @@ import { CiCirclePlus } from "react-icons/ci";
 import { styles } from "./TemplatePlanManager";
 import { FoodIngredient } from "../api/types";
 import SearchableFoodSelect from "@/app/common/inputs/SearchableFoodSelect";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CustomBadges from "./CustomBadges";
 import useDietPlanStore from "./dietplansStore";
 import { getTotalFoodItemMarcos } from "../utils";
+import { createTemplateSubSection } from "../api/mocks";
 
 interface AddTemplateSubSectionProps {
   label: string;
@@ -63,9 +65,35 @@ export interface TemplateSubSection {
 }
 
 export const FoodItemSubSection = (props: TemplateSubSection) => {
-  const [selected, setSelected] = useState<FoodIngredient>(props.foodItem!);
+  console.log("props", props);
+  const [selected, setSelected] = useState<FoodIngredient | undefined>();
+
   const { updateActiveFoodItemQuantity, setSubSectionInSection } =
     useDietPlanStore();
+
+  const macros = props.isNew
+    ? getTotalFoodItemMarcos({
+        id: props.id!,
+        food_ingredient: props.foodItem!,
+        quantity: props.quantity,
+      })
+    : props.macros!;
+
+  useEffect(() => {
+    if (selected && props.isNew) {
+      const newSubSection = createTemplateSubSection({
+        id: selected.id!,
+        foodItem: selected,
+        quantity: 1,
+        unit: selected.unit_of_measure,
+        name: selected.name,
+        description: selected.description,
+      });
+
+      setSubSectionInSection(props.mealId!, props.id!, newSubSection);
+      setSelected(undefined);
+    }
+  }, [selected]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Flex
@@ -83,22 +111,13 @@ export const FoodItemSubSection = (props: TemplateSubSection) => {
           <SearchableFoodSelect
             onSelect={(foodItem: FoodIngredient) => {
               setSelected(foodItem);
-              setSubSectionInSection(props.mealId!, props.id!, {
-                id: foodItem.id,
-                name: foodItem.name,
-                description: foodItem.description,
-                quantity: 1 as unknown as number,
-                unit: foodItem.unit_of_measure as unknown as string,
-                foodItem: foodItem,
-              });
             }}
-            selected={selected}
+            selected={selected || props.foodItem}
             isLoadingOptions={false}
-            options={[]}
           />
         </Box>
         <Flex direction={"row"} justifyContent={"space-between"} width={"100%"}>
-          <CustomBadges macros={props.macros} />
+          <CustomBadges macros={macros} />
         </Flex>
         <Text fontSize={"12px"}>{props.description}</Text>
       </Flex>
@@ -108,19 +127,32 @@ export const FoodItemSubSection = (props: TemplateSubSection) => {
         alignItems={"flex-end"}
         width={"40%"}
       >
-        <Flex direction={"column"} alignItems={"flex-end"}>
-          <InputGroup>
+        <Flex
+          direction={"column"}
+          justifyContent={"space-between"}
+          fontFamily={"JetBrains Mono"}
+        >
+          <InputGroup
+            style={{
+              borderRadius: "4px",
+              border: "1px solid #D0D5DD",
+            }}
+          >
             <Input
               placeholder="Quantity"
-              value={0}
+              value={props.quantity}
               onChange={(event) => {
                 updateActiveFoodItemQuantity(
                   props.id!,
                   event.target.value as unknown as number
                 );
               }}
+              style={{ border: "none", outline: "none" }}
             />
-            <InputRightAddon background={"white"}>
+            <InputRightAddon
+              background={"white"}
+              style={{ border: "none", outline: "none" }}
+            >
               <Badge
                 colorScheme="white"
                 alignItems={"center"}
@@ -135,6 +167,7 @@ export const FoodItemSubSection = (props: TemplateSubSection) => {
               </Badge>
             </InputRightAddon>
           </InputGroup>
+          <Box p={1} />
         </Flex>
       </Flex>
     </Flex>

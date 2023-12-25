@@ -6,7 +6,7 @@ export const NumberTicker = ({ toValue, duration = 1000, unit }: any) => {
   const [value, setValue] = useState(0);
 
   useEffect(() => {
-    let start = 0;
+    let start = value;
     // Calculate the increment per time to ensure smooth animation
     const increment = toValue / (duration / 10);
 
@@ -21,7 +21,7 @@ export const NumberTicker = ({ toValue, duration = 1000, unit }: any) => {
     }, 10);
 
     return () => clearInterval(timer); // Cleanup the interval on component unmount
-  }, [toValue, duration]);
+  }, [toValue, duration]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Text fontWeight="bold">

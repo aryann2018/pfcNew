@@ -2,19 +2,19 @@ import { type } from "os";
 
 export type FoodIngredient = {
   id: string;
-  created_at: string;
-  modified_at: string;
+  created_at?: string;
+  modified_at?: string;
   name: string;
   description: string;
-  unit_of_measure: string;
-  portion_size: string;
-  calories: string;
-  protein: string;
-  fat: string;
-  carbohydrates: string;
-  is_private: boolean;
-  is_allergen: boolean;
-  photo: null | string;
+  unit_of_measure?: string;
+  portion_size?: string;
+  calories?: string;
+  protein?: string;
+  fat?: string;
+  carbohydrates?: string;
+  is_private?: boolean;
+  is_allergen?: boolean;
+  photo?: null | string;
 };
 
 export type FoodItem = {
