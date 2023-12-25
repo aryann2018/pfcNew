@@ -10,6 +10,7 @@ import { DietPlanTemplate } from "./types";
 export const templateFromDietPlanTemplate = (
   dietPlanTemplate: DietPlanTemplate
 ): Template => {
+  console.log(dietPlanTemplate, "dietPlanTemplate");
   // Map each MealPlan in the DietPlanTemplate to a TemplateSection
   const sections = dietPlanTemplate.meal_plan_templates.map((mealPlan) => {
     // Map each FoodItem in the MealPlan to a TemplateSubSection
@@ -19,9 +20,7 @@ export const templateFromDietPlanTemplate = (
         name: foodItem.food_ingredient.name, // Assuming you want to use the name of the food ingredient
         description: foodItem.food_ingredient.description,
         foodItem: foodItem.food_ingredient, // Pass the whole FoodItem object
-        quantity:
-          foodItem.quantity *
-          (foodItem.food_ingredient.portion_size as unknown as number),
+        quantity: foodItem.quantity,
         unit: foodItem.food_ingredient.unit_of_measure,
         macros: getTotalDietPlanMacros(dietPlanTemplate), // Pass the total macros of the DietPlanTemplate
       })

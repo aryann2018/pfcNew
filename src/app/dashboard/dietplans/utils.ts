@@ -1,3 +1,4 @@
+import { parse } from "path";
 import { TemplateSubSection } from "./[id]/FoodItemSubSection";
 import { TemplateSection } from "./[id]/MealPlanSection";
 import { Template } from "./[id]/TemplatePlanManager";
@@ -189,9 +190,9 @@ export const getTotalFoodMacros = (
   }
 
   return {
-    calories: (food.foodItem!.calories as unknown as number) * food.quantity,
-    carbs: (food.foodItem!.carbohydrates as unknown as number) * food.quantity,
-    fat: (food.foodItem!.fat as unknown as number) * food.quantity,
-    protein: (food.foodItem!.protein as unknown as number) * food.quantity,
+    calories: parseFloat(food.foodItem.calories!) * food.quantity,
+    carbs: parseFloat(food.foodItem.carbohydrates!) * food.quantity,
+    fat: parseFloat(food.foodItem.fat!) * food.quantity,
+    protein: parseFloat(food.foodItem.protein!) * food.quantity,
   };
 };

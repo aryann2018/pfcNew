@@ -17,7 +17,7 @@ import SearchableFoodSelect from "@/app/common/inputs/SearchableFoodSelect";
 import { useEffect, useState } from "react";
 import CustomBadges from "./CustomBadges";
 import useDietPlanStore from "./dietplansStore";
-import { getTotalFoodItemMarcos } from "../utils";
+import { getTotalFoodItemMarcos, getTotalFoodMacros } from "../utils";
 import { createTemplateSubSection } from "../api/mocks";
 
 interface AddTemplateSubSectionProps {
@@ -67,20 +67,15 @@ export interface TemplateSubSection {
 export const FoodItemSubSection = (props: TemplateSubSection) => {
   console.log("props", props);
   const [selected, setSelected] = useState<FoodIngredient | undefined>();
+  console.log("selected", selected);
 
   const { updateActiveFoodItemQuantity, setSubSectionInSection } =
     useDietPlanStore();
 
-  const macros = props.isNew
-    ? getTotalFoodItemMarcos({
-        id: props.id!,
-        food_ingredient: props.foodItem!,
-        quantity: props.quantity,
-      })
-    : props.macros!;
+  const macros = getTotalFoodMacros(props);
 
   useEffect(() => {
-    if (selected && props.isNew) {
+    if (selected) {
       const newSubSection = createTemplateSubSection({
         id: selected.id!,
         foodItem: selected,
@@ -112,7 +107,7 @@ export const FoodItemSubSection = (props: TemplateSubSection) => {
             onSelect={(foodItem: FoodIngredient) => {
               setSelected(foodItem);
             }}
-            selected={selected || props.foodItem}
+            selected={props.foodItem}
             isLoadingOptions={false}
           />
         </Box>
@@ -140,11 +135,17 @@ export const FoodItemSubSection = (props: TemplateSubSection) => {
           >
             <Input
               placeholder="Quantity"
-              value={props.quantity}
+              value={Math.round(
+                props.quantity * parseFloat(props.foodItem?.portion_size!)
+              )}
               onChange={(event) => {
                 updateActiveFoodItemQuantity(
+                  props.mealId!,
                   props.id!,
-                  event.target.value as unknown as number
+                  event.target.value
+                    ? parseFloat(event.target.value) /
+                        parseFloat(props.foodItem?.portion_size!)
+                    : 0
                 );
               }}
               style={{ border: "none", outline: "none" }}

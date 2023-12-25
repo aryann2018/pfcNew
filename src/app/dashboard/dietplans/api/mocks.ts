@@ -20,7 +20,6 @@ export function createTemplateSubSection(
 ): TemplateSubSection {
   return {
     ...subSectionData,
-    foodItem: createFoodItem(subSectionData.foodItem),
     macros: subSectionData.macros,
   };
 }

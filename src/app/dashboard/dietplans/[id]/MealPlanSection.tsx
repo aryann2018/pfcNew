@@ -9,10 +9,7 @@ import {
 } from "./FoodItemSubSection";
 import EditableText from "@/app/common/inputs/EditableInput";
 import useDietPlanStore from "./dietplansStore";
-import { getTotalFoodMacros, getTotalSectionMacros } from "../utils";
-import { useRef } from "react";
-import { useHover } from "@/app/utilities/utils";
-import macro from "styled-jsx/macro";
+import { getTotalSectionMacros } from "../utils";
 
 export interface TemplateSection {
   id: string;
@@ -73,10 +70,7 @@ export const MealPlanSection = (props: TemplateSectionProps) => {
                 name={subSection.name}
                 description={subSection.description}
                 onDelete={() => {}}
-                quantity={
-                  subSection.quantity *
-                  (subSection.foodItem?.portion_size! as unknown as number)
-                }
+                quantity={subSection.quantity}
                 unit={subSection.unit}
                 style={{
                   zIndex: props.subSections.length - index,

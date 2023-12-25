@@ -16,7 +16,11 @@ interface DietPlanState {
   activeTemplate: Template | null;
   setActiveTemplate: (templateId: string) => void;
   updateActiveTemplateField: (field: string, value: any) => void;
-  updateActiveFoodItemQuantity: (foodItemId: string, quantity: number) => void;
+  updateActiveFoodItemQuantity: (
+    mealId: string,
+    foodItemId: string,
+    quantity: number
+  ) => void;
   addSubSectionToActiveTemplate: (foodItem: TemplateSubSection) => void;
   addNewSubSectionToActiveTemplate: (sectionId: any) => void;
   setSubSectionInSection: (
@@ -47,19 +51,23 @@ const useDietPlanStore = create<DietPlanState>((set) => ({
         ? { ...state.activeTemplate, [field]: value }
         : null,
     })),
-  updateActiveFoodItemQuantity: (foodItemId, quantity) =>
+  updateActiveFoodItemQuantity: (sectionId, foodItemId, quantity) =>
     set((state) => ({
       activeTemplate: state.activeTemplate
         ? {
             ...state.activeTemplate,
-            sections: state.activeTemplate.sections.map((section) => ({
-              ...section,
-              subSections: section.subSections.map((subSection) =>
-                subSection.id === foodItemId
-                  ? { ...subSection, quantity }
-                  : subSection
-              ),
-            })),
+            sections: state.activeTemplate.sections.map((section) =>
+              section.id === sectionId
+                ? {
+                    ...section,
+                    subSections: section.subSections.map((subSection) =>
+                      subSection.id === foodItemId
+                        ? { ...subSection, quantity }
+                        : subSection
+                    ),
+                  }
+                : section
+            ),
           }
         : null,
     })),
