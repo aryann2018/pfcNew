@@ -18,7 +18,7 @@ export type FoodIngredient = {
 };
 
 export type FoodItem = {
-  id: string;
+  id?: string;
   created_at?: string;
   modified_at?: string;
   food_ingredient: FoodIngredient;
@@ -26,26 +26,24 @@ export type FoodItem = {
 };
 
 export type MealPlan = {
-  id: string;
-  created_at: string;
-  modified_at: string;
+  id?: string;
+  created_at?: string;
+  modified_at?: string;
   name: string;
   description: string;
   preffered_time: string;
-  template_foods: FoodItem[];
+  foods: FoodItem[];
 };
 
 export type DietPlan = {
-  id: string;
-  created_at: string;
-  modified_at: string;
+  id?: string;
+  created_at?: string;
+  modified_at?: string;
   name: string;
   description: string;
-  meal_plan_templates: MealPlan[];
+  meal_plans: MealPlan[];
   is_private: boolean;
   is_active: boolean;
-  is_success: boolean;
-  message: null | string;
 };
 
 export type DietPlansQueryResponse = {
@@ -54,12 +52,12 @@ export type DietPlansQueryResponse = {
   message: null | string;
 };
 
-export type MealPlanTemplate = MealPlan & {
+export type MealPlanTemplate = Omit<MealPlan, "foods"> & {
   template_foods: FoodItem[];
 };
 
-export type DietPlanTemplate = DietPlan & {
-  meal_plan_templates: MealPlan[];
+export type DietPlanTemplate = Omit<DietPlan, "meal_plans"> & {
+  meal_plan_templates?: MealPlanTemplate[];
 };
 
 export type DietPlanTemplatesQueryResponse = DietPlansQueryResponse & {
@@ -68,6 +66,33 @@ export type DietPlanTemplatesQueryResponse = DietPlansQueryResponse & {
 
 export type FoodIngredientsQueryResponse = {
   data: FoodIngredient[];
+  is_success: boolean;
+  message: null | string;
+};
+
+export type DietPlanPostPayload = {
+  client_id: string;
+  coach_id: string;
+  name: string;
+  description: string;
+  is_active: boolean;
+  is_paused: boolean;
+  start_date: string;
+  duration_in_days: number;
+  meal_plans: {
+    name: string;
+    description: string;
+    foods: {
+      food_ingredient_id: string;
+      quantity: number;
+    }[];
+    preffered_time: string;
+    diet_plan_id?: string;
+  }[];
+};
+
+export type DietPlanPostResponse = {
+  data: DietPlan;
   is_success: boolean;
   message: null | string;
 };

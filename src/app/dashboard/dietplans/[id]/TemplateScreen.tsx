@@ -1,14 +1,23 @@
 "use client";
 import TemplatePlanManager, { Template } from "./TemplatePlanManager";
 
-import { useGetDietPlanTemplates, useGetFoodIngredients } from "../api/hooks";
+import {
+  useGetDietPlanTemplates,
+  useGetFoodIngredients,
+  useMutateDietPlan,
+  useQueryCoachProfile,
+} from "../api/hooks";
 
 import { useRouter } from "next/navigation";
 import { templates as mocktemplates } from "../api/mocks";
 import useDietPlanStore from "./dietplansStore";
 import { useEffect } from "react";
-import { templateFromDietPlanTemplate } from "../api/adapters";
+import {
+  getDietPlanPostPayload,
+  templateFromDietPlanTemplate,
+} from "../api/adapters";
 import { useFoodIngridientsStore } from "@/app/common/inputs/SearchableFoodSelect";
+import { formatDateToYYYYMMDD } from "@/app/utilities/utils";
 
 interface TemplateScreenProps {
   isNew: boolean;
@@ -18,14 +27,27 @@ interface TemplateScreenProps {
 
 export const TemplateScreen = (props: TemplateScreenProps) => {
   const { data, error, isLoading } = useGetDietPlanTemplates();
-
+  const {
+    data: coachProfileData,
+    error: coachProfileError,
+    isLoading: coachProfileLoading,
+  } = useQueryCoachProfile();
   const { searchTerm, setFoodIngridients } = useFoodIngridientsStore();
   const { data: foodIngridientsData, isLoading: foodIngridientsLoading } =
     useGetFoodIngredients(searchTerm);
 
+  const { mutate } = useMutateDietPlan({
+    onSuccess: (data: any) => {
+      console.log("data", data);
+    },
+    onError: (error: any) => {
+      console.log("error", error);
+    },
+  });
   const router = useRouter();
 
-  const { setActiveTemplate, templates, setTemplates } = useDietPlanStore();
+  const { activeTemplate, setActiveTemplate, templates, setTemplates } =
+    useDietPlanStore();
 
   useEffect(() => {
     if (isLoading) {
@@ -66,7 +88,24 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
   }
 
   const onAssignPress = () => {
-    router.push(`/dashboard/clients/${props.clientId}/`);
+    const dietplan = getDietPlanPostPayload(
+      activeTemplate!,
+      props.clientId!,
+      "1",
+      true,
+      false
+    );
+
+    mutate({
+      ...dietplan,
+      client_id: props.clientId!,
+      coach_id: coachProfileData!.user_id,
+      is_active: true,
+      is_paused: false,
+      start_date: formatDateToYYYYMMDD(new Date()),
+      duration_in_days: 30,
+    });
+    // router.push(`/dashboard/clients/${props.clientId}/`);
   };
 
   return (
@@ -74,7 +113,6 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
       isNew={props.isNew}
       onAssignPress={onAssignPress}
       templates={templates}
-      onAddNewFoodItem={() => {}}
     />
   );
 };

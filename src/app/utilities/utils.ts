@@ -49,3 +49,16 @@ export const useHover = (): [boolean, RefObject<HTMLDivElement>] => {
 
   return [hovered, ref];
 };
+
+export function formatDateToYYYYMMDD(date: Date) {
+  var d = new Date(date),
+    month = "" + (d.getMonth() + 1), // Months are zero indexed
+    day = "" + d.getDate(),
+    year = d.getFullYear();
+
+  // Add leading zero to the month and day if needed
+  if (month.length < 2) month = "0" + month;
+  if (day.length < 2) day = "0" + day;
+
+  return [year, month, day].join("-");
+}

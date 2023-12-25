@@ -5,14 +5,14 @@ import {
   createTemplateSection,
   createTemplateSubSection,
 } from "./mocks";
-import { DietPlanTemplate } from "./types";
+import { DietPlan, DietPlanPostPayload, DietPlanTemplate } from "./types";
 
 export const templateFromDietPlanTemplate = (
   dietPlanTemplate: DietPlanTemplate
 ): Template => {
   console.log(dietPlanTemplate, "dietPlanTemplate");
   // Map each MealPlan in the DietPlanTemplate to a TemplateSection
-  const sections = dietPlanTemplate.meal_plan_templates.map((mealPlan) => {
+  const sections = dietPlanTemplate.meal_plan_templates?.map((mealPlan) => {
     // Map each FoodItem in the MealPlan to a TemplateSubSection
     const subsections = mealPlan.template_foods.map((foodItem) =>
       createTemplateSubSection({
@@ -48,14 +48,20 @@ export const templateFromDietPlanTemplate = (
   return template;
 };
 
-export const dietPlanTemplateFromTemplate = (template: Template) => {
+export const getDietPlanPostPayload = (
+  template: Template,
+  client_id: string,
+  coach_id: string,
+  is_active: boolean,
+  is_paused: boolean
+): DietPlanPostPayload => {
   // Map each TemplateSection to a MealPlan
   const mealPlanTemplates = template.sections.map((section) => {
     // Map each TemplateSubSection to a FoodItem
     const templateFoods = section.subSections.map((subSection) => ({
       id: subSection.id,
       quantity: subSection.quantity,
-      food_ingredient: subSection.foodItem, // Pass the whole FoodItem object
+      food_ingredient_id: subSection.foodItem?.id!, // Pass the whole FoodItem object
       // Add any additional fields needed for a FoodItem here
     }));
 
@@ -63,18 +69,22 @@ export const dietPlanTemplateFromTemplate = (template: Template) => {
       id: section.id,
       name: section.name,
       description: section.description,
-      template_foods: templateFoods, // Use the mapped templateFoods
-      // Add any additional fields needed for a MealPlan here
+      foods: templateFoods,
+      preffered_time: section.prefferedTime,
     };
   });
 
   // Create the final DietPlanTemplate using the mealPlanTemplates created above
-  const dietPlanTemplate = {
-    id: template.id,
+  const dietPlanTemplate: DietPlanPostPayload = {
     name: template.name,
     description: template.description,
-    meal_plan_templates: mealPlanTemplates, // Use the mapped mealPlanTemplates
-    // Add any additional fields needed for the DietPlanTemplate here
+    meal_plans: mealPlanTemplates,
+    client_id: client_id,
+    coach_id: coach_id,
+    is_active: is_active,
+    is_paused: is_paused,
+    start_date: new Date().toISOString(),
+    duration_in_days: 30,
   };
 
   return dietPlanTemplate;

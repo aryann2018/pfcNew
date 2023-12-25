@@ -72,7 +72,6 @@ interface TemplatePlanManagerProps {
   isNew: boolean;
   onAssignPress: (template_id: string, template: any) => void;
   templates: Template[];
-  onAddNewFoodItem: () => void;
 }
 
 export interface Template {

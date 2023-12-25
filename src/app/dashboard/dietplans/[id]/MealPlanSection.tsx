@@ -16,6 +16,7 @@ export interface TemplateSection {
   name: string;
   description: string;
   subSections: TemplateSubSection[];
+  prefferedTime: string;
   macros: {
     protein: number;
     fat: number;

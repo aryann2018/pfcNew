@@ -2,18 +2,24 @@ import { parse } from "path";
 import { TemplateSubSection } from "./[id]/FoodItemSubSection";
 import { TemplateSection } from "./[id]/MealPlanSection";
 import { Template } from "./[id]/TemplatePlanManager";
-import { DietPlan, FoodItem, MealPlan } from "./api/types";
+import {
+  DietPlan,
+  DietPlanTemplate,
+  FoodItem,
+  MealPlan,
+  MealPlanTemplate,
+} from "./api/types";
 
 export const getTotalDietPlanMacros = (
-  dietPlan: DietPlan
+  dietPlan: DietPlanTemplate
 ): {
   calories: number;
   carbs: number;
   fat: number;
   protein: number;
 } => {
-  const totalMacros = dietPlan.meal_plan_templates.reduce(
-    (total, mealPlan) => {
+  const totalMacros = dietPlan.meal_plan_templates?.reduce(
+    (total: any, mealPlan: any) => {
       const mealPlanMacros = getTotalMealPlanMacros(mealPlan);
       return {
         calories: total.calories + mealPlanMacros.calories,
@@ -29,18 +35,18 @@ export const getTotalDietPlanMacros = (
       protein: 0,
     }
   );
-  return totalMacros;
+  return totalMacros!;
 };
 
 export const getTotalMealPlanMacros = (
-  mealPlan: MealPlan
+  mealPlan: MealPlanTemplate
 ): {
   calories: number;
   carbs: number;
   fat: number;
   protein: number;
 } => {
-  const totalMacros = mealPlan.template_foods.reduce(
+  const totalMacros = mealPlan.template_foods?.reduce(
     (total, foodItem) => {
       const foodItemMacros = getTotalFoodItemMarcos(foodItem);
       return {

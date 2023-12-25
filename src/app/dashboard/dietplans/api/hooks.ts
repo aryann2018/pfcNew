@@ -1,12 +1,15 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 
 import {
+  DietPlanPostPayload,
+  DietPlanPostResponse,
   DietPlanTemplatesQueryResponse,
   DietPlansQueryResponse,
   FoodIngredientsQueryResponse,
 } from "./types";
-import { get } from "../../../utilities/api";
+import { get, post } from "../../../utilities/api";
 import {
+  COACH_PROFILE,
   DIET_PLANS_API,
   DIET_PLANS_TEMPLATES_API,
   FOOD_INGRIDENTS_API,
@@ -56,6 +59,38 @@ export const useGetFoodIngredients = (searchTerm: string) => {
         const res = await get<FoodIngredientsQueryResponse>(
           `${FOOD_INGRIDENTS_API}?q=${searchTerm}`
         );
+        return res?.data;
+      } catch (error) {
+        error;
+      }
+    },
+  });
+
+  return query;
+};
+
+export const useMutateDietPlan = ({ onSuccess, onError }: any) => {
+  const mutation = useMutation({
+    mutationFn: async (request: DietPlanPostPayload) => {
+      const res = await post<DietPlanPostPayload, DietPlanPostResponse>(
+        DIET_PLANS_API,
+        request
+      );
+      return res!.data;
+    },
+    onSuccess,
+    onError,
+  });
+
+  return mutation;
+};
+
+export const useQueryCoachProfile = () => {
+  const query = useQuery({
+    queryKey: ["COACH_PROFILE"],
+    queryFn: async () => {
+      try {
+        const res = await get<any>(COACH_PROFILE);
         return res?.data;
       } catch (error) {
         error;
