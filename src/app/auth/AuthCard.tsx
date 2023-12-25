@@ -37,7 +37,7 @@ const AuthCard = () => {
       }
     },
     onError: (error) => {
-      "error", error;
+      console.log("error", error);
     },
   });
 
@@ -48,7 +48,7 @@ const AuthCard = () => {
       }
     },
     onError: (error) => {
-      "error", error;
+      console.log("error", error);
     },
   });
 
@@ -81,7 +81,7 @@ const AuthCard = () => {
       }
     };
     checkToken();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
     <Container height="100%">
