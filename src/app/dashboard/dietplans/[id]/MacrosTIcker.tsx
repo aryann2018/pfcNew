@@ -91,7 +91,11 @@ export const MacrosTicker = (props: MacrosTickerProps) => {
         <NumberTicker toValue={carbs} duration={1000} />
         <Text>g</Text>
       </Flex>
-      <Flex padding="8px" gap={2}>
+      <Flex
+        padding="8px"
+        gap={2}
+        background="linear-gradient(180deg, rgba(238, 241, 244, 0.50) 0%, rgba(255, 255, 255, 0.50) 45%, rgba(255, 255, 255, 0.50) 58.89%, rgba(238, 241, 244, 0.50) 100%), #FFF"
+      >
         <Text>
           <NumberTicker toValue={calories} duration={1000} />
         </Text>
