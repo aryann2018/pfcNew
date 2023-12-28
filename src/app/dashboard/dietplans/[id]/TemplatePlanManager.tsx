@@ -168,7 +168,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
           ))}
         </Grid>
         <Box p={2} />
-        <Flex direction={"row"} justifyContent={"center"}>
+        <Flex direction={"row"} justifyContent={"center"} mb={2}>
           <AddNewMealButton
             onClick={() => {
               addNewSectionToActiveTemplate();

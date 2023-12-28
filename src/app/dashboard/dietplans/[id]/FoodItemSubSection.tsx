@@ -11,7 +11,7 @@ import {
   InputRightAddon,
   Text,
 } from "@chakra-ui/react";
-import { CiCirclePlus } from "react-icons/ci";
+import { FiPlusCircle } from "react-icons/fi";
 import { styles } from "./TemplatePlanManager";
 import { FoodIngredient } from "../api/types";
 import SearchableFoodSelect from "@/app/common/inputs/SearchableFoodSelect";
@@ -40,9 +40,13 @@ export const AddTemplateSubSection = ({
       justifyContent={"center"}
       bg="white"
       p="10px"
+      borderRadius={"4px"}
+      boxShadow="0px 1.69px 1.69px 0px rgba(24, 34, 48, 0.10)"
     >
-      <CiCirclePlus size={24} />
-      <Text fontSize={"15px"}>{label}</Text>
+      <FiPlusCircle size={24} color="rgba(102, 112, 133, 1)" />
+      <Text fontSize={"15px"} color={"rgba(71, 84, 103, 1)"} fontWeight={500}>
+        {label}
+      </Text>
     </Flex>
   );
 };
