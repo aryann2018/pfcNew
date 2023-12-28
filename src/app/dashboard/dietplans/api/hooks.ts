@@ -3,6 +3,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import {
   DietPlanPostPayload,
   DietPlanPostResponse,
+  DietPlanTemplatePostPayload,
   DietPlanTemplatesQueryResponse,
   DietPlansQueryResponse,
   FoodIngredientsQueryResponse,
@@ -74,6 +75,22 @@ export const useMutateDietPlan = ({ onSuccess, onError }: any) => {
     mutationFn: async (request: DietPlanPostPayload) => {
       const res = await post<DietPlanPostPayload, DietPlanPostResponse>(
         DIET_PLANS_API,
+        request
+      );
+      return res!.data;
+    },
+    onSuccess,
+    onError,
+  });
+
+  return mutation;
+};
+
+export const useMutateDietPlanTemplate = ({ onSuccess, onError }: any) => {
+  const mutation = useMutation({
+    mutationFn: async (request: DietPlanTemplatePostPayload) => {
+      const res = await post<DietPlanTemplatePostPayload, DietPlanPostResponse>(
+        DIET_PLANS_TEMPLATES_API,
         request
       );
       return res!.data;

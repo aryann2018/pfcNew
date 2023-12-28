@@ -3,7 +3,7 @@
 import { Box, Divider, Flex, IconButton, Text } from "@chakra-ui/react";
 import { useGetSubscriptions } from "../api/hooks";
 import { useMemo } from "react";
-import { SubscriptionType } from "../api/types";
+import { ClientType, SubscriptionType } from "../api/types";
 import { MdOutlineContentCopy } from "react-icons/md";
 
 type singleDetailProps = {
@@ -45,7 +45,7 @@ const SingleDetail = ({
   );
 };
 
-const getAllDetails = (client: SubscriptionType["client"]) => {
+const getAllDetails = (client: ClientType) => {
   return {
     BMI: client.bmi,
     contact: client.phone_number,
@@ -64,7 +64,7 @@ const getAllDetails = (client: SubscriptionType["client"]) => {
   };
 };
 
-const contactDetails = (client: SubscriptionType["client"]) => {
+const contactDetails = (client: ClientType) => {
   return {
     contact: client.phone_number,
     // email: client.email ?? "-",
@@ -108,12 +108,14 @@ export const DetailsCard = ({ id }: { id: string }) => {
 
   const client = useMemo(
     () =>
-      subscriptions?.find((subscription) => subscription.client.id === id)
-        ?.client,
+      subscriptions
+        ?.find((subscription) =>
+          subscription.clients.find((client) => client.id === id)
+        )
+        ?.clients.find((client) => client.id === id),
     [id, subscriptions]
   );
 
-  client;
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -159,7 +161,10 @@ export const DetailsCard = ({ id }: { id: string }) => {
         gap={"16px"}
       >
         <SingleDetail label={"Dietary Preference"} value={"Veg"} />
-        <SingleDetail label={"Allergies"} value={client.allergies ?? "-"} />
+        <SingleDetail
+          label={"Allergies"}
+          value={(client.allergies || ["-"]).join(",")}
+        />
       </Flex>
       <Flex
         direction={"row"}

@@ -40,7 +40,6 @@ function SearchableFoodSelect({
   selected,
   onSelect,
 }: SearchableFoodSelectProps) {
-  console.log("selected", selected);
   const { foodIngridients, setSearchTerm, isLoading } =
     useFoodIngridientsStore();
 

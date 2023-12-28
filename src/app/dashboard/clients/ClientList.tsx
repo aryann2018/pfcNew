@@ -22,7 +22,7 @@ import {
 } from "@chakra-ui/react";
 import { subscriptionsList } from "./api/mocks";
 import { getDaysUntilEndDate } from "@/app/utilities/utils";
-import { SubscriptionType } from "./api/types";
+import { ClientType, SubscriptionType } from "./api/types";
 import { useRouter } from "next/navigation";
 import { useGetSubscriptions } from "./api/hooks";
 import PFCSpace from "@/app/common/PFCSpace";
@@ -31,9 +31,14 @@ interface ClientSubscriptionProps {
   subscription: SubscriptionType;
 }
 
-const ClientSubscription = (props: ClientSubscriptionProps) => {
-  const { subscription } = props;
-  const { client, subscription_plan, end_date } = subscription;
+interface ClientDetailsProps {
+  client: ClientType;
+  endDate: string;
+  subscriptionType: String;
+}
+
+const ClientDetails = (props: ClientDetailsProps) => {
+  const { client, endDate, subscriptionType } = props;
 
   const router = useRouter();
 
@@ -52,12 +57,12 @@ const ClientSubscription = (props: ClientSubscriptionProps) => {
       </Td>
       <Td>
         <Text fontWeight="bold" fontSize={"sm"}>
-          {subscription_plan.type}
+          {subscriptionType}
         </Text>
         <Flex direction={"row"}>
           <Text fontSize="smaller">Ends on: </Text>{" "}
           <Text fontWeight={"bold"} fontSize="smaller">
-            {new Date(end_date).toLocaleDateString("en-US")}
+            {new Date(endDate).toLocaleDateString("en-US")}
           </Text>
         </Flex>
       </Td>
@@ -87,6 +92,36 @@ const ClientSubscription = (props: ClientSubscriptionProps) => {
         </Flex>
       </Td>
     </Tr>
+  );
+};
+const ClientSubscription = (props: ClientSubscriptionProps) => {
+  const { subscription } = props;
+  const { clients, end_date, type } = subscription;
+
+  const router = useRouter();
+
+  return (
+    <Stack direction={"row"} width={"100%"}>
+      {clients && clients.length > 0 ? (
+        clients.map((client) => {
+          return (
+            <ClientDetails
+              key={client.id}
+              client={client}
+              endDate={end_date}
+              subscriptionType={type}
+            />
+          );
+        })
+      ) : (
+        <SkeletonText
+          noOfLines={4}
+          spacing="4"
+          width={"100%"}
+          height={"100%"}
+        />
+      )}
+    </Stack>
   );
 };
 

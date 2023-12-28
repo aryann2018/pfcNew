@@ -21,17 +21,17 @@ import {
   getTotalTemplateMacros,
 } from "../utils";
 import { AddNewMealButton } from "./AddNewMealButton";
+import { DietPlanReviewModal } from "./DietPlanReviewModal";
 
 /* selectItem */
 interface TemplateSelectItemProps {
   label: string;
   value: string;
-  onClick: (value: string) => void;
 }
 
 const TemplateSelectItem = (props: TemplateSelectItemProps) => {
   return (
-    <option onClick={() => props.onClick(props.value)} value={props.value}>
+    <option value={props.value}>
       <Text>{props.label}</Text>
     </option>
   );
@@ -40,7 +40,7 @@ const TemplateSelectItem = (props: TemplateSelectItemProps) => {
 /* select */
 interface TemplateSelectProps {
   items: TemplateSelectItemProps[];
-  onClick: (value: string) => void;
+  onChange: (value: string) => void;
 }
 
 const TemplateSelect = (props: TemplateSelectProps) => {
@@ -54,13 +54,15 @@ const TemplateSelect = (props: TemplateSelectProps) => {
         fontSize: "24px",
         fontWeight: "600",
       }}
+      onChange={(e) => {
+        props.onChange(e.target.value);
+      }}
     >
       {props.items.map((item) => (
         <TemplateSelectItem
           key={item.value}
           label={item.label}
           value={item.value}
-          onClick={props.onClick}
         />
       ))}
     </Select>
@@ -72,6 +74,7 @@ interface TemplatePlanManagerProps {
   isNew: boolean;
   onAssignPress: (template_id: string, template: any) => void;
   templates: Template[];
+  clientId?: string;
 }
 
 export interface Template {
@@ -82,6 +85,8 @@ export interface Template {
 }
 
 const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
+
   const {
     activeTemplate,
     setActiveTemplate,
@@ -89,7 +94,6 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
     addNewSectionToActiveTemplate,
   } = useDietPlanStore();
 
-  console.log("activeTemplate", activeTemplate);
   const templateSelectItems = props.templates.map((template) => {
     return {
       label: template.name,
@@ -106,19 +110,12 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
           <TemplateSelect
             items={templateSelectItems.map((item) => ({
               ...item,
-              onClick: (value) => {
-                const template = props.templates.find(
-                  (template) => template.id === value
-                );
-                if (template) {
-                  setActiveTemplate(value);
-                }
-              },
             }))}
-            onClick={(value) => {
+            onChange={(value) => {
               const template = props.templates.find(
                 (template) => template.id === value
               );
+              console.log(template, "template");
               if (template) {
                 setActiveTemplate(value);
               }
@@ -182,13 +179,37 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
         <Flex p="4" direction="row" justifyContent={"flex-end"}>
           <Button
             onClick={() => {
-              props.onAssignPress(activeTemplate?.id!, activeTemplate);
+              setIsReviewModalOpen(true);
             }}
             {...styles.assignButton}
           >
-            Assign Chart
+            save template
           </Button>
+
+          {props.clientId && (
+            <Button
+              onClick={() => {
+                setIsReviewModalOpen(true);
+              }}
+              {...styles.assignButton}
+            >
+              Assign Chart
+            </Button>
+          )}
         </Flex>
+        {isReviewModalOpen && (
+          <DietPlanReviewModal
+            isOpen={isReviewModalOpen}
+            onClose={() => {
+              props.onAssignPress(activeTemplate?.id!, activeTemplate);
+              setIsReviewModalOpen(false);
+            }}
+            onSubmit={() => {
+              props.onAssignPress(activeTemplate?.id!, activeTemplate);
+              setIsReviewModalOpen(false);
+            }}
+          />
+        )}
       </Box>
     );
   }

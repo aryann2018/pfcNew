@@ -31,6 +31,7 @@ interface DietPlanState {
   removeSectionFromActiveTemplate: (sectionId: string) => void;
   addNewSectionToActiveTemplate: () => void;
   updateSectionName: (sectionId: string, name: string) => void;
+  updateTemplateName: (name: string) => void;
 }
 
 // Create the store
@@ -205,6 +206,15 @@ const useDietPlanStore = create<DietPlanState>((set) => ({
                   }
                 : section
             ),
+          }
+        : null,
+    })),
+  updateTemplateName: (name: string) =>
+    set((state) => ({
+      activeTemplate: state.activeTemplate
+        ? {
+            ...state.activeTemplate,
+            name: name,
           }
         : null,
     })),

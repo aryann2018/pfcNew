@@ -5,12 +5,16 @@ import {
   createTemplateSection,
   createTemplateSubSection,
 } from "./mocks";
-import { DietPlan, DietPlanPostPayload, DietPlanTemplate } from "./types";
+import {
+  DietPlan,
+  DietPlanPostPayload,
+  DietPlanTemplate,
+  DietPlanTemplatePostPayload,
+} from "./types";
 
 export const templateFromDietPlanTemplate = (
   dietPlanTemplate: DietPlanTemplate
 ): Template => {
-  console.log(dietPlanTemplate, "dietPlanTemplate");
   // Map each MealPlan in the DietPlanTemplate to a TemplateSection
   const sections = dietPlanTemplate.meal_plan_templates?.map((mealPlan) => {
     // Map each FoodItem in the MealPlan to a TemplateSubSection
@@ -85,6 +89,38 @@ export const getDietPlanPostPayload = (
     is_paused: is_paused,
     start_date: new Date().toISOString(),
     duration_in_days: 30,
+  };
+
+  return dietPlanTemplate;
+};
+
+export const getDietPlanTemplateFromDietPlan = (
+  template: Template
+): DietPlanTemplatePostPayload => {
+  // Map each TemplateSection to a MealPlan
+  const mealPlanTemplates = template.sections.map((section) => {
+    // Map each TemplateSubSection to a FoodItem
+    const templateFoods = section.subSections.map((subSection) => ({
+      id: subSection.id,
+      quantity: subSection.quantity,
+      food_ingredient_id: subSection.foodItem?.id!, // Pass the whole FoodItem object
+      // Add any additional fields needed for a FoodItem here
+    }));
+
+    return {
+      id: section.id,
+      name: section.name,
+      description: section.description,
+      template_foods: templateFoods,
+      preffered_time: section.prefferedTime,
+    };
+  });
+
+  // Create the final DietPlanTemplate using the mealPlanTemplates created above
+  const dietPlanTemplate: DietPlanTemplatePostPayload = {
+    name: template.name,
+    description: template.description,
+    meal_plan_templates: mealPlanTemplates,
   };
 
   return dietPlanTemplate;

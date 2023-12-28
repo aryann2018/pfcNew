@@ -65,9 +65,7 @@ export interface TemplateSubSection {
 }
 
 export const FoodItemSubSection = (props: TemplateSubSection) => {
-  console.log("props", props);
   const [selected, setSelected] = useState<FoodIngredient | undefined>();
-  console.log("selected", selected);
 
   const { updateActiveFoodItemQuantity, setSubSectionInSection } =
     useDietPlanStore();

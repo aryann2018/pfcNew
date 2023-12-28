@@ -5,6 +5,7 @@ import {
   useGetDietPlanTemplates,
   useGetFoodIngredients,
   useMutateDietPlan,
+  useMutateDietPlanTemplate,
   useQueryCoachProfile,
 } from "../api/hooks";
 
@@ -14,6 +15,7 @@ import useDietPlanStore from "./dietplansStore";
 import { useEffect } from "react";
 import {
   getDietPlanPostPayload,
+  getDietPlanTemplateFromDietPlan,
   templateFromDietPlanTemplate,
 } from "../api/adapters";
 import { useFoodIngridientsStore } from "@/app/common/inputs/SearchableFoodSelect";
@@ -26,17 +28,24 @@ interface TemplateScreenProps {
 }
 
 export const TemplateScreen = (props: TemplateScreenProps) => {
-  const { data, error, isLoading } = useGetDietPlanTemplates();
+  const {
+    data,
+    error,
+    isLoading,
+    refetch: refetchTemplates,
+  } = useGetDietPlanTemplates();
+
   const {
     data: coachProfileData,
     error: coachProfileError,
     isLoading: coachProfileLoading,
   } = useQueryCoachProfile();
+
   const { searchTerm, setFoodIngridients } = useFoodIngridientsStore();
   const { data: foodIngridientsData, isLoading: foodIngridientsLoading } =
     useGetFoodIngredients(searchTerm);
 
-  const { mutate } = useMutateDietPlan({
+  const { mutate: mutateDietPlan } = useMutateDietPlan({
     onSuccess: (data: any) => {
       console.log("data", data);
     },
@@ -44,6 +53,18 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
       console.log("error", error);
     },
   });
+
+  const { mutate: mutateDietPlanTemplate } = useMutateDietPlanTemplate({
+    onSuccess: async (data: any) => {
+      console.log("data", data);
+      await refetchTemplates();
+      setActiveTemplate(data.id);
+    },
+    onError: (error: any) => {
+      console.log("error", error);
+    },
+  });
+
   const router = useRouter();
 
   const { activeTemplate, setActiveTemplate, templates, setTemplates } =
@@ -64,8 +85,10 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
       templateFromDietPlanTemplate(template)
     );
     setTemplates(newTemplates);
-    setActiveTemplate(newTemplates[0].id);
-  }, [isLoading]); // eslint-disable-line react-hooks/exhaustive-deps
+    if (!activeTemplate?.id) {
+      setActiveTemplate(newTemplates[0].id);
+    }
+  }, [isLoading, data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     if (
@@ -96,7 +119,7 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
       false
     );
 
-    mutate({
+    mutateDietPlan({
       ...dietplan,
       client_id: props.clientId!,
       coach_id: coachProfileData!.user_id,
@@ -108,10 +131,16 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
     // router.push(`/dashboard/clients/${props.clientId}/`);
   };
 
+  const onCreateDietPlanTemplate = async () => {
+    const template = getDietPlanTemplateFromDietPlan(activeTemplate!);
+    mutateDietPlanTemplate(template);
+  };
+
   return (
     <TemplatePlanManager
       isNew={props.isNew}
-      onAssignPress={onAssignPress}
+      clientId={props.clientId!}
+      onAssignPress={props.clientId ? onAssignPress : onCreateDietPlanTemplate}
       templates={templates}
     />
   );

@@ -25,8 +25,11 @@ export const DetailsHeader = ({ id }: { id: string }) => {
 
   const client = useMemo(
     () =>
-      subscriptions?.find((subscription) => subscription.client.id === id)
-        ?.client,
+      subscriptions
+        ?.find((subscription) =>
+          subscription.clients.find((client) => client.id === id)
+        )
+        ?.clients.find((client) => client.id === id),
     [id, subscriptions]
   );
 

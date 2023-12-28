@@ -91,6 +91,21 @@ export type DietPlanPostPayload = {
   }[];
 };
 
+export type DietPlanTemplatePostPayload = {
+  name: string;
+  description: string;
+  meal_plan_templates: {
+    name: string;
+    description: string;
+    template_foods: {
+      food_ingredient_id: string;
+      quantity: number;
+    }[];
+    preffered_time: string;
+  }[];
+  diet_plan_template_id?: string;
+};
+
 export type DietPlanPostResponse = {
   data: DietPlan;
   is_success: boolean;
