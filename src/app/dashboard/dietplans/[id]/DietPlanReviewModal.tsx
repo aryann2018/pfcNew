@@ -7,7 +7,6 @@ import {
   ModalHeader,
   ModalCloseButton,
   ModalBody,
-  Spinner,
   Button,
 } from "@chakra-ui/react";
 import EditableText from "@/app/common/inputs/EditableInput";
@@ -17,12 +16,14 @@ interface DietPlanReviewModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: () => void;
+  isTemplate?: boolean;
 }
 
 export const DietPlanReviewModal = ({
   isOpen,
   onClose,
   onSubmit,
+  ...props
 }: DietPlanReviewModalProps) => {
   const { activeTemplate, updateTemplateName } = useDietPlanStore();
   const { name } = activeTemplate!;
@@ -38,7 +39,7 @@ export const DietPlanReviewModal = ({
             onChange={(text: string) => updateTemplateName(text)}
           />
           <Button size="lg" onClick={onSubmit}>
-            Save
+            {props.isTemplate ? "Create Template" : "Assign Diet Plan"}
           </Button>
         </ModalBody>
       </ModalContent>

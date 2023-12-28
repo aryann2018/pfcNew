@@ -183,7 +183,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
             }}
             {...styles.assignButton}
           >
-            save template
+            Create Template
           </Button>
 
           {props.clientId && (
@@ -208,6 +208,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
               props.onAssignPress(activeTemplate?.id!, activeTemplate);
               setIsReviewModalOpen(false);
             }}
+            isTemplate={props.clientId ? false : true}
           />
         )}
       </Box>

@@ -19,6 +19,7 @@ import {
 import { FaBell } from "react-icons/fa";
 import { FiMenu, FiSearch } from "react-icons/fi";
 import { PiUserList } from "react-icons/pi";
+import { FaBowlFood } from "react-icons/fa6";
 
 import React from "react";
 import { PFCColors } from "../common/PFCColors";
@@ -30,6 +31,11 @@ const navItems = [
     label: "Dashboard",
     icon: PiUserList,
     route: "/dashboard/clients",
+  },
+  {
+    label: "Create new Diet Template",
+    icon: FaBowlFood,
+    route: "/dashboard/dietplans/new",
   },
 ];
 
