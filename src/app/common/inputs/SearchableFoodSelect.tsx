@@ -54,44 +54,15 @@ function SearchableFoodSelect({
     <Select
       variant="unstyled"
       useBasicStyles={true}
-      // styles={{
-      //   container: (provided, state) => ({
-      //     ...provided,
-      //     width: "100%",
-      //     padding: "0px",
-      //     borderRadius: "4px",
-      //     boxShadow: "none",
-      //     zIndex: 0,
-      //     outline: "none",
-      //     border: "none",
-      //   }),
-      //   menu: (provided, state) => ({
-      //     ...provided,
-      //     borderRadius: "4px",
-      //     boxShadow: "none",
-      //     background: "white",
-      //     zIndex: 0,
-      //   }),
-      //   option: (provided, state) => ({
-      //     ...provided,
-      //     color: "black",
-      //     background: state.isSelected ? "#E2E8F0" : "white",
-      //     "&:hover": {
-      //       background: "#E2E8F0",
-      //     },
-      //     zIndex: 0,
-      //   }),
-      //   valueContainer: (provided, state) => ({
-      //     // ...provided,
-      //     padding: "0px",
-      //     zIndex: 0,
-      //   }),
-      //   placeholder: (provided, state) => ({
-      //     ...provided,
-      //     color: "black",
-      //     zIndex: 0,
-      //   }),
-      // }}
+      styles={{
+        placeholder: (provided: any) => ({
+          ...provided,
+          fontFamily: "Inter",
+          fontSize: "16px",
+          fontWeight: "500",
+          color: "#000000",
+        }),
+      }}
       isLoading={isLoading}
       selectedOptionStyle="color"
       options={options}
@@ -117,6 +88,7 @@ function SearchableFoodSelect({
         SingleValue: (props) => <components.SingleValue {...props} />,
         SelectContainer: (props) => <components.SelectContainer {...props} />,
         MultiValueLabel: (props) => <components.MultiValueLabel {...props} />,
+        Placeholder: (props) => <components.Placeholder {...props} />,
       }}
     />
   );

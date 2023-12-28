@@ -32,6 +32,10 @@ interface DietPlanState {
   addNewSectionToActiveTemplate: () => void;
   updateSectionName: (sectionId: string, name: string) => void;
   updateTemplateName: (name: string) => void;
+  removeSubSectionFromActiveTemplate: (
+    sectionId: string,
+    subSectionId: string
+  ) => void;
 }
 
 // Create the store
@@ -183,9 +187,23 @@ const useDietPlanStore = create<DietPlanState>((set) => ({
                 id: Math.random().toString(36).substr(2, 9),
                 name: "New Food Item",
                 description: "New Food Item",
-                quantity: 0,
+                quantity: 1,
                 unit: "g",
                 isNew: true,
+                foodItem: {
+                  id: "new",
+                  name: "New Food Item",
+                  description: "New Food Item",
+                  unit_of_measure: "-",
+                  portion_size: "0",
+                  calories: "0",
+                  protein: "0",
+                  fat: "0",
+                  carbohydrates: "0",
+                  is_private: false,
+                  is_allergen: false,
+                  photo: null,
+                },
               },
             ],
             isNew: true,
@@ -218,6 +236,29 @@ const useDietPlanStore = create<DietPlanState>((set) => ({
           }
         : null,
     })),
+  removeSubSectionFromActiveTemplate: (
+    sectionId: string,
+    subSectionId: string
+  ) => {
+    console.log(sectionId, subSectionId);
+    set((state) => ({
+      activeTemplate: state.activeTemplate
+        ? {
+            ...state.activeTemplate,
+            sections: state.activeTemplate.sections.map((section) =>
+              section.id === sectionId
+                ? {
+                    ...section,
+                    subSections: section.subSections.filter(
+                      (subSection) => subSection.id !== subSectionId
+                    ),
+                  }
+                : section
+            ),
+          }
+        : null,
+    }));
+  },
 }));
 
 export default useDietPlanStore;

@@ -5,6 +5,7 @@ import {
   Button,
   Flex,
   HStack,
+  IconButton,
   Input,
   InputGroup,
   InputRightAddon,
@@ -19,6 +20,7 @@ import CustomBadges from "./CustomBadges";
 import useDietPlanStore from "./dietplansStore";
 import { getTotalFoodItemMarcos, getTotalFoodMacros } from "../utils";
 import { createTemplateSubSection } from "../api/mocks";
+import { FaRegTrashAlt } from "react-icons/fa";
 
 interface AddTemplateSubSectionProps {
   label: string;
@@ -109,6 +111,7 @@ export const FoodItemSubSection = (props: TemplateSubSection) => {
             isLoadingOptions={false}
           />
         </Box>
+        <Box p={1} />
         <Flex direction={"row"} justifyContent={"space-between"} width={"100%"}>
           <CustomBadges macros={macros} />
         </Flex>
@@ -124,6 +127,7 @@ export const FoodItemSubSection = (props: TemplateSubSection) => {
           direction={"column"}
           justifyContent={"space-between"}
           fontFamily={"JetBrains Mono"}
+          height={"100%"}
         >
           <InputGroup
             style={{
@@ -167,6 +171,17 @@ export const FoodItemSubSection = (props: TemplateSubSection) => {
             </InputRightAddon>
           </InputGroup>
           <Box p={1} />
+
+          <IconButton
+            bg={"transparent"}
+            aria-label="Delete"
+            icon={<FaRegTrashAlt />}
+            onClick={() => {
+              props.onDelete && props.onDelete(props.id!);
+            }}
+            alignSelf={"flex-end"}
+            justifySelf={"flex-end"}
+          />
         </Flex>
       </Flex>
     </Flex>

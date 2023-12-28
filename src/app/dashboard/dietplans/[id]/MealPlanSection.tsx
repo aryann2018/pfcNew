@@ -28,8 +28,11 @@ export interface TemplateSection {
 interface TemplateSectionProps extends TemplateSection {}
 
 export const MealPlanSection = (props: TemplateSectionProps) => {
-  const { addNewSubSectionToActiveTemplate, updateSectionName } =
-    useDietPlanStore();
+  const {
+    addNewSubSectionToActiveTemplate,
+    updateSectionName,
+    removeSubSectionFromActiveTemplate,
+  } = useDietPlanStore();
 
   const macros = getTotalSectionMacros(props);
 
@@ -57,7 +60,9 @@ export const MealPlanSection = (props: TemplateSectionProps) => {
                 isNew={true}
                 name={"New Dish"}
                 description={"New Dish"}
-                onDelete={() => {}}
+                onDelete={() => {
+                  removeSubSectionFromActiveTemplate(props.id, subSection.id!);
+                }}
                 quantity={0}
                 unit={"-"}
                 macros={macros}
@@ -74,7 +79,9 @@ export const MealPlanSection = (props: TemplateSectionProps) => {
                 isNew={false}
                 name={subSection.name}
                 description={subSection.description}
-                onDelete={() => {}}
+                onDelete={(id) => {
+                  removeSubSectionFromActiveTemplate(props.id, id);
+                }}
                 quantity={subSection.quantity}
                 unit={subSection.unit}
                 style={{
