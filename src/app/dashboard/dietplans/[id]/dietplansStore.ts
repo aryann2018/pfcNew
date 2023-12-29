@@ -14,7 +14,8 @@ interface DietPlanState {
   templates: Template[];
   setTemplates: (templates: Template[]) => void;
   activeTemplate: Template | null;
-  setActiveTemplate: (templateId: string) => void;
+  activeTemplateId: string | null;
+  setActiveTemplate: (templateId?: string) => void;
   updateActiveTemplateField: (field: string, value: any) => void;
   updateActiveFoodItemQuantity: (
     mealId: string,
@@ -43,11 +44,16 @@ const useDietPlanStore = create<DietPlanState>((set) => ({
   // Initial state
   templates: [], // Populate with your initial templates
   activeTemplate: null,
+  activeTemplateId: null,
   setTemplates: (templates: Template[]) => set({ templates }),
   // Sets the active template by ID
   setActiveTemplate: (templateId) =>
     set((state) => ({
-      activeTemplate: state.templates.find((t) => t.id === templateId) || null,
+      activeTemplate:
+        state.templates.find(
+          (t) => t.id === templateId || state.templates[0]?.id
+        ) || null,
+      activeTemplateId: templateId,
     })),
 
   // Updates fields of the active template

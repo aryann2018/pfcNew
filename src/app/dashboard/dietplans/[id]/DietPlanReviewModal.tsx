@@ -8,6 +8,7 @@ import {
   ModalCloseButton,
   ModalBody,
   Button,
+  Box,
 } from "@chakra-ui/react";
 import EditableText from "@/app/common/inputs/EditableInput";
 import useDietPlanStore from "./dietplansStore";
@@ -38,6 +39,7 @@ export const DietPlanReviewModal = ({
             defaultValue={name}
             onChange={(text: string) => updateTemplateName(text)}
           />
+          <Box mt={4} />
           <Button size="lg" onClick={onSubmit}>
             {props.isTemplate ? "Create Template" : "Assign Diet Plan"}
           </Button>

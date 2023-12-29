@@ -177,15 +177,16 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
         </Flex>
         <Divider />
         <Flex p="4" direction="row" justifyContent={"flex-end"}>
-          <Button
-            onClick={() => {
-              setIsReviewModalOpen(true);
-            }}
-            {...styles.assignButton}
-          >
-            Create Template
-          </Button>
-
+          {!props.clientId && (
+            <Button
+              onClick={() => {
+                setIsReviewModalOpen(true);
+              }}
+              {...styles.assignButton}
+            >
+              Create Template
+            </Button>
+          )}
           {props.clientId && (
             <Button
               onClick={() => {

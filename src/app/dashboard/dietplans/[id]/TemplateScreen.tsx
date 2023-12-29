@@ -28,47 +28,24 @@ interface TemplateScreenProps {
 }
 
 export const TemplateScreen = (props: TemplateScreenProps) => {
+  const router = useRouter();
+
+  const {
+    activeTemplate,
+    setActiveTemplate,
+    templates,
+    setTemplates,
+    activeTemplateId,
+  } = useDietPlanStore();
+
+  const { searchTerm, setFoodIngridients } = useFoodIngridientsStore();
+
   const {
     data,
     error,
     isLoading,
     refetch: refetchTemplates,
   } = useGetDietPlanTemplates();
-
-  const {
-    data: coachProfileData,
-    error: coachProfileError,
-    isLoading: coachProfileLoading,
-  } = useQueryCoachProfile();
-
-  const { searchTerm, setFoodIngridients } = useFoodIngridientsStore();
-  const { data: foodIngridientsData, isLoading: foodIngridientsLoading } =
-    useGetFoodIngredients(searchTerm);
-
-  const { mutate: mutateDietPlan } = useMutateDietPlan({
-    onSuccess: (data: any) => {
-      console.log("data", data);
-    },
-    onError: (error: any) => {
-      console.log("error", error);
-    },
-  });
-
-  const { mutate: mutateDietPlanTemplate } = useMutateDietPlanTemplate({
-    onSuccess: async (data: any) => {
-      console.log("data", data);
-      await refetchTemplates();
-      setActiveTemplate(data.id);
-    },
-    onError: (error: any) => {
-      console.log("error", error);
-    },
-  });
-
-  const router = useRouter();
-
-  const { activeTemplate, setActiveTemplate, templates, setTemplates } =
-    useDietPlanStore();
 
   useEffect(() => {
     if (isLoading) {
@@ -84,11 +61,20 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
     const newTemplates = data.data.map((template) =>
       templateFromDietPlanTemplate(template)
     );
+
     setTemplates(newTemplates);
+
     if (!activeTemplate?.id) {
+      setActiveTemplate(newTemplates[0].id);
+    } else if (activeTemplateId && activeTemplateId !== activeTemplate?.id) {
+      setActiveTemplate(activeTemplateId);
+    } else {
       setActiveTemplate(newTemplates[0].id);
     }
   }, [isLoading, data]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const { data: foodIngridientsData, isLoading: foodIngridientsLoading } =
+    useGetFoodIngredients(searchTerm);
 
   useEffect(() => {
     if (
@@ -100,15 +86,34 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
     }
   }, [foodIngridientsLoading, foodIngridientsData]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-  if (!data || !data.data) {
-    return <div>No data</div>;
-  }
+  useEffect(() => {
+    setActiveTemplate(undefined);
+  }, [props.clientId]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const {
+    data: coachProfileData,
+    error: coachProfileError,
+    isLoading: coachProfileLoading,
+  } = useQueryCoachProfile();
+
+  const { mutate: mutateDietPlan } = useMutateDietPlan({
+    onSuccess: (data: any) => {
+      console.log("data", data);
+    },
+    onError: (error: any) => {
+      console.log("error", error);
+    },
+  });
+
+  const { mutate: mutateDietPlanTemplate } = useMutateDietPlanTemplate({
+    onSuccess: async (data: any) => {
+      await refetchTemplates();
+      setActiveTemplate(data.data.id);
+    },
+    onError: (error: any) => {
+      console.log("error", error);
+    },
+  });
 
   const onAssignPress = () => {
     const dietplan = getDietPlanPostPayload(
@@ -128,13 +133,23 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
       start_date: formatDateToYYYYMMDD(new Date()),
       duration_in_days: 30,
     });
-    // router.push(`/dashboard/clients/${props.clientId}/`);
+    router.push(`/dashboard/clients/${props.clientId}/`);
   };
 
   const onCreateDietPlanTemplate = async () => {
     const template = getDietPlanTemplateFromDietPlan(activeTemplate!);
     mutateDietPlanTemplate(template);
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+  if (!data || !data.data) {
+    return <div>No data</div>;
+  }
 
   return (
     <TemplatePlanManager
