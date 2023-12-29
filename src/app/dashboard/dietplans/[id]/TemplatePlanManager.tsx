@@ -39,13 +39,13 @@ const TemplateSelectItem = (props: TemplateSelectItemProps) => {
   return (
     <option value={props.value}>
       <Text>{props.label}</Text>
-      <MacrosTicker
+      {/* <MacrosTicker
         protien={props.macros.protein}
         fat={props.macros.fat}
         carbs={props.macros.carbs}
         calories={props.macros.calories}
         size="md"
-      />
+      /> */}
     </option>
   );
 };
