@@ -34,3 +34,5 @@ export const WeekdaySection = (props: TemplateSectionProps) => {
     </div>
   );
 };
+
+export const SECTION_WIDTH = 300;

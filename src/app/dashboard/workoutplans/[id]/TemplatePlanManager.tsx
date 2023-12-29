@@ -10,11 +10,15 @@ import {
   Spacer,
   Text,
 } from "@chakra-ui/react";
-import { useState } from "react";
-import { WeekdaySection, TemplateSection } from "./WeekdaySection";
+import { createRef, RefObject, useEffect, useRef, useState } from "react";
+import {
+  WeekdaySection,
+  TemplateSection,
+  SECTION_WIDTH,
+} from "./WeekdaySection";
 
 import useWorkoutPlanStore from "./useWorkoutplansStore";
-import { WorkoutPlanReviewModal } from "./WorkoutplanReviewModal";
+import { WorkoutPlanReviewModal } from "./WorkoutPlanReviewModal";
 
 /* selectItem */
 interface TemplateSelectItemProps {
@@ -77,10 +81,101 @@ export interface Template {
   sections: TemplateSection[];
 }
 
+const weekdays = [
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+  "Sunday",
+];
+
 const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const scrollContainerRef = useRef<any>();
+  const itemRefs = useRef<RefObject<any>[]>(weekdays.map(() => createRef()));
+
   const { activeTemplate, setActiveTemplate } = useWorkoutPlanStore();
+
+  useEffect(() => {
+    // scrollToItem(currentIndex);
+  }, [currentIndex]);
+
+  const scrollInContainer = (direction: "left" | "right", boost: boolean) => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      if (direction === "right") {
+        container.scrollBy({
+          left: boost ? (SECTION_WIDTH + 40) * 3 : SECTION_WIDTH + 40,
+          behavior: boost ? "instant" : "smooth",
+        });
+      } else if (direction === "left") {
+        container.scrollBy({
+          left: boost ? -(SECTION_WIDTH + 40) * 3 : -(SECTION_WIDTH + 40),
+          behavior: "smooth",
+        });
+      }
+    }
+  };
+
+  const scrollToItem = (index: number) => {
+    console.log(index, "index");
+    const item = itemRefs.current[index]?.current;
+    console.log(item, "item");
+    if (item) {
+      item.scrollIntoView({
+        behavior: "smooth",
+        block: "nearest",
+        inline: "start",
+      });
+    }
+  };
+
+  const getVisibleItems = () => {
+    const containerRect = scrollContainerRef.current.getBoundingClientRect();
+    return itemRefs.current
+      .map((ref, index) => {
+        const rect = ref.current.getBoundingClientRect();
+        const isFullyVisible =
+          rect.left >= containerRect.left && rect.right <= containerRect.right;
+        return isFullyVisible ? index : null;
+      })
+      .filter((index) => index !== null);
+  };
+
+  const updateCurrentIndex = (direction: "left" | "right") => {
+    const visibleItems = getVisibleItems();
+    const currentIndex = visibleItems[visibleItems.length - 1];
+
+    if (currentIndex === undefined || currentIndex === null) {
+      return setCurrentIndex(0);
+    }
+
+    if (direction === "right") {
+      const nextIndex = currentIndex + 1;
+
+      if (nextIndex < weekdays.length) {
+        setCurrentIndex(nextIndex);
+      }
+    } else if (direction === "left") {
+      const prevIndex = (visibleItems[0] as number) - 1;
+      console.log(prevIndex, "prevIndex");
+      if (prevIndex < weekdays.length) {
+        setCurrentIndex(prevIndex);
+      }
+    }
+  };
+
+  const scrollRight = (isDoubleClick: boolean) => {
+    scrollInContainer("right", isDoubleClick);
+  };
+
+  const scrollLeft = (isDoubleClick: boolean) => {
+    scrollInContainer("left", isDoubleClick);
+  };
 
   const templateSelectItems = props.templates.map((template) => {
     return {
@@ -108,49 +203,84 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
             }}
           />
           <Spacer />
+          <Flex p="4" direction="row" justifyContent={"flex-end"}>
+            {!props.clientId && (
+              <Button
+                onClick={() => {
+                  setIsReviewModalOpen(true);
+                }}
+                {...styles.assignButton}
+              >
+                Create Template
+              </Button>
+            )}
+            {props.clientId && (
+              <Button
+                onClick={() => {
+                  setIsReviewModalOpen(true);
+                }}
+                {...styles.assignButton}
+              >
+                Assign Chart
+              </Button>
+            )}
+          </Flex>
         </HStack>
         <Box p={2} />
-        <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-          {activeTemplate?.sections.map((section) => (
-            <div style={{ position: "relative" }} key={section.id}>
-              <GridItem
-                key={section.id}
-                {...styles.section}
-                _hover={{
-                  ".close-button": {
-                    display: "block",
-                  },
-                }}
-              >
-                <WeekdaySection key={section.id} {...section} />
-              </GridItem>
-            </div>
-          ))}
-        </Grid>
+        {/* a container with a scrollable horizontal list of weekday sections */}
+        <Flex width={"100%"} justifyContent={"center"}>
+          <Button
+            onClick={() => scrollLeft(false)}
+            onDoubleClick={() => {
+              scrollLeft(true);
+            }}
+          >
+            Left
+          </Button>
+          <Box
+            ref={scrollContainerRef}
+            style={{
+              overflowX: "scroll",
+              overflowY: "hidden",
+              width: "100%",
+              whiteSpace: "nowrap",
+              scrollBehavior: "smooth",
+            }}
+          >
+            <Grid
+              templateColumns={`repeat(7, ${SECTION_WIDTH}px)`}
+              gap={0}
+              style={{ width: "100%" }}
+            >
+              {weekdays.map((weekday, index) => (
+                <GridItem
+                  key={weekday}
+                  {...styles.section}
+                  ref={itemRefs.current[index]}
+                >
+                  <Text {...styles.sectionTitle}>{weekday}</Text>
+                  <Box p={2} />
+                  <Divider />
+                  <Box p={2} />
+                  {/* <WeekdaySection
+                  sections={activeTemplate?.sections.filter(
+                    (section) => section.day === weekday
+                  )}
+                /> */}
+                </GridItem>
+              ))}
+            </Grid>
+          </Box>
+          <Button
+            onClick={() => scrollRight(false)}
+            onDoubleClick={() => scrollRight(true)}
+          >
+            Right
+          </Button>
+        </Flex>
+
         <Box p={2} />
         <Divider />
-        <Flex p="4" direction="row" justifyContent={"flex-end"}>
-          {!props.clientId && (
-            <Button
-              onClick={() => {
-                setIsReviewModalOpen(true);
-              }}
-              {...styles.assignButton}
-            >
-              Create Template
-            </Button>
-          )}
-          {props.clientId && (
-            <Button
-              onClick={() => {
-                setIsReviewModalOpen(true);
-              }}
-              {...styles.assignButton}
-            >
-              Assign Chart
-            </Button>
-          )}
-        </Flex>
         {isReviewModalOpen && (
           <WorkoutPlanReviewModal
             isOpen={isReviewModalOpen}
