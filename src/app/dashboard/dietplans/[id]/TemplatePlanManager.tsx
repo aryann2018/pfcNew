@@ -27,12 +27,25 @@ import { DietPlanReviewModal } from "./DietPlanReviewModal";
 interface TemplateSelectItemProps {
   label: string;
   value: string;
+  macros: {
+    calories: number;
+    protein: number;
+    fat: number;
+    carbs: number;
+  };
 }
 
 const TemplateSelectItem = (props: TemplateSelectItemProps) => {
   return (
     <option value={props.value}>
       <Text>{props.label}</Text>
+      <MacrosTicker
+        protien={props.macros.protein}
+        fat={props.macros.fat}
+        carbs={props.macros.carbs}
+        calories={props.macros.calories}
+        size="md"
+      />
     </option>
   );
 };
@@ -65,6 +78,7 @@ const TemplateSelect = (props: TemplateSelectProps) => {
           key={item.value}
           label={item.label}
           value={item.value}
+          macros={item.macros}
         />
       ))}
     </Select>
@@ -96,14 +110,15 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
     addNewSectionToActiveTemplate,
   } = useDietPlanStore();
 
+  const activeTemplateMacros = getTotalTemplateMacros(activeTemplate!);
+
   const templateSelectItems = props.templates.map((template) => {
     return {
       label: template.name,
       value: template.id,
+      macros: activeTemplateMacros ?? {},
     };
   });
-
-  const activeTemplateMacros = getTotalTemplateMacros(activeTemplate!);
 
   if (props.isNew) {
     return (
@@ -112,6 +127,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
           <TemplateSelect
             items={templateSelectItems.map((item) => ({
               ...item,
+              macros: activeTemplateMacros ?? {},
             }))}
             value={activeTemplate?.id}
             onChange={(value) => {
@@ -130,6 +146,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
             fat={activeTemplateMacros.fat!}
             carbs={activeTemplateMacros.carbs!}
             calories={activeTemplateMacros.calories!}
+            size="lg"
           />
         </HStack>
         <Box p={2} />

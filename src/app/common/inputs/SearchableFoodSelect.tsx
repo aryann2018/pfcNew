@@ -60,6 +60,18 @@ function SearchableFoodSelect({
           fontWeight: "500",
           color: "#000000",
         }),
+        option: (provided: any, state: any) => ({
+          ...provided,
+          fontFamily: "Inter",
+          fontSize: "16px",
+          fontWeight: "500",
+          color: "#000000",
+          backgroundColor: state.isSelected ? "#E2E8F0" : "#ffffff",
+          ":hover": {
+            backgroundColor: "#E2E8F0",
+          },
+          transition: " all 0.3s ease;" /* Smooth transition for all changes */,
+        }),
       }}
       isLoading={isLoading}
       selectedOptionStyle="color"
