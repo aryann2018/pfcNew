@@ -40,9 +40,7 @@ function SearchableFoodSelect({
   selected,
   onSelect,
 }: SearchableFoodSelectProps) {
-  const { foodIngridients, setSearchTerm, isLoading } =
-    useFoodIngridientsStore();
-
+  const { foodIngridients, isLoading } = useFoodIngridientsStore();
   let options = foodIngridients?.map((item: FoodIngredient) => ({
     value: item.id,
     label: item.name,
@@ -77,11 +75,7 @@ function SearchableFoodSelect({
           foodIngridients.find((item: FoodIngredient) => item.id === value)
         );
       }}
-      onInputChange={(value) => {
-        setSearchTerm(value);
-      }}
-      // isOptionSelected={(option) => option.value === selected?.id}
-      // hideSelectedOptions={false}
+      hideSelectedOptions={false}
       components={{
         Option: SelectOption,
         IndicatorSeparator: () => null,

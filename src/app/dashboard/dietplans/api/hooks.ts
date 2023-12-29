@@ -52,13 +52,13 @@ export const useGetDietPlanTemplates = () => {
   return query;
 };
 
-export const useGetFoodIngredients = (searchTerm: string) => {
+export const useGetFoodIngredients = (searchTerm?: string) => {
   const query = useQuery({
     queryKey: [`FOOD_INGRIDENTS_API-${searchTerm}`],
     queryFn: async () => {
       try {
         const res = await get<FoodIngredientsQueryResponse>(
-          `${FOOD_INGRIDENTS_API}?q=${searchTerm}`
+          `${FOOD_INGRIDENTS_API}` // TODO: add search term to query q=${searchTerm}
         );
         return res?.data;
       } catch (error) {

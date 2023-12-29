@@ -18,7 +18,7 @@ import SearchableFoodSelect from "@/app/common/inputs/SearchableFoodSelect";
 import { useEffect, useState } from "react";
 import CustomBadges from "./CustomBadges";
 import useDietPlanStore from "./dietplansStore";
-import { getTotalFoodItemMarcos, getTotalFoodMacros } from "../utils";
+import { getTotalFoodMacros } from "../utils";
 import { createTemplateSubSection } from "../api/mocks";
 import { FaRegTrashAlt } from "react-icons/fa";
 
