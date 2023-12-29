@@ -20,7 +20,7 @@ import { ContactDetailsType } from "./AuthCard";
 import { getToken, isTokenAvailable } from "./utils";
 import { useEffect } from "react";
 
-const COUNTRY_CODE = "+91";
+const COUNTRY_CODE = "91";
 
 interface LoginCardProps {
   onSubmit: (details: ContactDetailsType) => void;
@@ -77,7 +77,7 @@ export const LoginCard = (props: LoginCardProps) => {
                         maxWidth={"10"}
                         padding={0}
                         disabled={true}
-                        value={COUNTRY_CODE}
+                        value={`+${COUNTRY_CODE}`}
                         onChange={() => {}}
                       ></Input>
                     </>

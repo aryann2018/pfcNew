@@ -2,7 +2,7 @@
 "use client";
 
 import { CacheProvider } from "@chakra-ui/next-js";
-import { ChakraProvider } from "@chakra-ui/react";
+import { ChakraProvider, withDefaultProps } from "@chakra-ui/react";
 
 // 1. Import the extendTheme function
 import { extendTheme } from "@chakra-ui/react";
@@ -20,7 +20,19 @@ const fonts = {
   body: "var(--font-inter)",
 };
 
-export const theme = extendTheme({ colors, fonts });
+export const theme = extendTheme(
+  {
+    colors,
+    fonts,
+  }
+  // },
+  // withDefaultProps({
+  //   defaultProps: {
+  //     colorScheme: "blackAlpha",
+  //   },
+  //   components: ["Text"],
+  // })
+);
 
 import { Rubik } from "next/font/google";
 import { PFCColors } from "./common/PFCColors";

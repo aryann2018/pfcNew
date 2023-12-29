@@ -47,7 +47,7 @@ export const MacrosTicker = (props: MacrosTickerProps) => {
       style={{
         fontFamily: "JetBrains Mono",
         fontWeight: "bold",
-        fontSize: size === "sm" ? "14px" : size === "md" ? "16px" : "22px",
+        fontSize: size === "sm" ? "12px" : size === "md" ? "14px" : "22px",
         borderColor: "#D0D5DD",
         borderWidth: "1px",
         borderRadius: "6.761px",

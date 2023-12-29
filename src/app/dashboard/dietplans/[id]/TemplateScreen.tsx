@@ -30,13 +30,8 @@ interface TemplateScreenProps {
 export const TemplateScreen = (props: TemplateScreenProps) => {
   const router = useRouter();
 
-  const {
-    activeTemplate,
-    setActiveTemplate,
-    templates,
-    setTemplates,
-    activeTemplateId,
-  } = useDietPlanStore();
+  const { activeTemplate, setActiveTemplate, templates, setTemplates } =
+    useDietPlanStore();
 
   const { searchTerm, setFoodIngridients } = useFoodIngridientsStore();
 
@@ -65,16 +60,14 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
     setTemplates(newTemplates);
 
     if (!activeTemplate?.id) {
-      setActiveTemplate(newTemplates[0].id);
-    } else if (activeTemplateId && activeTemplateId !== activeTemplate?.id) {
-      setActiveTemplate(activeTemplateId);
+      setActiveTemplate(newTemplates[0]?.id);
     } else {
-      setActiveTemplate(newTemplates[0].id);
+      setActiveTemplate(activeTemplate?.id);
     }
   }, [isLoading, data]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const { data: foodIngridientsData, isLoading: foodIngridientsLoading } =
-    useGetFoodIngredients(searchTerm);
+    useGetFoodIngredients();
 
   useEffect(() => {
     if (
@@ -86,9 +79,9 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
     }
   }, [foodIngridientsLoading, foodIngridientsData]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    setActiveTemplate(undefined);
-  }, [props.clientId]); // eslint-disable-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  //   setActiveTemplate(undefined);
+  // }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const {
     data: coachProfileData,
@@ -143,12 +136,6 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
 
   if (isLoading) {
     return <div>Loading...</div>;
-  }
-  if (error) {
-    return <div>Error: {error.message}</div>;
-  }
-  if (!data || !data.data) {
-    return <div>No data</div>;
   }
 
   return (
