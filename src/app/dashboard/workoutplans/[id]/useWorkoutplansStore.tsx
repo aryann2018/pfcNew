@@ -10,7 +10,7 @@ interface WorkoutPlanTemplate {
   sections: any[]; // Define appropriately based on your data structure
 }
 
-interface DietPlanState {
+interface WorkoutPlanState {
   templates: Template[];
   setTemplates: (templates: Template[]) => void;
   activeTemplate: Template | null;
@@ -32,7 +32,7 @@ interface DietPlanState {
 }
 
 // Create the store
-const useWorkoutPlanStore = create<DietPlanState>((set) => ({
+const useWorkoutPlanStore = create<WorkoutPlanState>((set) => ({
   // Initial state
   templates: [], // Populate with your initial templates
   activeTemplate: null,
@@ -53,26 +53,6 @@ const useWorkoutPlanStore = create<DietPlanState>((set) => ({
     set((state) => ({
       activeTemplate: state.activeTemplate
         ? { ...state.activeTemplate, [field]: value }
-        : null,
-    })),
-  updateActiveFoodItemQuantity: (sectionId, foodItemId, quantity) =>
-    set((state) => ({
-      activeTemplate: state.activeTemplate
-        ? {
-            ...state.activeTemplate,
-            sections: state.activeTemplate.sections.map((section) =>
-              section.id === sectionId
-                ? {
-                    ...section,
-                    subSections: section.subSections.map((subSection) =>
-                      subSection.id === foodItemId
-                        ? { ...subSection, quantity }
-                        : subSection
-                    ),
-                  }
-                : section
-            ),
-          }
         : null,
     })),
   addSubSectionToActiveTemplate: (foodItem: TemplateSubSection) =>
@@ -100,25 +80,17 @@ const useWorkoutPlanStore = create<DietPlanState>((set) => ({
                       ...section.subSections,
                       {
                         id: Math.random().toString(36).substr(2, 9),
-                        name: "New Food Item",
-                        description: "New Food Item",
-                        quantity: 0,
-                        unit: "g",
+                        name: "New Exercise",
+                        description: "New Exercise",
+                        reps: 1,
+                        sets: 1,
                         isNew: true,
-                        foodItem: {
+                        exercise: {
                           id: "new",
-                          name: "New Food Item",
-                          description: "New Food Item",
-                          unit_of_measure: "-",
-                          portion_size: "0",
-                          calories: "0",
-                          protein: "0",
-                          fat: "0",
-                          carbohydrates: "0",
-                          is_private: false,
-                          is_allergen: false,
-                          photo: null,
+                          name: "New Exercise",
+                          description: "New Exercise",
                         },
+                        rest: 0,
                       },
                     ],
                   }

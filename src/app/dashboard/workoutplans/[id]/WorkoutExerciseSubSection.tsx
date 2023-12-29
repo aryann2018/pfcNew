@@ -1,21 +1,8 @@
+import { useEffect, useState } from "react";
 import { PFCColors } from "@/app/common/PFCColors";
-import {
-  Badge,
-  Box,
-  Flex,
-  IconButton,
-  Input,
-  InputGroup,
-  InputRightAddon,
-  Text,
-} from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import { FiPlusCircle } from "react-icons/fi";
 import { ExerciseType } from "../api/types";
-import SearchableFoodSelect from "@/app/common/inputs/SearchableFoodSelect";
-import { useEffect, useState } from "react";
-import CustomBadges from "./CustomBadges";
-import { createTemplateSubSection } from "../api/mocks";
-import { FaRegTrashAlt } from "react-icons/fa";
 import useWorkoutPlanStore from "./useWorkoutplansStore";
 
 interface AddTemplateSubSectionProps {
@@ -48,31 +35,35 @@ export const AddTemplateSubSection = ({
 };
 
 export interface TemplateSubSection {
-  id?: string;
+  id: string;
   workoutId?: string;
   name: string;
   description: string;
   isNew?: boolean;
-  exerciseType?: ExerciseType;
+  exercise?: ExerciseType;
   sets: number;
   reps: number;
   rest: number;
   style?: any;
+  notes?: string;
 }
 
-export const FoodItemSubSection = (props: TemplateSubSection) => {
+export const ExerciseSubSection = (props: TemplateSubSection) => {
   const [selected, setSelected] = useState<ExerciseType | undefined>();
 
   const { setSubSectionInSection } = useWorkoutPlanStore();
 
   useEffect(() => {
     if (selected) {
-      const newSubSection = createTemplateSubSection({
+      const newSubSection = {
         id: selected.id!,
-        foodItem: selected,
+        exercise: selected,
         name: selected.name,
         description: selected.description,
-      });
+        sets: 1,
+        reps: 1,
+        rest: 0,
+      };
 
       setSubSectionInSection(props.id!, props.id!, newSubSection);
       setSelected(undefined);
@@ -90,89 +81,7 @@ export const FoodItemSubSection = (props: TemplateSubSection) => {
       zIndex={props.style?.zIndex}
       gap={"10px"}
     >
-      <Flex direction={"column"} justifyContent={"space-between"} width={"60%"}>
-        <Box width={"100%"}>
-          <SearchableFoodSelect
-            onSelect={(foodItem: FoodIngredient) => {
-              setSelected(foodItem);
-            }}
-            selected={props.foodItem}
-            isLoadingOptions={false}
-          />
-        </Box>
-        <Box p={1} />
-        <Flex direction={"row"} justifyContent={"space-between"} width={"100%"}>
-          <CustomBadges macros={macros} />
-        </Flex>
-        <Text fontSize={"12px"}>{props.description}</Text>
-      </Flex>
-      <Flex
-        direction={"column"}
-        justifyContent={"space-between"}
-        alignItems={"flex-end"}
-        width={"40%"}
-      >
-        <Flex
-          direction={"column"}
-          justifyContent={"space-between"}
-          fontFamily={"JetBrains Mono"}
-          height={"100%"}
-        >
-          <InputGroup
-            style={{
-              borderRadius: "4px",
-              border: "1px solid #D0D5DD",
-            }}
-          >
-            <Input
-              placeholder="Quantity"
-              value={Math.round(
-                props.quantity * parseFloat(props.foodItem?.portion_size!)
-              )}
-              onChange={(event) => {
-                updateActiveFoodItemQuantity(
-                  props.mealId!,
-                  props.id!,
-                  event.target.value
-                    ? parseFloat(event.target.value) /
-                        parseFloat(props.foodItem?.portion_size!)
-                    : 0
-                );
-              }}
-              style={{ border: "none", outline: "none" }}
-            />
-            <InputRightAddon
-              background={"white"}
-              style={{ border: "none", outline: "none" }}
-            >
-              <Badge
-                colorScheme="white"
-                alignItems={"center"}
-                justifyContent={"center"}
-                justifyItems={"center"}
-                display={"flex"}
-                p="1"
-                gap={"2px"}
-                width={"100%"}
-              >
-                <Text>{props.unit}</Text>
-              </Badge>
-            </InputRightAddon>
-          </InputGroup>
-          <Box p={1} />
-
-          <IconButton
-            bg={"transparent"}
-            aria-label="Delete"
-            icon={<FaRegTrashAlt />}
-            onClick={() => {
-              props.onDelete && props.onDelete(props.id!);
-            }}
-            alignSelf={"flex-end"}
-            justifySelf={"flex-end"}
-          />
-        </Flex>
-      </Flex>
+      sub section
     </Flex>
   );
 };

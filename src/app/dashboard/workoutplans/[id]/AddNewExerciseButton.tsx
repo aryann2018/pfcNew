@@ -1,5 +1,5 @@
-import { Button, Flex, Text } from "@chakra-ui/react";
-import { PiPlusCircle, PiPlusFill } from "react-icons/pi";
+import { Flex, Text } from "@chakra-ui/react";
+import { PiPlusCircle } from "react-icons/pi";
 
 interface AddNewMealButtonProps {
   onClick: () => void;
@@ -27,7 +27,7 @@ export const AddNewMealButton = (props: AddNewMealButtonProps) => {
       cursor={"pointer"}
     >
       <PiPlusCircle size={24} />
-      <Text fontSize={"12px"}>Add New Meal</Text>
+      <Text fontSize={"12px"}>Add New Exercise</Text>
     </Flex>
   );
 };

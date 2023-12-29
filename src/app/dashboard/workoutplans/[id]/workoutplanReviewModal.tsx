@@ -11,28 +11,28 @@ import {
   Box,
 } from "@chakra-ui/react";
 import EditableText from "@/app/common/inputs/EditableInput";
-import useDietPlanStore from "./dietplansStore";
+import useWorkoutPlanStore from "./useWorkoutplansStore";
 
-interface DietPlanReviewModalProps {
+interface WorkoutPlanReviewModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSubmit: () => void;
   isTemplate?: boolean;
 }
 
-export const DietPlanReviewModal = ({
+export const WorkoutPlanReviewModal = ({
   isOpen,
   onClose,
   onSubmit,
   ...props
-}: DietPlanReviewModalProps) => {
-  const { activeTemplate, updateTemplateName } = useDietPlanStore();
+}: WorkoutPlanReviewModalProps) => {
+  const { activeTemplate, updateTemplateName } = useWorkoutPlanStore();
   const { name } = activeTemplate!;
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl">
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Review Diet Plan</ModalHeader>
+        <ModalHeader>Review Workout Plan</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
           <EditableText
@@ -41,7 +41,7 @@ export const DietPlanReviewModal = ({
           />
           <Box mt={4} />
           <Button size="lg" onClick={onSubmit}>
-            {props.isTemplate ? "Create Template" : "Assign Diet Plan"}
+            {props.isTemplate ? "Create Template" : "Assign Workout Plan"}
           </Button>
         </ModalBody>
       </ModalContent>

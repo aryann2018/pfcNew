@@ -1,23 +1,23 @@
 //types for backend
 
 export type ExerciseType = {
-  id: string;
+  id?: string;
   created_at?: string;
   modified_at?: string;
   name: string;
   description: string;
-  benefits: string[];
-  exercise_type: string;
-  equipment_type: string;
-  exercise_level: string;
+  benefits?: string[];
+  exercise_type?: string;
+  equipment_type?: string;
+  exercise_level?: string;
 };
 
 export type WorkoutExerciseType = {
-  id: string;
-  created_at: string;
-  modified_at: string;
+  id?: string;
+  created_at?: string;
+  modified_at?: string;
   exercise: ExerciseType;
-  notes: string;
+  notes?: string;
   sets_and_reps: {
     sets: number;
     reps: number;
@@ -30,6 +30,7 @@ export type WorkoutType = {
   modified_at: string;
   name: string;
   description: string;
+  preffered_day_of_week: string;
   exercises: WorkoutExerciseType[];
 };
 
@@ -56,18 +57,20 @@ export type WorkoutExerciseTemplate = WorkoutExerciseType & {
   exercise: ExerciseType;
 };
 
-export type WorkoutTemplate = WorkoutType & {
+export type WorkoutTemplate = Omit<WorkoutType, "exercises"> & {
   template_exercises: WorkoutExerciseTemplate[];
 };
 
-export type WorkoutPlanTemplate = WorkoutPlanType & {
-  workout_plan_templates: WorkoutTemplate[];
+export type WorkoutPlanTemplate = Omit<WorkoutPlanType, "workouts"> & {
+  workout_templates: WorkoutTemplate[];
 };
 
-export type WorkoutPlansTemplatesQueryResponseType =
-  WorkoutPlansQueryResponseType & {
-    data: WorkoutPlanTemplate[];
-  };
+export type WorkoutPlansTemplatesQueryResponseType = Omit<
+  WorkoutPlansQueryResponseType,
+  "data"
+> & {
+  data: WorkoutPlanTemplate[];
+};
 
 export type ExercisesQueryResponse = {
   data: ExerciseType[];
@@ -108,7 +111,9 @@ export type WorkoutPlanTemplatePostPayload = {
     name: string;
     description: string;
     template_exercises: {
-      exercise: string;
+      exercise_id: string;
+      workout_id?: string;
+      notes: string;
       sets_and_reps: {
         sets: number;
         reps: number;

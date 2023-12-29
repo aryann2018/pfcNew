@@ -11,9 +11,10 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { MealPlanSection, TemplateSection } from "./MealPlanSection";
-import { DietPlanReviewModal } from "./workoutplanReviewModal";
+import { WeekdaySection, TemplateSection } from "./WeekdaySection";
+
 import useWorkoutPlanStore from "./useWorkoutplansStore";
+import { WorkoutPlanReviewModal } from "./WorkoutplanReviewModal";
 
 /* selectItem */
 interface TemplateSelectItemProps {
@@ -121,7 +122,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
                   },
                 }}
               >
-                <MealPlanSection key={section.id} {...section} />
+                <WeekdaySection key={section.id} {...section} />
               </GridItem>
             </div>
           ))}
@@ -151,7 +152,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
           )}
         </Flex>
         {isReviewModalOpen && (
-          <DietPlanReviewModal
+          <WorkoutPlanReviewModal
             isOpen={isReviewModalOpen}
             onClose={() => {
               props.onAssignPress(activeTemplate?.id!, activeTemplate);

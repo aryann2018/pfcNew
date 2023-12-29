@@ -10,16 +10,16 @@ import {
 } from "../api/hooks";
 
 import { useRouter } from "next/navigation";
-// import { templates as mocktemplates } from "../api/mocks";
-import useDietPlanStore from "./dietplansStore";
+import useWorkoutPlanStore from "./useWorkoutplansStore";
 import { useEffect } from "react";
-// import {
-//   getDietPlanPostPayload,
-//   getDietPlanTemplateFromDietPlan,
-//   templateFromDietPlanTemplate,
-// } from "../api/adapters";
-import { useFoodIngridientsStore } from "@/app/common/inputs/SearchableFoodSelect";
+
+import { useExercisesStore } from "@/app/common/inputs/SearchableExerciseSelect";
 import { formatDateToYYYYMMDD } from "@/app/utilities/utils";
+import {
+  getWorkoutPlanPostPayload,
+  getWorkoutPlanTemplateFromWorkoutPlan,
+  templateFromWorkoutPlanTemplate,
+} from "../api/adapters";
 
 interface TemplateScreenProps {
   isNew: boolean;
@@ -36,16 +36,16 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
     templates,
     setTemplates,
     activeTemplateId,
-  } = useDietPlanStore();
+  } = useWorkoutPlanStore();
 
-  const { searchTerm, setFoodIngridients } = useFoodIngridientsStore();
+  const { searchTerm, setExercises } = useExercisesStore();
 
   const {
     data,
     error,
     isLoading,
     refetch: refetchTemplates,
-  } = useGetDietPlanTemplates();
+  } = useGetWorkoutPlanTemplates();
 
   useEffect(() => {
     if (isLoading) {
@@ -59,7 +59,7 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
     }
 
     const newTemplates = data.data.map((template) =>
-      templateFromDietPlanTemplate(template)
+      templateFromWorkoutPlanTemplate(template)
     );
 
     setTemplates(newTemplates);
@@ -73,18 +73,14 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
     }
   }, [isLoading, data]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  const { data: foodIngridientsData, isLoading: foodIngridientsLoading } =
-    useGetFoodIngredients(searchTerm);
+  const { data: exercisesData, isLoading: exercisesDataLoading } =
+    useGetExercises(searchTerm);
 
   useEffect(() => {
-    if (
-      !foodIngridientsLoading &&
-      foodIngridientsData &&
-      foodIngridientsData.data
-    ) {
-      setFoodIngridients(foodIngridientsData.data);
+    if (!exercisesDataLoading && exercisesData && exercisesData.data) {
+      setExercises(exercisesData.data);
     }
-  }, [foodIngridientsLoading, foodIngridientsData]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [exercisesDataLoading, exercisesData]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setActiveTemplate(undefined);
@@ -96,7 +92,7 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
     isLoading: coachProfileLoading,
   } = useQueryCoachProfile();
 
-  const { mutate: mutateDietPlan } = useMutateDietPlan({
+  const { mutate: mutateDietPlan } = useMutateWorkoutPlan({
     onSuccess: (data: any) => {
       console.log("data", data);
     },
@@ -105,7 +101,7 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
     },
   });
 
-  const { mutate: mutateDietPlanTemplate } = useMutateDietPlanTemplate({
+  const { mutate: mutateDietPlanTemplate } = useMutateWorkoutPlanTemplate({
     onSuccess: async (data: any) => {
       await refetchTemplates();
       setActiveTemplate(data.data.id);
@@ -116,7 +112,7 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
   });
 
   const onAssignPress = () => {
-    const dietplan = getDietPlanPostPayload(
+    const dietplan = getWorkoutPlanPostPayload(
       activeTemplate!,
       props.clientId!,
       "1",
@@ -137,7 +133,7 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
   };
 
   const onCreateDietPlanTemplate = async () => {
-    const template = getDietPlanTemplateFromDietPlan(activeTemplate!);
+    const template = getWorkoutPlanTemplateFromWorkoutPlan(activeTemplate!);
     mutateDietPlanTemplate(template);
   };
 
