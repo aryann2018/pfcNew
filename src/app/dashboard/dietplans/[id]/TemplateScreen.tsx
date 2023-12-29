@@ -30,13 +30,8 @@ interface TemplateScreenProps {
 export const TemplateScreen = (props: TemplateScreenProps) => {
   const router = useRouter();
 
-  const {
-    activeTemplate,
-    setActiveTemplate,
-    templates,
-    setTemplates,
-    activeTemplateId,
-  } = useDietPlanStore();
+  const { activeTemplate, setActiveTemplate, templates, setTemplates } =
+    useDietPlanStore();
 
   const { searchTerm, setFoodIngridients } = useFoodIngridientsStore();
 
@@ -66,10 +61,8 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
 
     if (!activeTemplate?.id) {
       setActiveTemplate(newTemplates[0].id);
-    } else if (activeTemplateId && activeTemplateId !== activeTemplate?.id) {
-      setActiveTemplate(activeTemplateId);
     } else {
-      setActiveTemplate(newTemplates[0].id);
+      setActiveTemplate(activeTemplate?.id);
     }
   }, [isLoading, data]); // eslint-disable-line react-hooks/exhaustive-deps
 
@@ -86,9 +79,9 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
     }
   }, [foodIngridientsLoading, foodIngridientsData]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  useEffect(() => {
-    setActiveTemplate(undefined);
-  }, [props.clientId]); // eslint-disable-line react-hooks/exhaustive-deps
+  // useEffect(() => {
+  //   setActiveTemplate(undefined);
+  // }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const {
     data: coachProfileData,

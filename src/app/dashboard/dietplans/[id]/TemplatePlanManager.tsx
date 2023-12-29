@@ -40,6 +40,7 @@ const TemplateSelectItem = (props: TemplateSelectItemProps) => {
 /* select */
 interface TemplateSelectProps {
   items: TemplateSelectItemProps[];
+  value?: string;
   onChange: (value: string) => void;
 }
 
@@ -57,6 +58,7 @@ const TemplateSelect = (props: TemplateSelectProps) => {
       onChange={(e) => {
         props.onChange(e.target.value);
       }}
+      value={props.value}
     >
       {props.items.map((item) => (
         <TemplateSelectItem
@@ -111,6 +113,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
             items={templateSelectItems.map((item) => ({
               ...item,
             }))}
+            value={activeTemplate?.id}
             onChange={(value) => {
               const template = props.templates.find(
                 (template) => template.id === value
