@@ -1,7 +1,9 @@
+//types for backend
+
 export type ExerciseType = {
   id: string;
-  created_at: string;
-  modified_at: string;
+  created_at?: string;
+  modified_at?: string;
   name: string;
   description: string;
   benefits: string[];
@@ -16,7 +18,10 @@ export type WorkoutExerciseType = {
   modified_at: string;
   exercise: ExerciseType;
   notes: string;
-  sets_and_reps: string[];
+  sets_and_reps: {
+    sets: number;
+    reps: number;
+  };
 };
 
 export type WorkoutType = {
@@ -25,7 +30,7 @@ export type WorkoutType = {
   modified_at: string;
   name: string;
   description: string;
-  template_exercises: WorkoutExerciseType[];
+  exercises: WorkoutExerciseType[];
 };
 
 export type WorkoutPlanType = {
@@ -34,7 +39,7 @@ export type WorkoutPlanType = {
   modified_at: string;
   name: string;
   description: string;
-  workout_templates: WorkoutType[];
+  workouts: WorkoutType[];
   is_private: boolean;
   is_active: boolean;
   is_success: boolean;
@@ -56,10 +61,70 @@ export type WorkoutTemplate = WorkoutType & {
 };
 
 export type WorkoutPlanTemplate = WorkoutPlanType & {
-  meal_plan_templates: WorkoutType[];
+  workout_plan_templates: WorkoutTemplate[];
 };
 
 export type WorkoutPlansTemplatesQueryResponseType =
   WorkoutPlansQueryResponseType & {
     data: WorkoutPlanTemplate[];
   };
+
+export type ExercisesQueryResponse = {
+  data: ExerciseType[];
+  is_success: boolean;
+  message: null | string;
+};
+
+export type WorkoutPlanPostPayload = {
+  client_id: string;
+  coach_id: string;
+  name: string;
+  description: string;
+  is_active: boolean;
+  is_paused: boolean;
+  start_date: string;
+  duration_in_days: number;
+  workouts: {
+    name: string;
+    description: string;
+    exercises: {
+      exercise_id: string;
+      workout_id?: string;
+      notes: string;
+      sets_and_reps: {
+        sets: number;
+        reps: number;
+      };
+    }[];
+    preffered_day_of_week: string;
+    workout_plan_id?: string;
+  }[];
+};
+
+export type WorkoutPlanTemplatePostPayload = {
+  name: string;
+  description: string;
+  workout_templates: {
+    name: string;
+    description: string;
+    template_exercises: {
+      exercise: string;
+      sets_and_reps: {
+        sets: number;
+        reps: number;
+      };
+    }[];
+    preffered_day_of_week: string;
+    workout_template_id?: string;
+  }[];
+
+  workout_plan_template_id?: string;
+};
+
+export type WorkoutPlanPostResponse = {
+  data: WorkoutPlanType;
+  is_success: boolean;
+  message: null | string;
+};
+
+// types for frontend

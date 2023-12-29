@@ -2,9 +2,7 @@ import { PFCColors } from "@/app/common/PFCColors";
 import {
   Badge,
   Box,
-  Button,
   Flex,
-  HStack,
   IconButton,
   Input,
   InputGroup,
@@ -12,15 +10,13 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { FiPlusCircle } from "react-icons/fi";
-import { styles } from "./TemplatePlanManager";
-import { FoodIngredient } from "../api/types";
+import { ExerciseType } from "../api/types";
 import SearchableFoodSelect from "@/app/common/inputs/SearchableFoodSelect";
 import { useEffect, useState } from "react";
 import CustomBadges from "./CustomBadges";
-import useDietPlanStore from "./dietplansStore";
-import { getTotalFoodMacros } from "../utils";
 import { createTemplateSubSection } from "../api/mocks";
 import { FaRegTrashAlt } from "react-icons/fa";
+import useWorkoutPlanStore from "./useWorkoutplansStore";
 
 interface AddTemplateSubSectionProps {
   label: string;
@@ -53,43 +49,32 @@ export const AddTemplateSubSection = ({
 
 export interface TemplateSubSection {
   id?: string;
-  mealId?: string;
+  workoutId?: string;
   name: string;
   description: string;
-  onDelete?: (id: string) => void;
   isNew?: boolean;
-  macros?: {
-    protein: number;
-    fat: number;
-    carbs: number;
-    calories: number;
-  };
-  quantity: number;
-  unit: string;
-  foodItem?: FoodIngredient;
+  exerciseType?: ExerciseType;
+  sets: number;
+  reps: number;
+  rest: number;
   style?: any;
 }
 
 export const FoodItemSubSection = (props: TemplateSubSection) => {
-  const [selected, setSelected] = useState<FoodIngredient | undefined>();
+  const [selected, setSelected] = useState<ExerciseType | undefined>();
 
-  const { updateActiveFoodItemQuantity, setSubSectionInSection } =
-    useDietPlanStore();
-
-  const macros = getTotalFoodMacros(props);
+  const { setSubSectionInSection } = useWorkoutPlanStore();
 
   useEffect(() => {
     if (selected) {
       const newSubSection = createTemplateSubSection({
         id: selected.id!,
         foodItem: selected,
-        quantity: 1,
-        unit: selected.unit_of_measure,
         name: selected.name,
         description: selected.description,
       });
 
-      setSubSectionInSection(props.mealId!, props.id!, newSubSection);
+      setSubSectionInSection(props.id!, props.id!, newSubSection);
       setSelected(undefined);
     }
   }, [selected]); // eslint-disable-line react-hooks/exhaustive-deps
