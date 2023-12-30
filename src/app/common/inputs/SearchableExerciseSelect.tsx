@@ -27,16 +27,16 @@ const SelectOption = ({ children, ...props }: any) => (
   </components.Option>
 );
 
-interface SearchableFoodSelectProps {
+interface SearchableExerciseSelectProps {
   isLoadingOptions: boolean;
   selected?: ExerciseType;
   onSelect: (value: any) => void;
 }
 
-function SearchableFoodSelect({
+function SearchableExerciseSelect({
   selected,
   onSelect,
-}: SearchableFoodSelectProps) {
+}: SearchableExerciseSelectProps) {
   const { exercises, setSearchTerm, isLoading } = useExercisesStore();
 
   let options = exercises?.map((item: ExerciseType) => ({
@@ -88,4 +88,4 @@ function SearchableFoodSelect({
   );
 }
 
-export default SearchableFoodSelect;
+export default SearchableExerciseSelect;

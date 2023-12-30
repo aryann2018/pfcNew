@@ -231,7 +231,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
             }}
           >
             <Grid
-              templateColumns={`repeat(7, ${SECTION_WIDTH}px)`}
+              templateColumns={`repeat(7, minmax(${SECTION_WIDTH}px, 14fr))`}
               gap={0}
               style={{ width: "100%", height: "100%" }}
             >

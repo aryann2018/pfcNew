@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
 import { PFCColors } from "@/app/common/PFCColors";
-import { Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text } from "@chakra-ui/react";
 import { FiPlusCircle } from "react-icons/fi";
 import { ExerciseType } from "../api/types";
 import useWorkoutPlanStore from "./useWorkoutplansStore";
+import SearchableExerciseSelect from "@/app/common/inputs/SearchableExerciseSelect";
+import { MetaInputs } from "./MetaInputs";
 
 interface AddTemplateSubSectionProps {
   label: string;
@@ -48,6 +50,22 @@ export interface TemplateSubSection {
   style?: any;
   notes?: string;
 }
+const MuscleTargetedLabel = ({ label }: { label: string }) => {
+  return (
+    <Flex
+      bg={"#D0D5DD"}
+      paddingY={1.5}
+      paddingX={2}
+      borderRadius={"4px"}
+      alignItems={"center"}
+      justifyContent={"center"}
+    >
+      <Text fontSize={"12px"} fontFamily={"JetBrains Mono"} color={"#344054"}>
+        {label}
+      </Text>
+    </Flex>
+  );
+};
 
 export const ExerciseSubSection = (props: TemplateSubSection) => {
   const [selected, setSelected] = useState<ExerciseType | undefined>();
@@ -73,16 +91,29 @@ export const ExerciseSubSection = (props: TemplateSubSection) => {
 
   return (
     <Flex
-      direction={"row"}
+      direction={"column"}
       justifyContent={"space-between"}
-      bg={PFCColors.WHITE}
-      p="12px"
+      bg={"#F9FAFB"}
+      p={3}
       borderRadius={"4px"}
-      boxShadow="0px 1.69px 1.69px 0px rgba(24, 34, 48, 0.10)"
       zIndex={props.style?.zIndex}
       gap={"10px"}
+      width={"100%"}
     >
-      sub section
+      <MuscleTargetedLabel label={"Chest"} />
+      <SearchableExerciseSelect
+        isLoadingOptions={false}
+        onSelect={(value) => {}}
+      />
+      <Text fontSize={"12px"}>{props.description}</Text>
+      <MetaInputs
+        sets={0}
+        onSetsChange={() => {}}
+        reps={0}
+        onRepsChange={() => {}}
+        rest={0}
+        onRestChange={() => {}}
+      />
     </Flex>
   );
 };

@@ -1,4 +1,4 @@
-import { CloseButton, Flex, HStack } from "@chakra-ui/react";
+import { Box, CloseButton, Flex, HStack } from "@chakra-ui/react";
 
 import {
   AddTemplateSubSection,
@@ -45,7 +45,7 @@ export const WeekdaySection = (props: WeekdaySectionProps) => {
   }
 
   return (
-    <Flex height={"100%"} direction={"column"} p={4}>
+    <Flex height={"100%"} direction={"column"} p={4} gap={4}>
       {weekdaySection.subSections.length > 0 && (
         <AddTemplateSubSection
           label=""
@@ -61,9 +61,8 @@ export const WeekdaySection = (props: WeekdaySectionProps) => {
       )}
       {weekdaySection.subSections.map((subSection) => {
         return (
-          <div key={subSection.id}>
+          <Flex key={subSection.id} width="100%">
             <ExerciseSubSection {...subSection} />
-            <Flex direction={"column"}>weekday</Flex>
             <CloseButton
               className="close-button"
               size="md"
@@ -83,11 +82,11 @@ export const WeekdaySection = (props: WeekdaySectionProps) => {
               }}
               cursor={"pointer"}
             />
-          </div>
+          </Flex>
         );
       })}
     </Flex>
   );
 };
 
-export const SECTION_WIDTH = 400;
+export const SECTION_WIDTH = 330;
