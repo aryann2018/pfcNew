@@ -20,6 +20,7 @@ import {
 import useWorkoutPlanStore from "./useWorkoutplansStore";
 import { WorkoutPlanReviewModal } from "./WorkoutPlanReviewModal";
 import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
+import { weekdays } from "./constants";
 
 /* selectItem */
 interface TemplateSelectItemProps {
@@ -81,16 +82,6 @@ export interface Template {
   description: string;
   sections: TemplateSection[];
 }
-
-const weekdays = [
-  "Monday",
-  "Tuesday",
-  "Wednesday",
-  "Thursday",
-  "Friday",
-  "Saturday",
-  "Sunday",
-];
 
 const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
@@ -234,7 +225,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
               whiteSpace: "nowrap",
               scrollBehavior: "smooth",
               scrollSnapType: "x mandatory",
-              scrollSnapAlign: "center",
+              scrollSnapAlign: "right",
               border: "1px solid #D0D5DD",
               height: "100%",
             }}
@@ -252,9 +243,17 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
                   ref={itemRefs.current[index]}
                 >
                   {/* @ts-ignore */}
-                  <Text {...styles.sectionTitle}>{weekday}</Text>
+                  <Text
+                    {...styles.sectionTitle}
+                    _firstLetter={{ textTransform: "capitalize" }}
+                  >
+                    {weekday.toLocaleLowerCase()}
+                  </Text>
 
-                  <WeekdaySection key={weekday} weekday={weekday} />
+                  <WeekdaySection
+                    key={weekday}
+                    weekday={weekday.toLocaleLowerCase()}
+                  />
                 </GridItem>
               ))}
             </Grid>

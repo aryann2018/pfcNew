@@ -8,11 +8,13 @@ import useWorkoutPlanStore from "./useWorkoutplansStore";
 interface AddTemplateSubSectionProps {
   label: string;
   onClick: () => void;
+  size?: "sm" | "md" | "lg" | "xl";
 }
 
 export const AddTemplateSubSection = ({
   label,
   onClick,
+  ...props
 }: AddTemplateSubSectionProps) => {
   return (
     <Flex
@@ -21,10 +23,9 @@ export const AddTemplateSubSection = ({
       cursor={"pointer"}
       alignItems={"center"}
       justifyContent={"center"}
-      bg="white"
-      p="10px"
+      bg="#EAECF0"
+      p={props.size === "xl" ? "24px" : props.size === "lg" ? "16px" : "10px"}
       borderRadius={"4px"}
-      boxShadow="0px 1.69px 1.69px 0px rgba(24, 34, 48, 0.10)"
     >
       <FiPlusCircle size={24} color="rgba(102, 112, 133, 1)" />
       <Text fontSize={"15px"} color={"rgba(71, 84, 103, 1)"} fontWeight={500}>

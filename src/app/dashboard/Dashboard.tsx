@@ -122,12 +122,7 @@ const Dashboard = ({ children }: DashboardProps) => {
     </Box>
   );
   return (
-    <Box
-      as="section"
-      bg="white"
-      _dark={{ bg: "gray.700" }}
-      height={"calc(100vh - 64px)"}
-    >
+    <Box as="section" bg="white" _dark={{ bg: "gray.700" }} height={"100%"}>
       <SidebarContent display={{ base: "none", md: "unset" }} />
       <Drawer
         isOpen={sidebar.isOpen}

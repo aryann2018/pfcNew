@@ -18,7 +18,7 @@ interface WorkoutPlanState {
   setActiveTemplate: (templateId?: string) => void;
   updateActiveTemplateField: (field: string, value: any) => void;
   addSubSectionToActiveTemplate: (foodItem: TemplateSubSection) => void;
-  addNewSubSectionToActiveTemplate: (sectionId: any) => void;
+  addNewSubSectionToActiveTemplate: (weekday: string) => void;
   setSubSectionInSection: (
     sectionId: string,
     subSectionId: string,
@@ -67,17 +67,45 @@ const useWorkoutPlanStore = create<WorkoutPlanState>((set) => ({
           }
         : null,
     })),
-  addNewSubSectionToActiveTemplate: (sectionId: any) =>
+  addNewSubSectionToActiveTemplate: (weekday: string) =>
     set((state) => ({
       activeTemplate: state.activeTemplate
         ? {
             ...state.activeTemplate,
-            sections: state.activeTemplate.sections.map((section) =>
-              section.id === sectionId
-                ? {
-                    ...section,
+            sections: state.activeTemplate.sections.find(
+              (section) => section.preffered_day_of_week === weekday
+            )
+              ? state.activeTemplate.sections.map((section) =>
+                  section.preffered_day_of_week === weekday
+                    ? {
+                        ...section,
+                        subSections: [
+                          ...section.subSections,
+                          {
+                            id: Math.random().toString(36).substr(2, 9),
+                            name: "New Exercise",
+                            description: "New Exercise",
+                            reps: 1,
+                            sets: 1,
+                            isNew: true,
+                            exercise: {
+                              id: "new",
+                              name: "New Exercise",
+                              description: "New Exercise",
+                            },
+                            rest: 0,
+                          },
+                        ],
+                      }
+                    : section
+                )
+              : [
+                  ...state.activeTemplate.sections,
+                  {
+                    id: Math.random().toString(36).substr(2, 9),
+                    name: weekday,
+                    description: weekday,
                     subSections: [
-                      ...section.subSections,
                       {
                         id: Math.random().toString(36).substr(2, 9),
                         name: "New Exercise",
@@ -93,9 +121,9 @@ const useWorkoutPlanStore = create<WorkoutPlanState>((set) => ({
                         rest: 0,
                       },
                     ],
-                  }
-                : section
-            ),
+                    preffered_day_of_week: weekday,
+                  },
+                ],
           }
         : null,
     })),
@@ -207,16 +235,15 @@ const useWorkoutPlanStore = create<WorkoutPlanState>((set) => ({
         : null,
     })),
   removeSubSectionFromActiveTemplate: (
-    sectionId: string,
+    weekday: string,
     subSectionId: string
   ) => {
-    console.log(sectionId, subSectionId);
     set((state) => ({
       activeTemplate: state.activeTemplate
         ? {
             ...state.activeTemplate,
             sections: state.activeTemplate.sections.map((section) =>
-              section.id === sectionId
+              section.preffered_day_of_week === weekday
                 ? {
                     ...section,
                     subSections: section.subSections.filter(
