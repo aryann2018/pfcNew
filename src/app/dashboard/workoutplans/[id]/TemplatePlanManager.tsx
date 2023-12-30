@@ -10,7 +10,7 @@ import {
   Spacer,
   Text,
 } from "@chakra-ui/react";
-import { useRef, useState } from "react";
+import { createRef, useEffect, useRef, useState } from "react";
 import {
   WeekdaySection,
   TemplateSection,
@@ -97,31 +97,59 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
 
   const scrollContainerRef = useRef<any>();
 
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const itemRefs = useRef<any>(weekdays.map(() => createRef()));
+
   const { activeTemplate, setActiveTemplate } = useWorkoutPlanStore();
 
-  const scrollInContainer = (direction: "left" | "right", boost: boolean) => {
-    const container = scrollContainerRef.current;
-    if (container) {
-      if (direction === "right") {
-        container.scrollBy({
-          left: boost ? (SECTION_WIDTH + 40) * 3 : SECTION_WIDTH + 40,
-          behavior: boost ? "instant" : "smooth",
-        });
-      } else if (direction === "left") {
-        container.scrollBy({
-          left: boost ? -(SECTION_WIDTH + 40) * 3 : -(SECTION_WIDTH + 40),
-          behavior: "smooth",
-        });
+  const getVisibleItems = () => {
+    const containerRect = scrollContainerRef.current.getBoundingClientRect();
+    return itemRefs.current
+      .map((ref: any, index: number) => {
+        const rect = ref.current.getBoundingClientRect();
+        const isFullyVisible =
+          rect.left >= containerRect.left && rect.right <= containerRect.right;
+        return isFullyVisible ? index : null;
+      })
+      .filter((index: any) => index !== null);
+  };
+
+  const updateCurrentIndex = (direction: "left" | "right") => {
+    const visibleItems = getVisibleItems();
+    if (direction === "right") {
+      const nextIndex = visibleItems[visibleItems.length - 1] + 1;
+      if (nextIndex < weekdays.length) {
+        setCurrentIndex(nextIndex);
+      }
+    } else if (direction === "left") {
+      const prevIndex = visibleItems[0] - 1;
+      if (prevIndex >= 0) {
+        setCurrentIndex(prevIndex);
       }
     }
   };
 
+  const scrollToItem = (index: number) => {
+    const item = itemRefs.current[index]?.current;
+    if (item) {
+      item.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
+    }
+  };
+
+  useEffect(() => {
+    scrollToItem(currentIndex);
+  }, [currentIndex]);
+
   const scrollRight = (isDoubleClick: boolean) => {
-    scrollInContainer("right", isDoubleClick);
+    updateCurrentIndex("right");
   };
 
   const scrollLeft = (isDoubleClick: boolean) => {
-    scrollInContainer("left", isDoubleClick);
+    updateCurrentIndex("left");
   };
 
   const templateSelectItems = props.templates.map((template) => {
@@ -175,7 +203,12 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
         </HStack>
         <Box p={2} />
         {/* a container with a scrollable horizontal list of weekday sections */}
-        <Flex width={"100%"} justifyContent={"center"}>
+        <Flex
+          width={"100%"}
+          justifyContent={"center"}
+          // height={"100%"}
+          height="1000px"
+        >
           <Button
             onClick={() => scrollLeft(false)}
             onDoubleClick={() => {
@@ -201,26 +234,27 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
               whiteSpace: "nowrap",
               scrollBehavior: "smooth",
               scrollSnapType: "x mandatory",
-
               scrollSnapAlign: "center",
               border: "1px solid #D0D5DD",
+              height: "100%",
             }}
           >
             <Grid
               templateColumns={`repeat(7, ${SECTION_WIDTH}px)`}
               gap={0}
-              style={{ width: "100%" }}
+              style={{ width: "100%", height: "100%" }}
             >
               {weekdays.map((weekday, index) => (
-                <GridItem key={weekday} {...styles.section}>
+                <GridItem
+                  key={weekday}
+                  {...styles.section}
+                  scrollSnapAlign={"start"}
+                  ref={itemRefs.current[index]}
+                >
                   {/* @ts-ignore */}
                   <Text {...styles.sectionTitle}>{weekday}</Text>
 
-                  {/* <WeekdaySection
-                  sections={activeTemplate?.sections.filter(
-                    (section) => section.day === weekday
-                  )}
-                /> */}
+                  <WeekdaySection key={weekday} weekday={weekday} />
                 </GridItem>
               ))}
             </Grid>
@@ -241,7 +275,6 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
           </Button>
         </Flex>
 
-        <Box p={2} />
         <Divider />
         {isReviewModalOpen && (
           <WorkoutPlanReviewModal

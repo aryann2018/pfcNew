@@ -144,8 +144,13 @@ const Dashboard = ({ children }: DashboardProps) => {
         transition=".3s ease"
         background={"#101828"}
       >
-        <Box p={"2"} background={"#101828"} />
-        <Box as="main" p="8" borderTopLeftRadius={"40px"} background={"white"}>
+        <Box
+          as="main"
+          p="8"
+          borderTopLeftRadius={"40px"}
+          background={"white"}
+          overflow={"hidden"}
+        >
           {children}
         </Box>
       </Box>
