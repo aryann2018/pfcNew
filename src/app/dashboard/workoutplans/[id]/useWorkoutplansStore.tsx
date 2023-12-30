@@ -32,6 +32,7 @@ interface WorkoutPlanState {
 }
 
 // Create the store
+
 const useWorkoutPlanStore = create<WorkoutPlanState>((set) => ({
   // Initial state
   templates: [], // Populate with your initial templates
