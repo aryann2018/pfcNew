@@ -10,7 +10,7 @@ import {
   Spacer,
   Text,
 } from "@chakra-ui/react";
-import { createRef, RefObject, useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
   WeekdaySection,
   TemplateSection,
@@ -19,6 +19,7 @@ import {
 
 import useWorkoutPlanStore from "./useWorkoutplansStore";
 import { WorkoutPlanReviewModal } from "./WorkoutPlanReviewModal";
+import { FaArrowLeftLong, FaArrowRightLong } from "react-icons/fa6";
 
 /* selectItem */
 interface TemplateSelectItemProps {
@@ -94,15 +95,9 @@ const weekdays = [
 const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
   const [isReviewModalOpen, setIsReviewModalOpen] = useState(false);
 
-  const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef<any>();
-  const itemRefs = useRef<RefObject<any>[]>(weekdays.map(() => createRef()));
 
   const { activeTemplate, setActiveTemplate } = useWorkoutPlanStore();
-
-  useEffect(() => {
-    // scrollToItem(currentIndex);
-  }, [currentIndex]);
 
   const scrollInContainer = (direction: "left" | "right", boost: boolean) => {
     const container = scrollContainerRef.current;
@@ -117,54 +112,6 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
           left: boost ? -(SECTION_WIDTH + 40) * 3 : -(SECTION_WIDTH + 40),
           behavior: "smooth",
         });
-      }
-    }
-  };
-
-  const scrollToItem = (index: number) => {
-    console.log(index, "index");
-    const item = itemRefs.current[index]?.current;
-    console.log(item, "item");
-    if (item) {
-      item.scrollIntoView({
-        behavior: "smooth",
-        block: "nearest",
-        inline: "start",
-      });
-    }
-  };
-
-  const getVisibleItems = () => {
-    const containerRect = scrollContainerRef.current.getBoundingClientRect();
-    return itemRefs.current
-      .map((ref, index) => {
-        const rect = ref.current.getBoundingClientRect();
-        const isFullyVisible =
-          rect.left >= containerRect.left && rect.right <= containerRect.right;
-        return isFullyVisible ? index : null;
-      })
-      .filter((index) => index !== null);
-  };
-
-  const updateCurrentIndex = (direction: "left" | "right") => {
-    const visibleItems = getVisibleItems();
-    const currentIndex = visibleItems[visibleItems.length - 1];
-
-    if (currentIndex === undefined || currentIndex === null) {
-      return setCurrentIndex(0);
-    }
-
-    if (direction === "right") {
-      const nextIndex = currentIndex + 1;
-
-      if (nextIndex < weekdays.length) {
-        setCurrentIndex(nextIndex);
-      }
-    } else if (direction === "left") {
-      const prevIndex = (visibleItems[0] as number) - 1;
-      console.log(prevIndex, "prevIndex");
-      if (prevIndex < weekdays.length) {
-        setCurrentIndex(prevIndex);
       }
     }
   };
@@ -234,8 +181,16 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
             onDoubleClick={() => {
               scrollLeft(true);
             }}
+            style={{
+              borderRadius: "8px 0px 0px 8px",
+              borderTop: "1px solid  #D0D5DD",
+              borderBottom: " 1px solid #D0D5DD",
+              borderLeft: "1px solid #D0D5DD",
+              background: "#fff",
+              padding: 10,
+            }}
           >
-            Left
+            <FaArrowLeftLong />
           </Button>
           <Box
             ref={scrollContainerRef}
@@ -245,6 +200,10 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
               width: "100%",
               whiteSpace: "nowrap",
               scrollBehavior: "smooth",
+              scrollSnapType: "x mandatory",
+
+              scrollSnapAlign: "center",
+              border: "1px solid #D0D5DD",
             }}
           >
             <Grid
@@ -253,15 +212,10 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
               style={{ width: "100%" }}
             >
               {weekdays.map((weekday, index) => (
-                <GridItem
-                  key={weekday}
-                  {...styles.section}
-                  ref={itemRefs.current[index]}
-                >
+                <GridItem key={weekday} {...styles.section}>
+                  {/* @ts-ignore */}
                   <Text {...styles.sectionTitle}>{weekday}</Text>
-                  <Box p={2} />
-                  <Divider />
-                  <Box p={2} />
+
                   {/* <WeekdaySection
                   sections={activeTemplate?.sections.filter(
                     (section) => section.day === weekday
@@ -274,8 +228,16 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
           <Button
             onClick={() => scrollRight(false)}
             onDoubleClick={() => scrollRight(true)}
+            style={{
+              borderRadius: "0px 8px 8px 0px",
+              borderTop: "1px solid  #D0D5DD",
+              borderBottom: " 1px solid #D0D5DD",
+              borderRight: "1px solid #D0D5DD",
+              background: "#fff",
+              padding: 10,
+            }}
           >
-            Right
+            <FaArrowRightLong />
           </Button>
         </Flex>
 
@@ -318,22 +280,18 @@ export const styles = {
 
   section: {
     flex: "0 0 48%",
-    margin: "5px" /* Optional: Add margin for spacing between items */,
     width: "100%",
     height: "100%",
-    padding: "18px",
-
-    background: "#F2F4F7",
-    boxShadow: "0px 1px 2px rgba(16, 24, 40, 0.06)",
-    borderRadius: 8,
     overflow: "hidden",
-    border: "1px #D0D5DD solid",
+    border: "0.3px #D0D5DD solid",
   },
   sectionTitle: {
-    color: "#344054",
-    fontSize: 20,
+    fontSize: "14px",
     fontWeight: 600,
-    wordWrap: "break-word",
+    textAlign: "center",
+    padding: "8px",
+    borderBottom: "1px solid #D0D5DD",
+    marginBottom: "8px",
   },
   subSection: {
     leftInfo: {

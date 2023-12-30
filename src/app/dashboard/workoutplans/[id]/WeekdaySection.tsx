@@ -2,10 +2,8 @@ import { Flex, HStack } from "@chakra-ui/react";
 
 import {
   AddTemplateSubSection,
-  ExerciseSubSection,
   TemplateSubSection,
 } from "./WorkoutExerciseSubSection";
-import EditableText from "@/app/common/inputs/EditableInput";
 import useWorkoutplanStore from "./useWorkoutplansStore";
 
 export interface TemplateSection {
@@ -35,4 +33,4 @@ export const WeekdaySection = (props: TemplateSectionProps) => {
   );
 };
 
-export const SECTION_WIDTH = 300;
+export const SECTION_WIDTH = 330;
