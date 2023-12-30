@@ -59,6 +59,7 @@ const MuscleTargetedLabel = ({ label }: { label: string }) => {
       borderRadius={"4px"}
       alignItems={"center"}
       justifyContent={"center"}
+      width={"fit-content"}
     >
       <Text fontSize={"12px"} fontFamily={"JetBrains Mono"} color={"#344054"}>
         {label}

@@ -162,7 +162,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
               const template = props.templates.find(
                 (template) => template.id === value
               );
-              console.log(template, "template");
+
               if (template) {
                 setActiveTemplate(value);
               }
@@ -212,6 +212,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
               borderLeft: "1px solid #D0D5DD",
               background: "#fff",
               padding: 10,
+              borderRightWidth: "0px",
             }}
           >
             <FaArrowLeftLong />
@@ -227,6 +228,8 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
               scrollSnapType: "x mandatory",
               scrollSnapAlign: "right",
               border: "1px solid #D0D5DD",
+              borderLeftWidth: "0.5px",
+              // borderTopWidth: "0.5px",
               height: "100%",
             }}
           >
