@@ -85,7 +85,6 @@ export const WeekdaySection = (props: WeekdaySectionProps) => {
           </Flex>
         );
       })} */}
-      {/* reverse subsections array and return map */}
       {weekdaySection.subSections
         .slice(0)
         .reverse()

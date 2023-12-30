@@ -6,11 +6,6 @@ import {
   InputLeftElement,
   Text,
 } from "@chakra-ui/react";
-//   in the style of CustomBadges.tsx but rather have inputs for sets, reps, and rest each input
-//   having similar color scheme for border and input text color not the label color. also should take props for
-//   the inputs and the label. use InputGroups and InputLeftElements correctly to get the desired effect. the text should
-//   be the same color as the input text color. the input border should be the same color as the input text color.
-//   the left addon should be text, not an icon. the text should be the same color as the input text color. the colors are rgba(182, 146, 246, 1), rgba(83, 56, 158, 1) and rgba(253, 162, 155, 1) , rgba(145, 32, 24, 1) and rgba(8, 93, 58, 1), rgba(71, 205, 137, 1)
 
 interface MetaInputsProps {
   sets: number;
