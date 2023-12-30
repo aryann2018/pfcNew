@@ -50,6 +50,7 @@ export interface TemplateSubSection {
   style?: any;
   notes?: string;
 }
+
 const MuscleTargetedLabel = ({ label }: { label: string }) => {
   return (
     <Flex
@@ -61,7 +62,12 @@ const MuscleTargetedLabel = ({ label }: { label: string }) => {
       justifyContent={"center"}
       width={"fit-content"}
     >
-      <Text fontSize={"12px"} fontFamily={"JetBrains Mono"} color={"#344054"}>
+      <Text
+        fontSize={"12px"}
+        fontFamily={"JetBrains Mono"}
+        color={"#344054"}
+        fontWeight={600}
+      >
         {label}
       </Text>
     </Flex>
@@ -100,8 +106,11 @@ export const ExerciseSubSection = (props: TemplateSubSection) => {
       zIndex={props.style?.zIndex}
       gap={"10px"}
       width={"100%"}
+      border={"1px solid #D0D5DD"}
     >
-      <MuscleTargetedLabel label={"Chest"} />
+      <MuscleTargetedLabel
+        label={props.exercise?.muscle_targeted || "unknown"}
+      />
       <SearchableExerciseSelect
         isLoadingOptions={false}
         onSelect={(value) => {}}

@@ -10,6 +10,7 @@ export type ExerciseType = {
   exercise_type?: string;
   equipment_type?: string;
   exercise_level?: string;
+  muscle_targeted: string;
 };
 
 export type WorkoutExerciseType = {

@@ -59,32 +59,6 @@ export const WeekdaySection = (props: WeekdaySectionProps) => {
           onClick={() => addNewSubSectionToActiveTemplate(props.weekday)}
         />
       )}
-      {/* {weekdaySection.subSections.reverse().map((subSection) => {
-        return (
-          <Flex key={subSection.id} width="100%">
-            <ExerciseSubSection {...subSection} />
-            <CloseButton
-              className="close-button"
-              size="md"
-              position="absolute"
-              display={"none"}
-              top={"-10px"}
-              right={"-20px"}
-              background={"black"}
-              color={"white"}
-              borderRadius={"50%"}
-              zIndex={100}
-              onClick={() => {
-                removeSubSectionFromActiveTemplate(
-                  props.weekday,
-                  subSection.id!
-                );
-              }}
-              cursor={"pointer"}
-            />
-          </Flex>
-        );
-      })} */}
       {weekdaySection.subSections
         .slice(0)
         .reverse()

@@ -194,12 +194,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
         </HStack>
         <Box p={2} />
         {/* a container with a scrollable horizontal list of weekday sections */}
-        <Flex
-          width={"100%"}
-          justifyContent={"center"}
-          // height={"100%"}
-          height="1000px"
-        >
+        <Flex width={"100%"} justifyContent={"center"} height="10000px">
           <Button
             onClick={() => scrollLeft(false)}
             onDoubleClick={() => {
@@ -229,6 +224,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
               scrollSnapAlign: "right",
               border: "1px solid #D0D5DD",
               borderLeftWidth: "0.5px",
+              borderBottom: "none",
               // borderTopWidth: "0.5px",
               height: "100%",
             }}
@@ -277,7 +273,6 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
           </Button>
         </Flex>
 
-        <Divider />
         {isReviewModalOpen && (
           <WorkoutPlanReviewModal
             isOpen={isReviewModalOpen}

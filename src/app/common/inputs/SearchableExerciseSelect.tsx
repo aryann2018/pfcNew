@@ -37,7 +37,7 @@ function SearchableExerciseSelect({
   selected,
   onSelect,
 }: SearchableExerciseSelectProps) {
-  const { exercises, setSearchTerm, isLoading } = useExercisesStore();
+  const { exercises, isLoading } = useExercisesStore();
 
   let options = exercises?.map((item: ExerciseType) => ({
     value: item.id,
@@ -51,12 +51,34 @@ function SearchableExerciseSelect({
       variant="unstyled"
       useBasicStyles={true}
       styles={{
+        valueContainer: (provided: any) => ({
+          ...provided,
+          padding: "0px",
+          paddingLeft: "0px",
+          width: "100px",
+          fontFamily: "Inter",
+          fontSize: "20px",
+          fontWeight: "500",
+          color: "#182230",
+        }),
         placeholder: (provided: any) => ({
           ...provided,
           fontFamily: "Inter",
-          fontSize: "16px",
+          fontSize: "20px",
           fontWeight: "500",
-          color: "#000000",
+          color: "#182230",
+        }),
+        dropdownIndicator: (provided: any) => ({
+          ...provided,
+          color: "#182230",
+          display: "inline",
+        }),
+        singleValue: (provided: any) => ({
+          ...provided,
+          fontFamily: "Inter",
+          fontSize: "20px",
+          fontWeight: "500",
+          color: "#182230",
         }),
       }}
       isLoading={isLoading}
@@ -71,11 +93,6 @@ function SearchableExerciseSelect({
       onChange={({ value }: any) => {
         onSelect(exercises.find((item: ExerciseType) => item.id === value));
       }}
-      onInputChange={(value) => {
-        setSearchTerm(value);
-      }}
-      // isOptionSelected={(option) => option.value === selected?.id}
-      // hideSelectedOptions={false}
       components={{
         Option: SelectOption,
         IndicatorSeparator: () => null,

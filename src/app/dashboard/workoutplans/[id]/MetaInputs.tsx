@@ -19,13 +19,16 @@ interface MetaInputsProps {
 export const MetaInputs = ({
   sets,
   reps,
-  rest,
   onSetsChange,
   onRepsChange,
-  onRestChange,
 }: MetaInputsProps) => {
   return (
-    <Flex direction={"row"} gap={2} fontFamily={"Jetbrains Mono"}>
+    <Flex
+      direction={"row"}
+      gap={2}
+      fontFamily={"Jetbrains Mono"}
+      justifyContent={"space-between"}
+    >
       <InputGroup
         size="sm"
         borderColor={"#B692F6"}
@@ -68,7 +71,7 @@ export const MetaInputs = ({
           paddingLeft={1 + 46}
         />
       </InputGroup>
-      <InputGroup
+      {/* <InputGroup
         size="sm"
         borderColor={"#47CD89"}
         borderWidth={"1px"}
@@ -88,7 +91,7 @@ export const MetaInputs = ({
           color={"rgba(71, 205, 137, 1)"}
           paddingLeft={1 + 46}
         />
-      </InputGroup>
+      </InputGroup> */}
     </Flex>
   );
 };
