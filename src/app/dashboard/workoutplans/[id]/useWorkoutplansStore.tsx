@@ -20,13 +20,23 @@ interface WorkoutPlanState {
   addSubSectionToActiveTemplate: (foodItem: TemplateSubSection) => void;
   addNewSubSectionToActiveTemplate: (weekday: string) => void;
   setSubSectionInSection: (
-    sectionId: string,
+    weekday: string,
     subSectionId: string,
     newSubSection: TemplateSubSection
   ) => void;
+  updateSubSectionSets: (
+    weekday: string,
+    subSectionId: string,
+    sets: number
+  ) => void;
+  updateSubSectionReps: (
+    weekday: string,
+    subSectionId: string,
+    reps: number
+  ) => void;
   updateTemplateName: (name: string) => void;
   removeSubSectionFromActiveTemplate: (
-    sectionId: string,
+    weekday: string,
     subSectionId: string
   ) => void;
 }
@@ -89,6 +99,7 @@ const useWorkoutPlanStore = create<WorkoutPlanState>((set) => ({
                             reps: 1,
                             sets: 1,
                             isNew: true,
+                            preffered_day_of_week: weekday,
                             exercise: {
                               id: "new",
                               name: "New Exercise",
@@ -114,6 +125,7 @@ const useWorkoutPlanStore = create<WorkoutPlanState>((set) => ({
                         reps: 1,
                         sets: 1,
                         isNew: true,
+                        preffered_day_of_week: weekday,
                         exercise: {
                           id: "new",
                           name: "New Exercise",
@@ -129,22 +141,18 @@ const useWorkoutPlanStore = create<WorkoutPlanState>((set) => ({
         : null,
     })),
   setSubSectionInSection: (
-    sectionId: string,
+    weekday: string,
     subSectionId: string,
     newSubSection: TemplateSubSection
   ) => {
-    console.log(
-      "setSubSectionInSection",
-      sectionId,
-      subSectionId,
-      newSubSection
-    );
+    console.log("setSubSectionInSection", weekday, subSectionId, newSubSection);
     set((state) => ({
       activeTemplate: state.activeTemplate
         ? {
             ...state.activeTemplate,
-            sections: state.activeTemplate.sections.map((section) =>
-              section.id === sectionId
+            sections: state.activeTemplate.sections.map((section) => {
+              console.log("section", section);
+              return section.preffered_day_of_week.toLowerCase() === weekday
                 ? {
                     ...section,
                     subSections: section.subSections.map((subSection) =>
@@ -153,8 +161,8 @@ const useWorkoutPlanStore = create<WorkoutPlanState>((set) => ({
                         : subSection
                     ),
                   }
-                : section
-            ),
+                : section;
+            }),
           }
         : null,
     }));
@@ -257,6 +265,52 @@ const useWorkoutPlanStore = create<WorkoutPlanState>((set) => ({
         : null,
     }));
   },
+  updateSubSectionSets: (weekday: string, subSectionId: string, sets: number) =>
+    set((state) => ({
+      activeTemplate: state.activeTemplate
+        ? {
+            ...state.activeTemplate,
+            sections: state.activeTemplate.sections.map((section) =>
+              section.preffered_day_of_week === weekday
+                ? {
+                    ...section,
+                    subSections: section.subSections.map((subSection) =>
+                      subSection.id === subSectionId
+                        ? {
+                            ...subSection,
+                            sets: sets,
+                          }
+                        : subSection
+                    ),
+                  }
+                : section
+            ),
+          }
+        : null,
+    })),
+  updateSubSectionReps: (weekday: string, subSectionId: string, reps: number) =>
+    set((state) => ({
+      activeTemplate: state.activeTemplate
+        ? {
+            ...state.activeTemplate,
+            sections: state.activeTemplate.sections.map((section) =>
+              section.preffered_day_of_week === weekday
+                ? {
+                    ...section,
+                    subSections: section.subSections.map((subSection) =>
+                      subSection.id === subSectionId
+                        ? {
+                            ...subSection,
+                            reps: reps,
+                          }
+                        : subSection
+                    ),
+                  }
+                : section
+            ),
+          }
+        : null,
+    })),
 }));
 
 export default useWorkoutPlanStore;

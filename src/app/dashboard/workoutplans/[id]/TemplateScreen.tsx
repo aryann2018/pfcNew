@@ -94,7 +94,7 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
 
   const { mutate: mutateDietPlan } = useMutateWorkoutPlan({
     onSuccess: (data: any) => {
-      console.log("data", data);
+      router.push(`/dashboard/clients/${props.clientId}/`);
     },
     onError: (error: any) => {
       console.log("error", error);
@@ -129,7 +129,6 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
       start_date: formatDateToYYYYMMDD(new Date()),
       duration_in_days: 30,
     });
-    router.push(`/dashboard/clients/${props.clientId}/`);
   };
 
   const onCreateDietPlanTemplate = async () => {

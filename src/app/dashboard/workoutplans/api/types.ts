@@ -91,7 +91,7 @@ export type WorkoutPlanPostPayload = {
   workouts: {
     name: string;
     description: string;
-    exercises: {
+    workout_exercises: {
       exercise_id: string;
       workout_id?: string;
       notes: string;

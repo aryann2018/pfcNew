@@ -49,6 +49,7 @@ export interface TemplateSubSection {
   rest: number;
   style?: any;
   notes?: string;
+  preffered_day_of_week: string;
 }
 
 const MuscleTargetedLabel = ({ label }: { label: string }) => {
@@ -75,23 +76,32 @@ const MuscleTargetedLabel = ({ label }: { label: string }) => {
 };
 
 export const ExerciseSubSection = (props: TemplateSubSection) => {
+  console.log(props);
   const [selected, setSelected] = useState<ExerciseType | undefined>();
 
-  const { setSubSectionInSection } = useWorkoutPlanStore();
+  const { setSubSectionInSection, updateSubSectionSets, updateSubSectionReps } =
+    useWorkoutPlanStore();
 
   useEffect(() => {
+    console.log(selected);
     if (selected) {
       const newSubSection = {
         id: selected.id!,
         exercise: selected,
         name: selected.name,
         description: selected.description,
+        preffered_day_of_week: props.preffered_day_of_week,
         sets: 1,
         reps: 1,
         rest: 0,
+        muscle_targeted: selected.muscle_targeted,
       };
 
-      setSubSectionInSection(props.id!, props.id!, newSubSection);
+      setSubSectionInSection(
+        props.preffered_day_of_week,
+        props.id!,
+        newSubSection
+      );
       setSelected(undefined);
     }
   }, [selected]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -113,15 +123,23 @@ export const ExerciseSubSection = (props: TemplateSubSection) => {
       />
       <SearchableExerciseSelect
         isLoadingOptions={false}
-        onSelect={(value) => {}}
+        selected={props.exercise}
+        onSelect={(value) => {
+          console.log(value);
+          setSelected(value);
+        }}
       />
       <Text fontSize={"12px"}>{props.description}</Text>
       <MetaInputs
-        sets={0}
-        onSetsChange={() => {}}
-        reps={0}
-        onRepsChange={() => {}}
-        rest={0}
+        sets={props.sets}
+        onSetsChange={(value) => {
+          updateSubSectionSets(props.preffered_day_of_week, props.id!, value);
+        }}
+        reps={props.reps}
+        onRepsChange={(value) => {
+          updateSubSectionReps(props.preffered_day_of_week, props.id!, value);
+        }}
+        rest={props.rest}
         onRestChange={() => {}}
       />
     </Flex>

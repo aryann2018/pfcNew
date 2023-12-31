@@ -250,7 +250,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
                   </Text>
 
                   <WeekdaySection
-                    key={weekday}
+                    key={weekday.toLowerCase()}
                     weekday={weekday.toLocaleLowerCase()}
                   />
                 </GridItem>

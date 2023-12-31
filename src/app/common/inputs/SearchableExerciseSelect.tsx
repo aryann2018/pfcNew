@@ -91,6 +91,7 @@ function SearchableExerciseSelect({
       isSearchable={true}
       noOptionsMessage={() => "No results found"}
       onChange={({ value }: any) => {
+        console.log(value);
         onSelect(exercises.find((item: ExerciseType) => item.id === value));
       }}
       components={{
