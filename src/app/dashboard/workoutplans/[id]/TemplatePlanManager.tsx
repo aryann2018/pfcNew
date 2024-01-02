@@ -92,7 +92,8 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
 
   const itemRefs = useRef<any>(weekdays.map(() => createRef()));
 
-  const { activeTemplate, setActiveTemplate } = useWorkoutPlanStore();
+  const { activeTemplate, setActiveTemplate, updateTemplateName } =
+    useWorkoutPlanStore();
 
   const getVisibleItems = () => {
     const containerRect = scrollContainerRef.current.getBoundingClientRect();
@@ -277,7 +278,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
           <WorkoutPlanReviewModal
             isOpen={isReviewModalOpen}
             onClose={() => {
-              props.onAssignPress(activeTemplate?.id!, activeTemplate);
+              updateTemplateName(activeTemplate?.name!);
               setIsReviewModalOpen(false);
             }}
             onSubmit={() => {

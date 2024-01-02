@@ -76,6 +76,7 @@ function EditableText(props: {
       direction={"row"}
       alignItems={"center"}
       onChange={(value) => {
+        console.log(value);
         onChange(value);
       }}
     >

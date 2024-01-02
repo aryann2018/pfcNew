@@ -39,8 +39,8 @@ export const templateFromWorkoutPlanTemplate = (
     );
 
     return {
-      id: workoutPlan.id,
-      name: workoutPlan.name,
+      id: workout.id,
+      name: weekday,
       description: workoutPlan.description,
       subSections: subsections,
       preffered_day_of_week: workout.preffered_day_of_week,
@@ -80,7 +80,7 @@ export const getWorkoutPlanPostPayload = (
       }));
 
     return {
-      id: section.id,
+      // id: section.id,
       name: section.name,
       description: section.description,
       workout_exercises: templateExercises,
@@ -120,7 +120,7 @@ export const getWorkoutPlanTemplateFromWorkoutPlan = (
     }));
 
     return {
-      id: section.id,
+      // id: section.id,
       name: section.name,
       description: section.description,
       template_exercises: templateExercises,

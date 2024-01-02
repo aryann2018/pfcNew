@@ -1,4 +1,4 @@
-import { Box, CloseButton, Flex, HStack } from "@chakra-ui/react";
+import { Box, CloseButton, Flex, HStack, Stack, Text } from "@chakra-ui/react";
 
 import {
   AddTemplateSubSection,
@@ -6,6 +6,7 @@ import {
   ExerciseSubSection,
 } from "./WorkoutExerciseSubSection";
 import useWorkoutplanStore from "./useWorkoutplansStore";
+import { FaBed } from "react-icons/fa";
 
 export interface TemplateSection {
   id: string;
@@ -13,6 +14,7 @@ export interface TemplateSection {
   description: string;
   subSections: TemplateSubSection[];
   preffered_day_of_week: string;
+  is_marked_rest_day?: boolean;
 }
 
 interface TemplateSectionProps extends TemplateSection {}
@@ -26,6 +28,7 @@ export const WeekdaySection = (props: WeekdaySectionProps) => {
     addNewSubSectionToActiveTemplate,
     removeSubSectionFromActiveTemplate,
     activeTemplate,
+    setIsMarkedRestDay,
   } = useWorkoutplanStore();
 
   const weekdaySection = activeTemplate?.sections.find(
@@ -44,6 +47,20 @@ export const WeekdaySection = (props: WeekdaySectionProps) => {
     );
   }
 
+  if (weekdaySection.is_marked_rest_day) {
+    return (
+      <Flex
+        height={"100%"}
+        direction={"column"}
+        padding={4}
+        backgroundColor="#f0f0f0"
+        background="linear-gradient(45deg, rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(135deg, rgba(0,0,0,0.1) 1px, transparent 1px)"
+        backgroundPosition="0 0, 25px 25px"
+        backgroundSize="20px 20px"
+      ></Flex>
+    );
+  }
+
   return (
     <Flex height={"100%"} direction={"column"} p={4} gap={4}>
       {weekdaySection.subSections.length > 0 && (
@@ -53,11 +70,22 @@ export const WeekdaySection = (props: WeekdaySectionProps) => {
         />
       )}
       {weekdaySection.subSections.length === 0 && (
-        <AddTemplateSubSection
-          label="Add exercise"
-          size="lg"
-          onClick={() => addNewSubSectionToActiveTemplate(props.weekday)}
-        />
+        <Stack>
+          <AddTemplateSubSection
+            label="Add exercise"
+            size="lg"
+            onClick={() => addNewSubSectionToActiveTemplate(props.weekday)}
+          />
+          <Text fontSize="sm" color="gray.500" align={"center"}>
+            or
+          </Text>
+          <AddTemplateSubSection
+            label="mark as rest day"
+            size="lg"
+            onClick={() => setIsMarkedRestDay(props.weekday, true)}
+            icon={<FaBed size={24} color="rgba(102, 112, 133, 1)" />}
+          />
+        </Stack>
       )}
       {weekdaySection.subSections
         .slice(0)

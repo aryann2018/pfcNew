@@ -11,6 +11,7 @@ interface AddTemplateSubSectionProps {
   label: string;
   onClick: () => void;
   size?: "sm" | "md" | "lg" | "xl";
+  icon?: any;
 }
 
 export const AddTemplateSubSection = ({
@@ -29,7 +30,17 @@ export const AddTemplateSubSection = ({
       p={props.size === "xl" ? "24px" : props.size === "lg" ? "16px" : "10px"}
       borderRadius={"4px"}
     >
-      <FiPlusCircle size={24} color="rgba(102, 112, 133, 1)" />
+      {props.icon || (
+        <Box
+          width={"100%"}
+          height={"100%"}
+          display={"flex"}
+          alignItems={"center"}
+          justifyContent={"center"}
+        >
+          <FiPlusCircle size={24} color="rgba(102, 112, 133, 1)" />
+        </Box>
+      )}
       <Text fontSize={"15px"} color={"rgba(71, 84, 103, 1)"} fontWeight={500}>
         {label}
       </Text>

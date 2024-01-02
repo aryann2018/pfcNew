@@ -39,6 +39,7 @@ interface WorkoutPlanState {
     weekday: string,
     subSectionId: string
   ) => void;
+  setIsMarkedRestDay: (weekday: string, isMarkedRestDay: boolean) => void;
 }
 
 // Create the store
@@ -134,6 +135,7 @@ const useWorkoutPlanStore = create<WorkoutPlanState>((set) => ({
                         rest: 0,
                       },
                     ],
+                    is_marked_rest_day: false,
                     preffered_day_of_week: weekday,
                   },
                 ],
@@ -218,31 +220,18 @@ const useWorkoutPlanStore = create<WorkoutPlanState>((set) => ({
         ],
       },
     })),
-  updateSectionName: (sectionId: string, name: string) =>
-    set((state) => ({
-      activeTemplate: state.activeTemplate
-        ? {
-            ...state.activeTemplate,
-            sections: state.activeTemplate.sections.map((section) =>
-              section.id === sectionId
-                ? {
-                    ...section,
-                    name: name,
-                  }
-                : section
-            ),
-          }
-        : null,
-    })),
   updateTemplateName: (name: string) =>
-    set((state) => ({
-      activeTemplate: state.activeTemplate
-        ? {
-            ...state.activeTemplate,
-            name: name,
-          }
-        : null,
-    })),
+    set((state) => {
+      console.log("updateTemplateName", name);
+      return {
+        activeTemplate: state.activeTemplate
+          ? {
+              ...state.activeTemplate,
+              name: name,
+            }
+          : null,
+      };
+    }),
   removeSubSectionFromActiveTemplate: (
     weekday: string,
     subSectionId: string
@@ -311,6 +300,23 @@ const useWorkoutPlanStore = create<WorkoutPlanState>((set) => ({
           }
         : null,
     })),
+  setIsMarkedRestDay: (weekday: string, isMarkedRestDay: boolean) => {
+    set((state) => ({
+      activeTemplate: state.activeTemplate
+        ? {
+            ...state.activeTemplate,
+            sections: state.activeTemplate.sections.map((section) =>
+              section.preffered_day_of_week === weekday
+                ? {
+                    ...section,
+                    is_marked_rest_day: isMarkedRestDay,
+                  }
+                : section
+            ),
+          }
+        : null,
+    }));
+  },
 }));
 
 export default useWorkoutPlanStore;
