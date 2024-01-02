@@ -8,18 +8,11 @@ import {
   DrawerOverlay,
   Flex,
   Icon,
-  IconButton,
-  Input,
-  InputGroup,
-  InputLeftElement,
   Stack,
-  Text,
   useDisclosure,
 } from "@chakra-ui/react";
-import { FaBell } from "react-icons/fa";
-import { FiMenu, FiSearch } from "react-icons/fi";
 import { PiUserList } from "react-icons/pi";
-import { FaBowlFood } from "react-icons/fa6";
+import { FaBowlFood, FaDumbbell } from "react-icons/fa6";
 
 import React from "react";
 import { PFCColors } from "../common/PFCColors";
@@ -33,9 +26,14 @@ const navItems = [
     route: "/dashboard/clients",
   },
   {
-    label: "Create new Diet Template",
+    label: "Create Diet Template",
     icon: FaBowlFood,
     route: "/dashboard/dietplans/new",
+  },
+  {
+    label: "Create Workout Template",
+    icon: FaDumbbell,
+    route: "/dashboard/workoutplans/new",
   },
 ];
 
@@ -122,12 +120,7 @@ const Dashboard = ({ children }: DashboardProps) => {
     </Box>
   );
   return (
-    <Box
-      as="section"
-      bg="white"
-      _dark={{ bg: "gray.700" }}
-      height={"calc(100vh - 64px)"}
-    >
+    <Box as="section" bg="white" _dark={{ bg: "gray.700" }} height={"100%"}>
       <SidebarContent display={{ base: "none", md: "unset" }} />
       <Drawer
         isOpen={sidebar.isOpen}
@@ -144,8 +137,13 @@ const Dashboard = ({ children }: DashboardProps) => {
         transition=".3s ease"
         background={"#101828"}
       >
-        <Box p={"2"} background={"#101828"} />
-        <Box as="main" p="8" borderTopLeftRadius={"40px"} background={"white"}>
+        <Box
+          as="main"
+          p="8"
+          borderTopLeftRadius={"40px"}
+          background={"white"}
+          overflow={"hidden"}
+        >
           {children}
         </Box>
       </Box>

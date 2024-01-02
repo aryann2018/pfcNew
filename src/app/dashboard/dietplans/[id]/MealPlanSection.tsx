@@ -1,4 +1,4 @@
-import { CloseButton, Flex, HStack, Text } from "@chakra-ui/react";
+import { Flex, HStack, Text } from "@chakra-ui/react";
 import { MacrosTicker } from "./MacrosTIcker";
 import { styles } from "./TemplatePlanManager";
 
