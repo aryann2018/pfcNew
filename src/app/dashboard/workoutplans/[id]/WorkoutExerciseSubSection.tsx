@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { PFCColors } from "@/app/common/PFCColors";
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Button, Flex, Text } from "@chakra-ui/react";
 import { FiPlusCircle } from "react-icons/fi";
 import { ExerciseType } from "../api/types";
 import useWorkoutPlanStore from "./useWorkoutplansStore";
@@ -94,7 +94,6 @@ export const ExerciseSubSection = (props: TemplateSubSection) => {
     useWorkoutPlanStore();
 
   useEffect(() => {
-    console.log(selected);
     if (selected) {
       const newSubSection = {
         id: selected.id!,
