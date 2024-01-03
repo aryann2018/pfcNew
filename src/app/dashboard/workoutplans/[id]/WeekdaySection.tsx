@@ -30,20 +30,30 @@ export const WeekdaySection = (props: WeekdaySectionProps) => {
     activeTemplate,
     setIsMarkedRestDay,
   } = useWorkoutplanStore();
-
   const weekdaySection = activeTemplate?.sections.find(
-    (section) => section.preffered_day_of_week === props.weekday
+    (section) =>
+      section.preffered_day_of_week.toLowerCase() ===
+      props.weekday.toLowerCase()
   );
 
   if (!weekdaySection) {
     return (
-      <Flex height={"100%"} direction={"column"} padding={4}>
+      <Stack p={4}>
         <AddTemplateSubSection
           label="Add exercise"
+          size="lg"
           onClick={() => addNewSubSectionToActiveTemplate(props.weekday)}
-          size="xl"
         />
-      </Flex>
+        <Text fontSize="sm" color="gray.500" align={"center"}>
+          or
+        </Text>
+        <AddTemplateSubSection
+          label="mark as rest day"
+          size="lg"
+          onClick={() => setIsMarkedRestDay(props.weekday, true)}
+          icon={<FaBed size={24} color="rgba(102, 112, 133, 1)" />}
+        />
+      </Stack>
     );
   }
 

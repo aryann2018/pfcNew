@@ -188,7 +188,7 @@ const useDietPlanStore = create<DietPlanState>((set) => ({
                 name: "New Food Item",
                 description: "New Food Item",
                 quantity: 1,
-                unit: "g",
+                unit: "-",
                 isNew: true,
                 foodItem: {
                   id: "new",

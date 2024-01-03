@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { Template } from "./TemplatePlanManager";
 import { TemplateSubSection } from "./WorkoutExerciseSubSection";
+import { EMPTY_TEMPLATE } from "./constants";
 
 // Define the store's state shape
 interface WorkoutPlanTemplate {
@@ -56,7 +57,7 @@ const useWorkoutPlanStore = create<WorkoutPlanState>((set) => ({
       activeTemplate:
         state.templates.find(
           (t) => t.id === templateId || state.templates[0]?.id
-        ) || null,
+        ) || EMPTY_TEMPLATE,
       activeTemplateId: templateId,
     })),
 

@@ -55,6 +55,8 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
       return;
     }
     if (!data || !data.data) {
+      setTemplates([]);
+      setActiveTemplate(undefined);
       return;
     }
 
@@ -65,11 +67,9 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
     setTemplates(newTemplates);
 
     if (!activeTemplate?.id) {
-      setActiveTemplate(newTemplates[0].id);
-    } else if (activeTemplateId && activeTemplateId !== activeTemplate?.id) {
-      setActiveTemplate(activeTemplateId);
+      setActiveTemplate(newTemplates[0]?.id);
     } else {
-      setActiveTemplate(newTemplates[0].id);
+      setActiveTemplate(activeTemplate?.id);
     }
   }, [isLoading, data]); // eslint-disable-line react-hooks/exhaustive-deps
 

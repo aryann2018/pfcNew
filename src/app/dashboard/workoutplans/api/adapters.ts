@@ -15,7 +15,8 @@ export const templateFromWorkoutPlanTemplate = (
   const sections = weekdays?.map((weekday) => {
     // Map each FoodItem in the MealPlan to a TemplateSubSection
     const workout = workoutPlan.workout_templates.find(
-      (workout) => workout.preffered_day_of_week === weekday.toLowerCase()
+      (workout) =>
+        workout.preffered_day_of_week?.toLowerCase() === weekday.toLowerCase()
     ) || {
       id: Math.random().toString(),
       template_exercises: [],
