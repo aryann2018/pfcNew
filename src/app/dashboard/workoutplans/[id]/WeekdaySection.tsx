@@ -6,7 +6,7 @@ import {
   ExerciseSubSection,
 } from "./WorkoutExerciseSubSection";
 import useWorkoutplanStore from "./useWorkoutplansStore";
-import { FaBed } from "react-icons/fa";
+import { FaBed, FaTrash } from "react-icons/fa";
 
 export interface TemplateSection {
   id: string;
@@ -67,7 +67,13 @@ export const WeekdaySection = (props: WeekdaySectionProps) => {
         background="linear-gradient(135deg, #f6f6f6 25%, transparent 25%, transparent 50%, #f6f6f6 50%, #f6f6f6 75%, transparent 75%, transparent)"
         backgroundSize="20px 20px"
         backgroundPosition="0 0, 25px 25px"
-      ></Flex>
+      >
+        <AddTemplateSubSection
+          label="unmark as rest day"
+          onClick={() => setIsMarkedRestDay(props.weekday, false)}
+          icon={<FaTrash size={24} color="rgba(102, 112, 133, 1)" />}
+        />
+      </Flex>
     );
   }
 
