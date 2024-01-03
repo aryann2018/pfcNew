@@ -100,15 +100,15 @@ export const getDietPlanTemplateFromDietPlan = (
   // Map each TemplateSection to a MealPlan
   const mealPlanTemplates = template.sections.map((section) => {
     // Map each TemplateSubSection to a FoodItem
-    const templateFoods = section.subSections.map((subSection) => ({
-      id: subSection.id,
-      quantity: subSection.quantity,
-      food_ingredient_id: subSection.foodItem?.id!, // Pass the whole FoodItem object
-      // Add any additional fields needed for a FoodItem here
-    }));
+    const templateFoods = section.subSections
+      .filter((subsection) => !subsection.isNew)
+      .map((subSection) => ({
+        quantity: subSection.quantity,
+        food_ingredient_id: subSection.foodItem?.id!, // Pass the whole FoodItem object
+        // Add any additional fields needed for a FoodItem here
+      }));
 
     return {
-      id: section.id,
       name: section.name,
       description: section.description,
       template_foods: templateFoods,

@@ -101,7 +101,7 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
   const { mutate: mutateDietPlanTemplate } = useMutateDietPlanTemplate({
     onSuccess: async (data: any) => {
       await refetchTemplates();
-      setActiveTemplate(data.data.id);
+      setActiveTemplate(data.id);
     },
     onError: (error: any) => {
       console.log("error", error);

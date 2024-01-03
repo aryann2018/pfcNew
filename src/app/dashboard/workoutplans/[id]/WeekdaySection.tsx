@@ -64,9 +64,9 @@ export const WeekdaySection = (props: WeekdaySectionProps) => {
         direction={"column"}
         padding={4}
         backgroundColor="#f0f0f0"
-        background="linear-gradient(45deg, rgba(0,0,0,0.1) 1px, transparent 1px), linear-gradient(135deg, rgba(0,0,0,0.1) 1px, transparent 1px)"
-        backgroundPosition="0 0, 25px 25px"
+        background="linear-gradient(135deg, #f6f6f6 25%, transparent 25%, transparent 50%, #f6f6f6 50%, #f6f6f6 75%, transparent 75%, transparent)"
         backgroundSize="20px 20px"
+        backgroundPosition="0 0, 25px 25px"
       ></Flex>
     );
   }

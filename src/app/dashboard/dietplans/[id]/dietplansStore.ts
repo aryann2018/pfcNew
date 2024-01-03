@@ -14,6 +14,7 @@ interface DietPlanState {
   templates: Template[];
   setTemplates: (templates: Template[]) => void;
   activeTemplate: Template | null;
+  activeTemplateId: string | null;
   setActiveTemplate: (templateId?: string) => void;
   updateActiveTemplateField: (field: string, value: any) => void;
   updateActiveFoodItemQuantity: (
@@ -21,7 +22,6 @@ interface DietPlanState {
     foodItemId: string,
     quantity: number
   ) => void;
-  addSubSectionToActiveTemplate: (foodItem: TemplateSubSection) => void;
   addNewSubSectionToActiveTemplate: (sectionId: any) => void;
   setSubSectionInSection: (
     sectionId: string,
@@ -43,13 +43,15 @@ const useDietPlanStore = create<DietPlanState>((set) => ({
   // Initial state
   templates: [], // Populate with your initial templates
   activeTemplate: null,
+  activeTemplateId: null,
   setTemplates: (templates: Template[]) => set({ templates }),
   // Sets the active template by ID
   setActiveTemplate: (templateId) =>
     set((state) => ({
-      activeTemplate: state.templates.find((t) => t.id === templateId) || null,
+      activeTemplateId: templateId,
+      activeTemplate:
+        state.templates.find((template) => template.id === templateId) || null,
     })),
-
   // Updates fields of the active template
   updateActiveTemplateField: (field, value) =>
     set((state) => ({
@@ -74,18 +76,6 @@ const useDietPlanStore = create<DietPlanState>((set) => ({
                   }
                 : section
             ),
-          }
-        : null,
-    })),
-  addSubSectionToActiveTemplate: (foodItem: TemplateSubSection) =>
-    set((state) => ({
-      activeTemplate: state.activeTemplate
-        ? {
-            ...state.activeTemplate,
-            sections: state.activeTemplate.sections.map((section) => ({
-              ...section,
-              subSections: [...section.subSections, foodItem],
-            })),
           }
         : null,
     })),
