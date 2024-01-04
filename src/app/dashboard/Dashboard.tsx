@@ -8,13 +8,15 @@ import {
   DrawerOverlay,
   Flex,
   Icon,
+  IconButton,
   Stack,
+  Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { PiUserList } from "react-icons/pi";
 import { FaBowlFood, FaDumbbell } from "react-icons/fa6";
-
-import React from "react";
+import { TiPinOutline, TiPin } from "react-icons/ti";
+import React, { useEffect, useRef, useState } from "react";
 import { PFCColors } from "../common/PFCColors";
 import { useRouter } from "next/navigation";
 import { Image } from "@chakra-ui/react";
@@ -42,8 +44,12 @@ interface DashboardProps {
 }
 
 const Dashboard = ({ children }: DashboardProps) => {
-  const sidebar = useDisclosure();
+  const sidebarManager = useDisclosure();
   const router = useRouter();
+
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(false); // New state for sidebar status
+  const [isSidebarPinned, setIsSidebarPinned] = useState(false); // New state for sidebar status
+  const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded); // Function to toggle sidebar
 
   const NavItem = (props: any) => {
     const { icon, children, ...rest } = props;
@@ -62,7 +68,6 @@ const Dashboard = ({ children }: DashboardProps) => {
         }}
         role="group"
         fontWeight="500"
-        transition=".15s ease"
         {...rest}
         onClick={() => {
           props.onClick();
@@ -96,13 +101,46 @@ const Dashboard = ({ children }: DashboardProps) => {
       bg="brand.GRAY_900"
       borderColor="blackAlpha.300"
       borderRightWidth="1px"
-      w="72"
+      w={isSidebarExpanded || isSidebarPinned ? "72" : "20"} // Adjust width based on the sidebar status
+      transition="width 0.9s ease-in-out"
+      onMouseEnter={() => setIsSidebarExpanded(true)} // Expand on hover
+      onMouseLeave={() => setIsSidebarExpanded(false)} // Collapse when mouse leaves
+      borderRight={"1px solid #101828"}
       {...props}
     >
-      <Stack as="nav" aria-label="Main Navigation">
+      <Stack
+        as="nav"
+        aria-label="Main Navigation"
+        alignItems={
+          isSidebarExpanded || isSidebarPinned ? "flex-start" : "center"
+        }
+      >
         <Box paddingY={"12px"} />
-        <Flex direction={"row"} alignItems={"center"} paddingX={"16px"}>
+        <Flex
+          direction={"row"}
+          justifyContent={"space-between"}
+          paddingX={"16px"}
+          width={"100%"}
+        >
           <Image src="/images/logo.svg" alt="Logo" height="40px" />
+          {(isSidebarExpanded || isSidebarPinned) && (
+            <IconButton
+              aria-label="Pin Sidebar"
+              icon={isSidebarPinned ? <TiPin /> : <TiPinOutline />}
+              onClick={() => setIsSidebarPinned(!isSidebarPinned)}
+              variant="ghost"
+              size="sm"
+              fontSize="20px"
+              color="gray.300"
+              bg="transparent"
+              _hover={{
+                bg: "transparent",
+                color: "gray.300",
+              }}
+              alignSelf={"flex-start"}
+              // top={"-24px"}
+            />
+          )}
         </Flex>
         <Box paddingY={"12px"} />
         {navItems.map((navItem) => (
@@ -113,18 +151,28 @@ const Dashboard = ({ children }: DashboardProps) => {
               router.push(navItem.route);
             }}
           >
-            {navItem.label}
+            {(isSidebarExpanded || isSidebarPinned) && (
+              <Text
+                _groupHover={{
+                  color: "gray.300",
+                }}
+              >
+                {navItem.label}
+              </Text>
+            )}
           </NavItem>
         ))}
       </Stack>
     </Box>
   );
+
   return (
-    <Box as="section" bg="white" _dark={{ bg: "gray.700" }} height={"100%"}>
+    <Box as="section" bg="brand.GRAY_900" height={"100%"}>
       <SidebarContent display={{ base: "none", md: "unset" }} />
+
       <Drawer
-        isOpen={sidebar.isOpen}
-        onClose={sidebar.onClose}
+        isOpen={sidebarManager.isOpen}
+        onClose={sidebarManager.onClose}
         placement="left"
       >
         <DrawerOverlay />
@@ -133,16 +181,25 @@ const Dashboard = ({ children }: DashboardProps) => {
         </DrawerContent>
       </Drawer>
       <Box
-        ml={{ base: 0, md: 72 }}
-        transition=".3s ease"
+        ml={{ base: 0, md: isSidebarExpanded || isSidebarPinned ? 72 : 20 }}
+        transition="0.1s ease"
         background={"#101828"}
+        top="20px"
+        zIndex="docked"
+        position="relative"
       >
         <Box
           as="main"
           p="8"
-          borderTopLeftRadius={"40px"}
+          borderTopLeftRadius={
+            isSidebarExpanded || isSidebarPinned ? "40px" : "10px"
+          }
+          transition={"0.4s ease"}
           background={"white"}
           overflow={"hidden"}
+          height={"100%"}
+          position={"relative"}
+          boxShadow={"0 0 20px 0 rgba(0,0,0,0.1)"}
         >
           {children}
         </Box>
