@@ -46,6 +46,7 @@ const ClientDetails = (props: ClientDetailsProps) => {
     <Tr
       _hover={{ cursor: "pointer", background: PFCColors.GRAY_100 }}
       onClick={() => router.push(`/dashboard/clients/${client.id}`)}
+      width={"100%"}
     >
       <Td>
         <div>
@@ -101,7 +102,7 @@ const ClientSubscription = (props: ClientSubscriptionProps) => {
   const router = useRouter();
 
   return (
-    <Stack direction={"row"} width={"100%"}>
+    <>
       {clients && clients.length > 0 ? (
         clients.map((client) => {
           return (
@@ -121,7 +122,7 @@ const ClientSubscription = (props: ClientSubscriptionProps) => {
           height={"100%"}
         />
       )}
-    </Stack>
+    </>
   );
 };
 
