@@ -3,14 +3,17 @@
 import {
   Avatar,
   Box,
+  Divider,
   Drawer,
   DrawerContent,
   DrawerOverlay,
   Flex,
   Icon,
   IconButton,
+  Spacer,
   Stack,
   Text,
+  VStack,
   useDisclosure,
 } from "@chakra-ui/react";
 import { PiUserList } from "react-icons/pi";
@@ -20,6 +23,9 @@ import React, { useEffect, useRef, useState } from "react";
 import { PFCColors } from "../common/PFCColors";
 import { useRouter } from "next/navigation";
 import { Image } from "@chakra-ui/react";
+import ProfileCard from "./ProfileCard";
+import { useQueryCoachProfile } from "./dietplans/api/hooks";
+import { removeToken } from "../auth/utils";
 
 const navItems = [
   {
@@ -51,6 +57,8 @@ const Dashboard = ({ children }: DashboardProps) => {
   const [isSidebarPinned, setIsSidebarPinned] = useState(false); // New state for sidebar status
   const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded); // Function to toggle sidebar
 
+  const { data, error, isLoading } = useQueryCoachProfile();
+  console.log(data, error, isLoading);
   const NavItem = (props: any) => {
     const { icon, children, ...rest } = props;
     return (
@@ -125,64 +133,89 @@ const Dashboard = ({ children }: DashboardProps) => {
       }}
       {...props}
     >
-      <Stack
-        as="nav"
-        aria-label="Main Navigation"
-        alignItems={
-          isSidebarExpanded || isSidebarPinned ? "flex-start" : "center"
-        }
-      >
+      <VStack aria-label="Main Navigation" height={"100%"}>
         <Box paddingY={"12px"} />
-        <Flex
-          direction={"row"}
-          justifyContent={"space-between"}
-          paddingX={"16px"}
-          width={"100%"}
+        <Box
+          as={Flex}
+          direction={"column"}
+          alignItems={
+            isSidebarExpanded || isSidebarPinned ? "flex-start" : "center"
+          }
         >
-          <Image src="/images/logo.svg" alt="Logo" height="40px" />
-          {(isSidebarExpanded || isSidebarPinned) && (
-            <IconButton
-              aria-label="Pin Sidebar"
-              icon={isSidebarPinned ? <TiPin /> : <TiPinOutline />}
-              onClick={() => {
-                setIsSidebarPinned(!isSidebarPinned);
-                setIsSidebarExpanded(false);
-              }}
-              variant="ghost"
-              size="sm"
-              fontSize="20px"
-              color="gray.300"
-              bg="transparent"
-              _hover={{
-                bg: "transparent",
-                color: "gray.300",
-              }}
-              alignSelf={"flex-start"}
-              // top={"-24px"}
-            />
-          )}
-        </Flex>
-        <Box paddingY={"12px"} />
-        {navItems.map((navItem) => (
-          <NavItem
-            key={navItem.label}
-            icon={navItem.icon}
-            onClick={() => {
-              router.push(navItem.route);
-            }}
+          <Flex
+            direction={"row"}
+            justifyContent={"space-between"}
+            paddingX={"16px"}
+            width={"100%"}
           >
+            <Image src="/images/logo.svg" alt="Logo" height="40px" />
             {(isSidebarExpanded || isSidebarPinned) && (
-              <Text
-                _groupHover={{
+              <IconButton
+                aria-label="Pin Sidebar"
+                icon={isSidebarPinned ? <TiPin /> : <TiPinOutline />}
+                onClick={() => {
+                  setIsSidebarPinned(!isSidebarPinned);
+                  setIsSidebarExpanded(false);
+                }}
+                variant="ghost"
+                size="sm"
+                fontSize="20px"
+                color="gray.300"
+                bg="transparent"
+                _hover={{
+                  bg: "transparent",
                   color: "gray.300",
                 }}
-              >
-                {navItem.label}
-              </Text>
+                alignSelf={"flex-start"}
+                // top={"-24px"}
+              />
             )}
-          </NavItem>
-        ))}
-      </Stack>
+          </Flex>
+          <Box paddingY={"12px"} />
+          {navItems.map((navItem) => (
+            <NavItem
+              key={navItem.label}
+              icon={navItem.icon}
+              onClick={() => {
+                router.push(navItem.route);
+              }}
+            >
+              {(isSidebarExpanded || isSidebarPinned) && (
+                <Text
+                  _groupHover={{
+                    color: "gray.300",
+                  }}
+                >
+                  {navItem.label}
+                </Text>
+              )}
+            </NavItem>
+          ))}
+        </Box>
+
+        <Spacer />
+        <Box
+          justifyContent={"space-between"}
+          width={"100%"}
+          justifySelf={"flex-end"}
+        >
+          <Divider
+            orientation="horizontal"
+            opacity={isSidebarExpanded || isSidebarPinned ? 0.9 : 0}
+            transition={"opacity 0.1s ease-in-out"}
+          />
+
+          <ProfileCard
+            isExpanded={isSidebarExpanded || isSidebarPinned}
+            name={data?.first_name + " " + data?.last_name}
+            email={data?.email}
+            logout={() => {
+              removeToken();
+              router.push("/");
+            }}
+          />
+        </Box>
+      </VStack>
     </Box>
   );
 
