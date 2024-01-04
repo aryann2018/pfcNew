@@ -144,7 +144,10 @@ const Dashboard = ({ children }: DashboardProps) => {
             <IconButton
               aria-label="Pin Sidebar"
               icon={isSidebarPinned ? <TiPin /> : <TiPinOutline />}
-              onClick={() => setIsSidebarPinned(!isSidebarPinned)}
+              onClick={() => {
+                setIsSidebarPinned(!isSidebarPinned);
+                setIsSidebarExpanded(false);
+              }}
               variant="ghost"
               size="sm"
               fontSize="20px"
