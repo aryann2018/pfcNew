@@ -106,6 +106,23 @@ const Dashboard = ({ children }: DashboardProps) => {
       onMouseEnter={() => setIsSidebarExpanded(true)} // Expand on hover
       onMouseLeave={() => setIsSidebarExpanded(false)} // Collapse when mouse leaves
       borderRight={"1px solid #101828"}
+      onClick={() => {
+        if (!isSidebarPinned) {
+          setIsSidebarExpanded(false);
+        }
+      }}
+      onTouchMove={
+        !isSidebarPinned
+          ? () => {
+              setIsSidebarExpanded(false);
+            }
+          : () => {}
+      }
+      onMouseMove={(event) => {
+        if (event.clientX < 100) {
+          setIsSidebarExpanded(true);
+        }
+      }}
       {...props}
     >
       <Stack
@@ -187,6 +204,7 @@ const Dashboard = ({ children }: DashboardProps) => {
         top="20px"
         zIndex="docked"
         position="relative"
+        height={"100%"}
       >
         <Box
           as="main"
@@ -200,6 +218,7 @@ const Dashboard = ({ children }: DashboardProps) => {
           height={"100%"}
           position={"relative"}
           boxShadow={"0 0 20px 0 rgba(0,0,0,0.1)"}
+          overflowY={"auto"}
         >
           {children}
         </Box>

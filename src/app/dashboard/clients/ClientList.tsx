@@ -146,7 +146,7 @@ const SubscriptionList = () => {
   }
 
   return (
-    <Box width={"100%"}>
+    <Box width={"100%"} height={"100%"}>
       <Text fontSize={"30px"}>Welcome back!</Text>
       <PFCSpace />
       <TableContainer
