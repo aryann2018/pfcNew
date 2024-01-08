@@ -47,6 +47,8 @@ const ClientDetails = (props: ClientDetailsProps) => {
       _hover={{ cursor: "pointer", background: PFCColors.GRAY_100 }}
       onClick={() => router.push(`/dashboard/clients/${client.id}`)}
       width={"100%"}
+      paddingY={"16px"}
+      paddingX={"24px"}
     >
       <Td>
         <div>
@@ -57,13 +59,17 @@ const ClientDetails = (props: ClientDetailsProps) => {
         </div>
       </Td>
       <Td>
-        <Text fontWeight="bold" fontSize={"sm"}>
-          {subscriptionType}
-        </Text>
-        <Flex direction={"row"}>
-          <Text fontSize="smaller">Ends on: </Text>{" "}
+        <Flex direction={"row"} width={"100%"}>
+          <Text fontSize="smaller">Plan: </Text>
           <Text fontWeight={"bold"} fontSize="smaller">
-            {new Date(endDate).toLocaleDateString("en-US")}
+            {subscriptionType}
+          </Text>
+          <Spacer />
+          <Text fontSize="smaller"> | </Text>
+          <Spacer />
+          <Text fontSize="smaller">Ends in: </Text>
+          <Text fontWeight={"bold"} fontSize="smaller">
+            {getDaysUntilEndDate(endDate)}
           </Text>
         </Flex>
       </Td>
@@ -151,15 +157,12 @@ const SubscriptionList = () => {
       <Text fontSize={"30px"}>Welcome back!</Text>
       <PFCSpace />
       <TableContainer
-        borderRadius={10}
-        borderWidth={1}
-        borderColor={PFCColors.GRAY_400}
+        borderRadius={"8px"}
+        border="1px solid #EAECF0"
+        box-shadow="0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.10)"
         width={"100%"}
-        maxHeight={"100%"}
-        overflowY={"auto"}
-        _loading={{ opacity: 0.5 }}
       >
-        <Table variant="striped" colorScheme={"Red"} position={"relative"}>
+        <Table variant="stripped" colorScheme={"Red"} position={"relative"}>
           <TableCaption
             position={"sticky"}
             bottom={0}
@@ -173,7 +176,7 @@ const SubscriptionList = () => {
               <Th>Client details</Th>
               <Th>Plan details</Th>
               <Th isNumeric>
-                <Text align={"center"}>BMI details</Text>
+                <Text align={"left"}>BMI details</Text>
               </Th>
             </Tr>
           </Thead>
