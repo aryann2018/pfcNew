@@ -5,7 +5,7 @@ import ClientsTable from "./ClientsTable";
 
 export default function Clients() {
   return (
-    <Flex justifyContent={"center"} height="100%">
+    <Flex justifyContent={"center"} height="100%" p={8}>
       <SubscriptionList />
       {/* <ClientsTable /> */}
     </Flex>

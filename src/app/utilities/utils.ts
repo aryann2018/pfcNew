@@ -1,11 +1,12 @@
 import { RefObject, useEffect, useRef, useState } from "react";
+import { DateTime } from "luxon";
 
 export function getDaysUntilEndDate(endDate: string) {
   const now = new Date();
   const end = new Date(endDate);
   const differenceInTime = end.getTime() - now.getTime();
   const differenceInDays = differenceInTime / (1000 * 3600 * 24);
-  return Math.ceil(differenceInDays);
+  return DateTime.now().plus({ days: differenceInDays }).toRelative();
 }
 
 export const isOdd = (num: number) => num % 2 === 1;

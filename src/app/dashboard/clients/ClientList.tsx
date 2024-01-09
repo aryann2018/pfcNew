@@ -14,13 +14,10 @@ import {
   Flex,
   Spacer,
   HStack,
-  Stack,
-  Skeleton,
   SkeletonText,
   CircularProgress,
   Box,
 } from "@chakra-ui/react";
-import { subscriptionsList } from "./api/mocks";
 import { getDaysUntilEndDate } from "@/app/utilities/utils";
 import { ClientType, SubscriptionType } from "./api/types";
 import { useRouter } from "next/navigation";
@@ -42,6 +39,44 @@ const ClientDetails = (props: ClientDetailsProps) => {
 
   const router = useRouter();
 
+  if (endDate < new Date().toISOString()) {
+    return (
+      <Tr
+        width={"100%"}
+        paddingY={"16px"}
+        paddingX={"24px"}
+        background={"red.300"}
+        onClick={() => router.push(`/dashboard/clients/${client.id}`)}
+      >
+        <Td>
+          <div>
+            <Text fontWeight="bold" decoration={"underline"}>
+              {client.first_name + " " + client.middle_name}
+            </Text>
+            <Text fontSize="sm">{client.phone_number}</Text>
+          </div>
+        </Td>
+        <Td>
+          <Flex direction={"column"} width={"100%"}>
+            <Flex direction={"row"}>
+              <Text fontSize="smaller">Plan: </Text>{" "}
+              <Text fontWeight={"bold"} fontSize="smaller">
+                {subscriptionType}
+              </Text>
+            </Flex>
+            <Spacer />
+            <Flex direction={"row"}>
+              <Text fontSize="smaller">Ended on: </Text>{" "}
+              <Text fontWeight={"bold"} fontSize="smaller">
+                {getDaysUntilEndDate(endDate)}
+              </Text>
+            </Flex>
+          </Flex>
+        </Td>
+        <Td></Td>
+      </Tr>
+    );
+  }
   return (
     <Tr
       _hover={{ cursor: "pointer", background: PFCColors.GRAY_100 }}
@@ -55,52 +90,63 @@ const ClientDetails = (props: ClientDetailsProps) => {
           <Text fontWeight="bold" decoration={"underline"}>
             {client.first_name + " " + client.middle_name}
           </Text>
+          <Box p={"4px"}></Box>
           <Text fontSize="sm">{client.phone_number}</Text>
         </div>
       </Td>
       <Td>
-        <Flex direction={"row"} width={"100%"}>
-          <Text fontSize="smaller">Plan: </Text>
-          <Text fontWeight={"bold"} fontSize="smaller">
-            {subscriptionType}
-          </Text>
+        <Flex direction={"column"} width={"100%"}>
+          <Flex direction={"row"}>
+            <Text fontSize="smaller">Plan: </Text>
+            <Box width={"4px"}></Box>
+            <Text fontWeight={"bold"} fontSize="smaller">
+              {subscriptionType}
+            </Text>
+          </Flex>
           <Spacer />
-          <Text fontSize="smaller"> | </Text>
-          <Spacer />
-          <Text fontSize="smaller">Ends in: </Text>
-          <Text fontWeight={"bold"} fontSize="smaller">
-            {getDaysUntilEndDate(endDate)}
-          </Text>
+          <Flex direction={"row"}>
+            <Text fontSize="smaller">Ends in: </Text>
+            <Box width={"4px"}></Box>
+            <Text fontWeight={"bold"} fontSize="smaller">
+              {getDaysUntilEndDate(endDate)}
+            </Text>
+          </Flex>
         </Flex>
       </Td>
 
       <Td>
-        <Flex direction={"row"} width={"100%"}>
+        <Flex direction={"column"} width={"100%"}>
           <Spacer />
-          <Text fontSize="smaller">BMI: </Text>{" "}
-          <Text fontWeight={"bold"} fontSize="smaller">
-            {client.bmi}
-          </Text>
+          <Flex direction={"row"}>
+            <Text fontSize="smaller">BMI: </Text>
+            <Box width={"4px"}></Box>
+            <Text fontWeight={"bold"} fontSize="smaller">
+              {client.bmi}
+            </Text>
+          </Flex>
           <Spacer />
-          <Text fontSize="smaller"> | </Text>
+          <Flex direction={"row"}>
+            <Text fontSize={"smaller"}>Weight: </Text>
+            <Box width={"4px"}></Box>
+            <Text fontWeight={"bold"} fontSize="smaller">
+              {client.weight_in_gm}
+            </Text>
+          </Flex>
           <Spacer />
-          <Text fontSize={"smaller"}>Weight: </Text>
-          <Text fontWeight={"bold"} fontSize="smaller">
-            {client.weight_in_gm}
-          </Text>
-          <Spacer />
-          <Text fontSize="smaller"> | </Text>
-          <Spacer />
-          <Text fontSize={"smaller"}>Height: </Text>
-          <Text fontWeight={"bold"} fontSize="smaller">
-            {client.height_in_cm}
-          </Text>
+          <Flex direction={"row"}>
+            <Text fontSize={"smaller"}>Height: </Text>
+            <Box width={"4px"}></Box>
+            <Text fontWeight={"bold"} fontSize="smaller">
+              {client.height_in_cm}
+            </Text>
+          </Flex>
           <Spacer />
         </Flex>
       </Td>
     </Tr>
   );
 };
+
 const ClientSubscription = (props: ClientSubscriptionProps) => {
   const { subscription } = props;
   const { clients, end_date, type } = subscription;
@@ -154,8 +200,11 @@ const SubscriptionList = () => {
 
   return (
     <Box width={"100%"} height={"100%"}>
-      <Text fontSize={"30px"}>Welcome back!</Text>
+      <Text fontSize={"30px"} fontWeight={"bold"}>
+        Welcome back!
+      </Text>
       <PFCSpace />
+
       <TableContainer
         borderRadius={"8px"}
         border="1px solid #EAECF0"
@@ -171,11 +220,16 @@ const SubscriptionList = () => {
           >
             {subscriptions!.length} clients
           </TableCaption>
-          <Thead position={"sticky"} top={0} background={PFCColors.WHITE}>
+          <Thead
+            position={"sticky"}
+            top={0}
+            background={PFCColors.WHITE}
+            borderBottom={"1px solid rgba(234, 236, 240, 1)"}
+          >
             <Tr>
-              <Th>Client details</Th>
-              <Th>Plan details</Th>
-              <Th isNumeric>
+              <Th color={"#667085"}>Client details</Th>
+              <Th color="#667085">Plan details</Th>
+              <Th color={"#667085"}>
                 <Text align={"left"}>BMI details</Text>
               </Th>
             </Tr>
