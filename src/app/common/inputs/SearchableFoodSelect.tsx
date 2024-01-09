@@ -41,10 +41,15 @@ function SearchableFoodSelect({
   onSelect,
 }: SearchableFoodSelectProps) {
   const { foodIngridients, isLoading } = useFoodIngridientsStore();
-  let options = foodIngridients?.map((item: FoodIngredient) => ({
-    value: item.id,
-    label: item.name,
-  }));
+  let options = foodIngridients
+    .filter(
+      (item) =>
+        !!item.calories && !!item.carbohydrates && !!item.fat && !!item.protein
+    )
+    ?.map((item: FoodIngredient) => ({
+      value: item.id,
+      label: item.name,
+    }));
 
   options = mergeUniqueObjects(options!);
 
