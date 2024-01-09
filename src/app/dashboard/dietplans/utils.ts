@@ -196,9 +196,9 @@ export const getTotalFoodMacros = (
   }
 
   return {
-    calories: parseFloat(food.foodItem.calories!) * food.quantity,
-    carbs: parseFloat(food.foodItem.carbohydrates!) * food.quantity,
-    fat: parseFloat(food.foodItem.fat!) * food.quantity,
-    protein: parseFloat(food.foodItem.protein!) * food.quantity,
+    calories: parseFloat(food.foodItem.calories ?? "0") * food.quantity,
+    carbs: parseFloat(food.foodItem.carbohydrates ?? "0") * food.quantity,
+    fat: parseFloat(food.foodItem.fat ?? "0") * food.quantity,
+    protein: parseFloat(food.foodItem.protein ?? "0") * food.quantity,
   };
 };

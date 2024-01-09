@@ -41,6 +41,7 @@ function SearchableFoodSelect({
   onSelect,
 }: SearchableFoodSelectProps) {
   const { foodIngridients, isLoading } = useFoodIngridientsStore();
+  console.log("foodIngridients", foodIngridients);
   let options = foodIngridients
     .filter(
       (item) =>
