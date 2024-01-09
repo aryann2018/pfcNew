@@ -103,7 +103,7 @@ const ClientDetails = (props: ClientDetailsProps) => {
               {subscriptionType}
             </Text>
           </Flex>
-          <Spacer />
+          <Box p={"4px"}></Box>
           <Flex direction={"row"}>
             <Text fontSize="smaller">Ends in: </Text>
             <Box width={"4px"}></Box>
