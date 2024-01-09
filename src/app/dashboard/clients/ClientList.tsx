@@ -114,7 +114,7 @@ const ClientDetails = (props: ClientDetailsProps) => {
         </Flex>
       </Td>
 
-      <Td>
+      <Td justifyContent={"space-between"}>
         <Flex direction={"column"} width={"100%"}>
           <Spacer />
           <Flex direction={"row"}>
@@ -129,7 +129,7 @@ const ClientDetails = (props: ClientDetailsProps) => {
             <Text fontSize={"smaller"}>Weight: </Text>
             <Box width={"4px"}></Box>
             <Text fontWeight={"bold"} fontSize="smaller">
-              {client.weight_in_gm}
+              {client.weight_in_gm / 1000} kg
             </Text>
           </Flex>
           <Spacer />
@@ -137,7 +137,7 @@ const ClientDetails = (props: ClientDetailsProps) => {
             <Text fontSize={"smaller"}>Height: </Text>
             <Box width={"4px"}></Box>
             <Text fontWeight={"bold"} fontSize="smaller">
-              {client.height_in_cm}
+              {client.height_in_cm} cm
             </Text>
           </Flex>
           <Spacer />
@@ -248,9 +248,11 @@ const SubscriptionList = () => {
 
           <Tfoot>
             <Tr>
-              <Th>Client details</Th>
-              <Th>Plan details</Th>
-              <Th isNumeric>BMI details</Th>
+              <Th color={"#667085"}>Client details</Th>
+              <Th color="#667085">Plan details</Th>
+              <Th color={"#667085"}>
+                <Text align={"left"}>BMI details</Text>
+              </Th>
             </Tr>
           </Tfoot>
         </Table>
