@@ -167,12 +167,9 @@ const ClientSubscription = (props: ClientSubscriptionProps) => {
           );
         })
       ) : (
-        <SkeletonText
-          noOfLines={4}
-          spacing="4"
-          width={"100%"}
-          height={"100%"}
-        />
+        <Text fontSize={"smaller"} textAlign={"center"}>
+          No clients
+        </Text>
       )}
     </>
   );
