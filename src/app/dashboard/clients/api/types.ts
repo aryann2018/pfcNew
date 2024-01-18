@@ -25,6 +25,7 @@ export type ClientType = {
   last_name: string;
   user_type: string;
   phone_number: string;
+  email: string;
   line_address: string;
   city: string;
   state: string;

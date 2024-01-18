@@ -67,7 +67,7 @@ const getAllDetails = (client: ClientType) => {
 const contactDetails = (client: ClientType) => {
   return {
     contact: client.phone_number,
-    // email: client.email ?? "-",
+    email: client.email ?? "-",
   };
 };
 
