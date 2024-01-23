@@ -11,7 +11,7 @@ import {
   Spacer,
   Text,
 } from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { MacrosTicker } from "./MacrosTIcker";
 import { MealPlanSection, TemplateSection } from "./MealPlanSection";
 import useDietPlanStore from "./dietplansStore";
@@ -22,6 +22,9 @@ import {
 } from "../utils";
 import { AddNewMealButton } from "./AddNewMealButton";
 import { DietPlanReviewModal } from "./DietPlanReviewModal";
+import { useReactToPrint } from "react-to-print";
+import html2pdf from "html2pdf.js";
+import TemplatePdf from "./TemplatePdf";
 
 /* selectItem */
 interface TemplateSelectItemProps {
@@ -110,6 +113,12 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
     addNewSectionToActiveTemplate,
   } = useDietPlanStore();
 
+  const templatePdfRef = useRef();
+
+  const handlePrint = useReactToPrint({
+    content: () => templatePdfRef.current!,
+  });
+
   const activeTemplateMacros = getTotalTemplateMacros(activeTemplate!);
 
   const templateSelectItems = props.templates.map((template) => {
@@ -134,7 +143,7 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
               const template = props.templates.find(
                 (template) => template.id === value
               );
-              console.log(template, "template");
+
               if (template) {
                 setActiveTemplate(value);
               }
@@ -197,6 +206,28 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
         </Flex>
         <Divider />
         <Flex p="4" direction="row" justifyContent={"flex-end"}>
+          <Button
+            onClick={() => {
+              const element = document.getElementById("template-pdf");
+              if (!element) {
+                return;
+              }
+              const opt = {
+                filename: "myfile.pdf",
+                html2canvas: { scale: 2 },
+                jsPDF: {
+                  unit: "in",
+                  format: "letter",
+                  orientation: "portrait",
+                },
+              };
+              html2pdf().set(opt).from(element).save();
+            }}
+            {...styles.assignButton}
+          >
+            Download
+          </Button>
+          <Box p={2} />
           {!props.clientId && (
             <Button
               onClick={() => {
@@ -232,6 +263,8 @@ const TemplatePlanManager = (props: TemplatePlanManagerProps) => {
             isTemplate={props.clientId ? false : true}
           />
         )}
+
+        <TemplatePdf templatePdfRef={templatePdfRef} />
       </Box>
     );
   }
