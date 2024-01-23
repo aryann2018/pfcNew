@@ -235,7 +235,7 @@ const Dashboard = ({ children }: DashboardProps) => {
       </Drawer>
       <Box
         ml={{ base: 0, md: isSidebarExpanded || isSidebarPinned ? 72 : 20 }}
-        transition="0.1s ease"
+        transition="0.3s ease"
         background={"#101828"}
         top="20px"
         zIndex="docked"
