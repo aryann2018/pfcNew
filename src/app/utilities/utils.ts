@@ -63,3 +63,7 @@ export function formatDateToYYYYMMDD(date: Date) {
 
   return [year, month, day].join("-");
 }
+
+export function generateRandomId() {
+  return Math.random().toString(36).substring(7);
+}
