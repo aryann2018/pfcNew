@@ -15,13 +15,14 @@ type UploadFileError = {
 };
 
 type UploadFileProgress = {
-  loaded: number;
+  uploaded: number;
   total: number;
 };
 
 type UploadFileState = {
   loading: boolean;
-  error?: UploadFileError;
+  error?: UploadFileError | null;
   progress?: UploadFileProgress;
   data?: UploadFileResponse;
+  presignedData?: PresignedPostData;
 };

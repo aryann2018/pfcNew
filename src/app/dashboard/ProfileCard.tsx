@@ -11,13 +11,15 @@ import { FiLogOut } from "react-icons/fi";
 interface ProfileCardProps {
   isExpanded: boolean;
   name: string;
-  email: string;
+  email?: string;
   profileImage?: string;
   logout: () => void;
+  onProfileClick: () => void;
 }
 
 function ProfileCard(props: ProfileCardProps) {
-  const { isExpanded, name, email, logout, profileImage } = props;
+  const { isExpanded, name, email, logout, profileImage, onProfileClick } =
+    props;
 
   if (!isExpanded) {
     return (
@@ -27,14 +29,29 @@ function ProfileCard(props: ProfileCardProps) {
     );
   }
   return (
-    <Box bg={"transparent"} borderRadius="lg" p={4} color="white" w="100%">
+    <Box
+      bg={"transparent"}
+      borderRadius="lg"
+      p={4}
+      color="white"
+      w="100%"
+      cursor={"pointer"}
+    >
       <Flex align="center" justify="space-between">
-        <Avatar name={name} src={profileImage} />
+        <Flex
+          direction={"row"}
+          alignItems={"center"}
+          justifyContent={"space-between"}
+          onClick={onProfileClick}
+        >
+          <Avatar name={name} src={profileImage} />
 
-        <Box ml={3}>
-          <Text fontWeight="bold">{name}</Text>
-          <Text fontSize="sm">{email}</Text>
-        </Box>
+          <Box ml={3}>
+            <Text fontWeight="bold">{name}</Text>
+            <Text fontSize="sm">{email ?? "-"}</Text>
+          </Box>
+        </Flex>
+
         <IconButton
           aria-label="Options"
           icon={<FiLogOut />}

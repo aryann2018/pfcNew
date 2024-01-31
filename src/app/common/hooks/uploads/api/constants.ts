@@ -1,1 +1,1 @@
-const UPLOADS_API_URL = "/uploads";
+export const UPLOADS_API_URL = "/uploads/";

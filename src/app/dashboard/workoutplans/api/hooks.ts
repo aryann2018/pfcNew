@@ -105,19 +105,3 @@ export const useMutateWorkoutPlanTemplate = ({ onSuccess, onError }: any) => {
 
   return mutation;
 };
-
-export const useQueryCoachProfile = () => {
-  const query = useQuery({
-    queryKey: ["COACH_PROFILE"],
-    queryFn: async () => {
-      try {
-        const res = await get<any>(COACH_PROFILE);
-        return res?.data;
-      } catch (error) {
-        error;
-      }
-    },
-  });
-
-  return query;
-};

@@ -6,7 +6,6 @@ import {
   useGetExercises,
   useMutateWorkoutPlan,
   useMutateWorkoutPlanTemplate,
-  useQueryCoachProfile,
 } from "../api/hooks";
 
 import { useRouter } from "next/navigation";
@@ -20,6 +19,7 @@ import {
   getWorkoutPlanTemplateFromWorkoutPlan,
   templateFromWorkoutPlanTemplate,
 } from "../api/adapters";
+import { useQueryCoachProfile } from "../../profile/api/hooks";
 
 interface TemplateScreenProps {
   isNew: boolean;

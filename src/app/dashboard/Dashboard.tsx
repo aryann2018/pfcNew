@@ -24,8 +24,8 @@ import { PFCColors } from "../common/PFCColors";
 import { useRouter } from "next/navigation";
 import { Image } from "@chakra-ui/react";
 import ProfileCard from "./ProfileCard";
-import { useQueryCoachProfile } from "./dietplans/api/hooks";
 import { removeToken } from "../auth/utils";
+import { useQueryCoachProfile } from "./profile/api/hooks";
 
 const navItems = [
   {
@@ -58,7 +58,9 @@ const Dashboard = ({ children }: DashboardProps) => {
   const toggleSidebar = () => setIsSidebarExpanded(!isSidebarExpanded); // Function to toggle sidebar
 
   const { data, error, isLoading } = useQueryCoachProfile();
-  console.log(data, error, isLoading);
+
+  const profile = data?.data;
+
   const NavItem = (props: any) => {
     const { icon, children, ...rest } = props;
     return (
@@ -207,11 +209,14 @@ const Dashboard = ({ children }: DashboardProps) => {
 
           <ProfileCard
             isExpanded={isSidebarExpanded || isSidebarPinned}
-            name={data?.first_name + " " + data?.last_name}
-            email={data?.email}
+            name={profile?.first_name + " " + profile?.last_name}
+            email={profile?.email || ""}
             logout={() => {
               removeToken();
               router.push("/");
+            }}
+            onProfileClick={() => {
+              router.push("/dashboard/profile");
             }}
           />
         </Box>

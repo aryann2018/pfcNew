@@ -10,7 +10,6 @@ import {
 } from "./types";
 import { get, post } from "../../../utilities/api";
 import {
-  COACH_PROFILE,
   DIET_PLANS_API,
   DIET_PLANS_TEMPLATES_API,
   FOOD_INGRIDENTS_API,
@@ -100,20 +99,4 @@ export const useMutateDietPlanTemplate = ({ onSuccess, onError }: any) => {
   });
 
   return mutation;
-};
-
-export const useQueryCoachProfile = () => {
-  const query = useQuery({
-    queryKey: ["COACH_PROFILE"],
-    queryFn: async () => {
-      try {
-        const res = await get<any>(COACH_PROFILE);
-        return res?.data;
-      } catch (error) {
-        error;
-      }
-    },
-  });
-
-  return query;
 };

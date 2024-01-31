@@ -2,15 +2,15 @@ import axios, { Axios, AxiosRequestConfig } from "axios";
 import { getToken } from "../auth/utils";
 
 const getUrl = () => {
-  if (process.env.NODE_ENV === "production") {
-    return "https://api.staging.pfc.quest/api/v1";
-  } else if (process.env.NODE_ENV === "development") {
-    return "http://localhost:8000/api/v1";
-  } else if (process.env.NODE_ENV === "test") {
-    return "http://localhost:8000/api/v1";
-  } else {
-    return "https://api.staging.pfc.quest/api/v1";
-  }
+  // if (process.env.NODE_ENV === "production") {
+  //   return "https://api.staging.pfc.quest/api/v1";
+  // } else if (process.env.NODE_ENV === "development") {
+  //   return "http://localhost:8000/api/v1";
+  // } else if (process.env.NODE_ENV === "test") {
+  //   return "http://localhost:8000/api/v1";
+  // } else {
+  return "https://api.staging.pfc.quest/api/v1";
+  // }
 };
 
 export const getInstance = async () => {
@@ -52,7 +52,7 @@ export const get = async <ResponseType>(
 export const put = async <RequestType, ResponseType>(
   url: string,
   data: RequestType,
-  options: AxiosRequestConfig
+  options?: AxiosRequestConfig
 ) => {
   const instance = await getInstance();
   const response = await instance.put<ResponseType>(url, data, { ...options });
@@ -63,7 +63,7 @@ export const put = async <RequestType, ResponseType>(
 export const patch = async <RequestType, ResponseType>(
   url: string,
   data: RequestType,
-  options: AxiosRequestConfig
+  options?: AxiosRequestConfig
 ) => {
   const instance = await getInstance();
   const response = await instance.patch<ResponseType>(url, data, {
@@ -75,7 +75,7 @@ export const patch = async <RequestType, ResponseType>(
 
 export const remove = async <ResponseType>(
   url: string,
-  options: AxiosRequestConfig
+  options?: AxiosRequestConfig
 ) => {
   const instance = await getInstance();
   const response = await instance.delete<ResponseType>(url, {

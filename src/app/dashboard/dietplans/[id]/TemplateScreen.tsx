@@ -6,7 +6,6 @@ import {
   useGetFoodIngredients,
   useMutateDietPlan,
   useMutateDietPlanTemplate,
-  useQueryCoachProfile,
 } from "../api/hooks";
 
 import { useRouter } from "next/navigation";
@@ -20,6 +19,7 @@ import {
 } from "../api/adapters";
 import { useFoodIngridientsStore } from "@/app/common/inputs/SearchableFoodSelect";
 import { formatDateToYYYYMMDD } from "@/app/utilities/utils";
+import { useQueryCoachProfile } from "../../profile/api/hooks";
 
 interface TemplateScreenProps {
   isNew: boolean;
