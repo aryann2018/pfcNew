@@ -18,7 +18,7 @@ const onUploadGeneratePresignedPostSuccess =
     Object.entries({ ...fields, file: FileBlob }).forEach(([key, value]) => {
       formData.append(key, value);
     });
-
+    console.log(formData);
     fetch(url, {
       method: "POST",
       body: formData,

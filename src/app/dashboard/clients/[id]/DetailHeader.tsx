@@ -71,7 +71,7 @@ export const DetailsHeader = ({ id }: { id: string }) => {
           <Button
             variant={"outline"}
             onClick={() => {
-              router.push("/dashboard/workoutplans/new/");
+              router.push(`/dashboard/workoutplans/new?client_id=${id}`);
             }}
           >
             Assign New workout
@@ -79,7 +79,7 @@ export const DetailsHeader = ({ id }: { id: string }) => {
           <Button
             variant={"outline"}
             onClick={() => {
-              router.push("/dashboard/dietplans/new/");
+              router.push(`/dashboard/dietplans/new?client_id=${id}`);
             }}
           >
             Assign New diet

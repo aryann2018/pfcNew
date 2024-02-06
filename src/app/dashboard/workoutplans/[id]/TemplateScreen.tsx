@@ -123,7 +123,7 @@ export const TemplateScreen = (props: TemplateScreenProps) => {
     mutateDietPlan({
       ...dietplan,
       client_id: props.clientId!,
-      coach_id: coachProfileData!.user_id,
+      coach_id: coachProfileData!.data.user_id,
       is_active: true,
       is_paused: false,
       start_date: formatDateToYYYYMMDD(new Date()),
