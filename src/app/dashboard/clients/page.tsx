@@ -1,5 +1,5 @@
 "use client";
-import SubscriptionList from "./ClientList";
+import SubscriptionList from "./ClientLists";
 import { Flex } from "@chakra-ui/react";
 import ClientsTable from "./ClientsTable";
 

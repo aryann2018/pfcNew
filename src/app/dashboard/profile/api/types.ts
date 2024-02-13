@@ -32,8 +32,8 @@ type CoachProfile = {
   user_id: string;
   first_name: string;
   middle_name: string;
-  email?: string;
   last_name: string;
+  email?: string;
   phone_number: string;
   line_address: string;
   city: string;

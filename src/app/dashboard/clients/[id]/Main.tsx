@@ -18,7 +18,7 @@ export const Main = (props: MainProps) => {
       <HStack
         width={"100%"}
         alignItems={"flex-start"}
-        padding={"24px"}
+        padding={"0"}
         border={"1px solid #EAECF0"}
         boxShadow={"0px 1px 2px 0px #1018280F"}
         borderRadius={"8px"}
@@ -27,8 +27,9 @@ export const Main = (props: MainProps) => {
           alignItems={"flex-start"}
           width={"62%"}
           wrap={"wrap"}
+          padding={"24px"}
           gap={"20px"}
-        >
+        > 
           <DetailsCard id={props.id} />
           <DietList clientId={props.id} />
           <WorkoutPlanList clientId={props.id} />
