@@ -3,9 +3,14 @@ import { PFCColors } from "@/app/common/PFCColors";
 import {
   Table,
   Thead,
+  ButtonGroup,
+  Button,
   Tbody,
+  Input,
+  InputLeftElement,
   Tfoot,
   Tr,
+  InputGroup,
   Th,
   Td,
   TableCaption,
@@ -19,10 +24,20 @@ import {
   Box,
 } from "@chakra-ui/react";
 import { getDaysUntilEndDate } from "@/app/utilities/utils";
+import { FiUploadCloud } from "react-icons/fi";
+import { BsFilter } from "react-icons/bs";
+import { AiOutlineClose } from "react-icons/ai";
+import { RiSearchLine } from "react-icons/ri";
+
 import { ClientType, SubscriptionType } from "./api/types";
 import { useRouter } from "next/navigation";
 import { useGetSubscriptions } from "./api/hooks";
+//import  useQueryCoachProfile  from "./api/hooks";
 import PFCSpace from "@/app/common/PFCSpace";
+import SearchBox from "./SearchBox";
+import AccordionTable from "./ClientsTable";
+import ClientFilter from "./ClientFilter";
+//import useQueryCoachProfile from ""
 
 interface ClientSubscriptionProps {
   subscription: SubscriptionType;
@@ -190,23 +205,45 @@ const SubscriptionList = () => {
   if (!subscriptions || subscriptions.length === 0) {
     <Flex>
       <HStack>
-        <Text>No Subscriptions to view</Text>
+        <Box bg="#FFEFEC">No Subscriptions to view</Box>
       </HStack>
     </Flex>;
   }
 
   return (
     <Box width={"100%"} height={"100%"}>
-      <Text fontSize={"30px"} fontWeight={"bold"}>
-        Welcome back!
-      </Text>
+      <Flex minWidth='max-content' alignItems='center' gap='2' mb='4'>
+       <Box>
+          <Text fontSize={"30px"} fontWeight={"bold"}>
+            Welcome back, Satej
+          </Text>
+          <Text>Track and manage your clients.</Text>
+        </Box>
+        <Spacer />
+        <ButtonGroup gap='2'>
+        <Button leftIcon={<FiUploadCloud />} colorScheme="" variant="outline">
+            Import
+          </Button>
+        </ButtonGroup>
+      </Flex>
+      
+      <Flex gap="2">
+        <Box>
+          <SearchBox></SearchBox>
+        </Box>
+        <Box>
+          <ClientFilter></ClientFilter>
+        </Box>
+      </Flex>
       <PFCSpace />
+      <AccordionTable></AccordionTable>
 
       <TableContainer
         borderRadius={"8px"}
         border="1px solid #EAECF0"
         box-shadow="0px 1px 2px 0px rgba(16, 24, 40, 0.06), 0px 1px 3px 0px rgba(16, 24, 40, 0.10)"
         width={"100%"}
+        display="none"
       >
         <Table variant="stripped" colorScheme={"Red"} position={"relative"}>
           <TableCaption
@@ -245,7 +282,7 @@ const SubscriptionList = () => {
 
           <Tfoot>
             <Tr>
-              <Th color={"#667085"}>Client details</Th>
+              <Th color={"#667085"}>Client detailss </Th>
               <Th color="#667085">Plan details</Th>
               <Th color={"#667085"}>
                 <Text align={"left"}>BMI details</Text>
