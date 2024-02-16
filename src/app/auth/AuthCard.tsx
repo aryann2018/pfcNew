@@ -9,6 +9,8 @@ import { useGenerateOtp, useLogin } from "./api/hooks";
 import { useRouter } from "next/navigation";
 import { getToken, setToken } from "./utils";
 
+
+
 const ChakraBox = chakra(motion.div, {
   /**
    * Allow motion props and non-Chakra props to be forwarded.
@@ -84,14 +86,19 @@ const AuthCard = () => {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <Container height="100%">
+    <Container height="100%" m="auto">
+      <Box display="flex" alignItems="center" justifyContent="center"
+      marginBottom={{ base: "-140px", md: "-220px", lg: "-150px" }}
+      >
+        <img src="/images/pfclogo.png" alt="PFC Club" />
+      </Box>
+
       {contactDetails && contactDetails.phoneNumber && !showPhoneInputCard ? (
         <ChakraBox
           maxW="md"
-          borderWidth="1px"
           borderRadius="lg"
           overflow="hidden"
-          p="6"
+          p="4"
           m="auto"
           mt="10"
           initial={{ opacity: 0, x: 20 }}
@@ -109,10 +116,7 @@ const AuthCard = () => {
       ) : (
         <Box
           maxW="md"
-          borderWidth="1px"
-          borderRadius="lg"
           overflow="hidden"
-          p="6"
           m="auto"
           mt="10"
         >

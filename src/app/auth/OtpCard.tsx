@@ -36,8 +36,10 @@ const OtpCard: React.FC<OtpCardProps> = ({
 
   return (
     <>
-      <Heading as="h2" textAlign="center" mb="6">
-        Verify OTP
+      
+      <Heading as="h2" 
+      textAlign="center" color="#101828" fontWeight="600" fontSize="3xl" mb={2}>
+      Verify OTP
       </Heading>
 
       <Text mb="4" textAlign="center">
@@ -86,6 +88,13 @@ const OtpCard: React.FC<OtpCardProps> = ({
         colorScheme="teal"
         onClick={handleSubmit((values) => handleOtpSubmit(values.otp))}
         width="full"
+        fontSize="md"
+            size='lg'
+            py="4"
+            backgroundColor='#F15C3D'
+            _hover={{
+              background: "black"
+            }}
         isLoading={isSubmitting || isSendingOtp}
         disabled={isSubmitting || isSendingOtp}
       >
